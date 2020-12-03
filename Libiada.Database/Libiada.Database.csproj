@@ -1,0 +1,174 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Db\**" />
+    <EmbeddedResource Remove="Db\**" />
+    <None Remove="Db\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Libiada.edmx" />
+    <None Remove="LibiadaWeb.Context.tt" />
+    <None Remove="LibiadaWeb.edmx.diagram" />
+    <None Remove="LibiadaWeb.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Libiada.Context.tt">
+      <DependentUpon>Libiada.edmx</DependentUpon>
+      <LastGenOutput>LibiadaWeb.Context.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+    <Content Include="Libiada.edmx.diagram">
+      <SubType>Designer</SubType>
+      <DependentUpon>Libiada.edmx</DependentUpon>
+    </Content>
+    <Content Include="Libiada.tt">
+      <DependentUpon>Libiada.edmx</DependentUpon>
+      <LastGenOutput>LibiadaWeb.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EntityDeploy Include="Libiada.edmx">
+      <LastGenOutput>Libiada.Designer.cs</LastGenOutput>
+      <Generator>EntityModelCodeGenerator</Generator>
+    </EntityDeploy>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="EntityFramework6.Npgsql" Version="6.4.1" />
+    <PackageReference Include="NetBio.Core" Version="3.0.0-alpha" />
+    <PackageReference Include="Npgsql" Version="5.0.0" />
+    <PackageReference Include="Npgsql.Json.NET" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="AccordanceCharacteristicLink.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AccordanceCharacteristicValue.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AspNetPushNotificationSubscriber.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AspNetRole.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AspNetUser.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AspNetUserClaim.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AspNetUserLogin.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="BinaryCharacteristicLink.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="BinaryCharacteristicValue.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CalculationTask.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CharacteristicValue.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CommonSequence.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CongenericCharacteristicLink.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="CongenericCharacteristicValue.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="DataSequence.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="DnaSequence.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Element.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Fmotif.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="FullCharacteristicLink.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ImageSequence.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Libiada.Context.cs">
+      <DependentUpon>Libiada.Context.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Libiada.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Libiada.Designer.cs">
+      <DependentUpon>Libiada.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="LiteratureSequence.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Matter.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Measure.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Multisequence.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="MusicSequence.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Note.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Pitch.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Position.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="SequenceAttribute.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="SequenceGroup.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Subsequence.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+    <Compile Update="TaskResult.cs">
+      <DependentUpon>Libiada.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>
