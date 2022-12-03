@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +20,7 @@
   <ItemGroup>
     <Content Include="Libiada.Context.tt">
       <DependentUpon>Libiada.edmx</DependentUpon>
-      <LastGenOutput>LibiadaWeb.Context.cs</LastGenOutput>
+      <LastGenOutput>Libiada.Context.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </Content>
     <Content Include="Libiada.edmx.diagram">
@@ -43,10 +43,10 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="EntityFramework6.Npgsql" Version="6.4.1" />
+    <PackageReference Include="EntityFramework6.Npgsql" Version="6.4.3" />
     <PackageReference Include="NetBio.Core" Version="3.0.0-alpha" />
-    <PackageReference Include="Npgsql" Version="5.0.0" />
-    <PackageReference Include="Npgsql.Json.NET" Version="5.0.0" />
+    <PackageReference Include="Npgsql" Version="7.0.0" />
+    <PackageReference Include="Npgsql.Json.NET" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
