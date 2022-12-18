@@ -8,6 +8,7 @@
     /// </summary>
     public static class FileHelper
     {
+
         /// <summary>
         /// The read sequence from stream.
         /// </summary>

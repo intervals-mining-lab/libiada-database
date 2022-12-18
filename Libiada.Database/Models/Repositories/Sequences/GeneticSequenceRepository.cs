@@ -6,7 +6,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
 
     using Bio;
     using Bio.Extensions;
-    using Libiada.Database;
+
     using LibiadaCore.Core;
 
     using Libiada.Database.Helpers;
@@ -42,6 +42,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         public (string[], string[]) SplitAccessionsIntoExistingAndNotImported(string[] accessions)
         {
             var allExistingAccessions = Db.DnaSequence
+                                               .Where(d => d.RemoteId != null)
                                                .Select(d => d.RemoteId)
                                                .ToArray()
                                                .Select(r => r.Split('.')[0])

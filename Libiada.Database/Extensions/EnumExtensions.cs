@@ -1,7 +1,6 @@
 ﻿namespace Libiada.Database.Extensions
 {
     using System;
-
     using LibiadaCore.Extensions;
 
     using Libiada.Database.Attributes;

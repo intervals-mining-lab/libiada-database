@@ -1,8 +1,6 @@
 ﻿namespace Libiada.Database.Attributes
 {
-    using Libiada.Database;
     using System;
-    using Attribute = System.Attribute;
 
     /// <summary>
     /// The nature attribute.

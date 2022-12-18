@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Bio.IO.GenBank;
+    using LibiadaCore.Extensions;
 
     using Libiada.Database.Models.CalculatorsData;
 
@@ -40,6 +42,53 @@
         /// </summary>
         public void Dispose()
         {
+        }
+
+        /// <summary>
+        /// Cleans attribute value.
+        /// </summary>
+        /// <param name="attributeValue">
+        /// The attribute value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string CleanAttributeValue(string attributeValue)
+        {
+            return attributeValue.Replace("\"", string.Empty)
+                                 .Replace('\n', ' ')
+                                 .Replace('\r', ' ')
+                                 .Replace('\t', ' ')
+                                 .Replace("  ", " ");
+        }
+
+        /// <summary>
+        /// Gets the attribute single value.
+        /// </summary>
+        /// <param name="source">
+        /// Collection of <see cref="FeatureItem"/> to search in.
+        /// </param>
+        /// <param name="attributeName">
+        /// Name of the attribute to  search for.
+        /// </param>
+        /// <returns>
+        /// Cleaned attribute value or null if nothing was found.
+        /// </returns>
+        public static string GetAttributeSingleValue(IEnumerable<FeatureItem> source, string attributeName)
+        {
+            string result;
+            try
+            {
+                result = source.Select(s => s.Qualifiers.SingleOrDefault(q => q.Key == attributeName)
+                                             .Value?.SingleOrDefault())
+                               .SingleOrDefault(s => s != null);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Attribute had more than one value with given key. Key: {attributeName}.", ex);
+            }
+
+            return result != null ? CleanAttributeValue(result) : null;
         }
 
         /// <summary>
@@ -184,24 +233,6 @@
         }
 
         /// <summary>
-        /// Cleans attribute value.
-        /// </summary>
-        /// <param name="attributeValue">
-        /// The attribute value.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        private string CleanAttributeValue(string attributeValue)
-        {
-            return attributeValue.Replace("\"", string.Empty)
-                                 .Replace("\n", " ")
-                                 .Replace("\r", " ")
-                                 .Replace("\t", " ")
-                                 .Replace("  ", " ");
-        }
-
-        /// <summary>
         /// Creates complement, join and partial attributes.
         /// </summary>
         /// <param name="complement">
@@ -218,7 +249,7 @@
         /// </returns>
         private List<SequenceAttribute> CreateComplementJoinPartialAttributes(bool complement, bool complementJoin, Subsequence subsequence)
         {
-            var result = new List<SequenceAttribute>();
+            var result = new List<SequenceAttribute>(3);
             if (complement)
             {
                 result.Add(CreateSequenceAttribute(Attribute.Complement, subsequence.Id));

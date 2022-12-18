@@ -60,10 +60,10 @@
         /// <summary>
         /// The Picture.
         /// </summary>
-        [Display(Name = "Picture")]
-        [Description("Picture")]
+        [Display(Name = "Painting")]
+        [Description("Painting")]
         [Nature(Nature.Image)]
-        Picture = 7,
+        Painting = 7,
 
         /// <summary>
         /// The Photo.
@@ -72,5 +72,21 @@
         [Description("Photo")]
         [Nature(Nature.Image)]
         Photo = 8,
+
+        /// <summary>
+        /// The Photo.
+        /// </summary>
+        [Display(Name = "Picture")]
+        [Description("Picture")]
+        [Nature(Nature.Image)]
+        Picture = 9,
+
+        /// <summary>
+        /// The Archaea.
+        /// </summary>
+        [Display(Name = "Archaea")]
+        [Description("Domain of single-celled organisms")]
+        [Nature(Nature.Genetic)]
+        Archaea = 10
     }
 }

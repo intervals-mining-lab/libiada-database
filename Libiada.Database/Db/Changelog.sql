@@ -3051,7 +3051,7 @@ COMMENT ON FUNCTION trigger_chain_key_unique_check() IS 'Checks that there is on
 
 CREATE TABLE dbo."AspNetPushNotificationSubscribers"
 (
-    "Id" integer NOT NULL,
+    "Id" serial NOT NULL,
     "UserId" integer NOT NULL DEFAULT 0,
     "Endpoint" text NOT NULL,
     "P256dh" text NOT NULL,
@@ -3062,20 +3062,57 @@ CREATE TABLE dbo."AspNetPushNotificationSubscribers"
         ON UPDATE NO ACTION
         ON DELETE CASCADE
 );
-COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers"
-    IS 'Table for storing data about devices that are subscribers to push notifications.';
+COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers" IS 'Table for storing data about devices that are subscribers to push notifications.';
 
--- 28.05.2020
--- Add auto increment for primary key of notification subscribers table.
+-- 15.04.2021
+-- Copy tasks results into task_result table.
 
-CREATE SEQUENCE dbo."AspNetPushNotificationSubscribers_Id_seq"
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
+INSERT INTO task_result (task_id, key, value) 
+	SELECT id, 'data', result
+	FROM task
+	WHERE result IS NOT NULL;
 
-ALTER TABLE dbo."AspNetPushNotificationSubscribers" ALTER COLUMN "Id"
-SET DEFAULT nextval('dbo."AspNetPushNotificationSubscribers_Id_seq"'::regclass)
+INSERT INTO task_result (task_id, key, value) 
+	SELECT id, 'similarityMatrix', additional_result_data 
+	FROM task
+	WHERE additional_result_data IS NOT NULL;
+
+INSERT INTO task_result (task_id, key, value) 
+	SELECT t.id, d.key, d.value :: json 
+	FROM task t
+	INNER JOIN json_each_text(t.result::json ) d ON true
+	WHERE t.additional_result_data IS NOT NULL
+	AND d.key IN ('characteristics', 'attributeValues');
+
+-- 01.02.2022
+-- Add collection country and collection date columns for genetic matters.
+
+ALTER TABLE IF EXISTS matter ADD COLUMN collection_country text;
+
+ALTER TABLE IF EXISTS matter ADD COLUMN collection_date date;
+
+-- 10.02.2022
+-- Add unique constraint on multisequence id and number in matters table.
+
+ALTER TABLE IF EXISTS matter ADD CONSTRAINT uk_matter_multisequence UNIQUE (multisequence_id, multisequence_number);
+
+-- 13.02.2022
+-- Delete redundant columns result and additional_result_data from task table.
+
+ALTER TABLE IF EXISTS task DROP COLUMN IF EXISTS result;
+
+ALTER TABLE IF EXISTS task DROP COLUMN IF EXISTS additional_result_data;
+
+-- 19.11.2022
+-- Recreate matter-multisequence unique constraint as deferred.
+
+ALTER TABLE IF EXISTS matter DROP CONSTRAINT IF EXISTS uk_matter_multisequence;
+
+ALTER TABLE IF EXISTS matter ADD CONSTRAINT uk_matter_multisequence UNIQUE (multisequence_id, multisequence_number) DEFERRABLE INITIALLY DEFERRED;
+
+-- 21.11.2022
+-- Add collection coordinates column for GenBank sequences.
+
+ALTER TABLE IF EXISTS matter ADD COLUMN collection_location text;
 
 COMMIT;

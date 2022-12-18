@@ -50,12 +50,12 @@
         Plasmid = 5,
 
         /// <summary>
-        /// Complete mitochondrion genome.
+        /// Complete mitochondrial genome.
         /// </summary>
-        [Display(Name = "Mitochondrion genome")]
+        [Display(Name = "Mitochondrial genome")]
         [Description("Complete mitochondrion genome")]
         [Nature(Nature.Genetic)]
-        MitochondrionGenome = 6,
+        MitochondrialGenome = 6,
 
         /// <summary>
         /// Complete chloroplast genome.
@@ -111,6 +111,15 @@
         [Display(Name = "Complete image")]
         [Description("Complete image")]
         [Nature(Nature.Image)]
-        CompleteImage = 13
+        CompleteImage = 13,
+
+        /// <summary>
+        /// Complete poem text.
+        /// </summary>
+        [Display(Name = "Complete Poem")]
+        [Description("Complete poem text")]
+        [Nature(Nature.Literature)]
+        CompletePoem = 14
+
     }
 }

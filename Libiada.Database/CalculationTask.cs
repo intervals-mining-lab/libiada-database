@@ -23,8 +23,6 @@ namespace Libiada.Database
         public Libiada.Database.Tasks.TaskType TaskType { get; set; }
         public string Description { get; set; }
         public Libiada.Database.Tasks.TaskState Status { get; set; }
-        public string Result { get; set; }
-        public string AdditionalResultData { get; set; }
         public int UserId { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public Nullable<System.DateTimeOffset> Started { get; set; }

@@ -156,7 +156,7 @@
                 if (feature.Key == gene)
                 {
                     // checking if there is any feature with identical location
-                    if (allNonGenesLeafLocations.Any(l => LocationsEqual(leafLocations, l)))
+                    if (allNonGenesLeafLocations.Any(l => IsLocationsEqual(leafLocations, l)))
                     {
                         continue;
                     }
@@ -199,7 +199,7 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool LocationsEqual(List<ILocation> geneLocation, List<ILocation> otherLocation)
+        private bool IsLocationsEqual(List<ILocation> geneLocation, List<ILocation> otherLocation)
         {
             // if there is a join in child record parent record contains only
             // first child start and last child end
@@ -252,7 +252,7 @@
 
                 if (feature.Key == gene)
                 {
-                    if (allNonGenesLeafLocations.Any(l => LocationsEqual(leafLocations, l)))
+                    if (allNonGenesLeafLocations.Any(l => IsLocationsEqual(leafLocations, l)))
                     {
                         continue;
                     }
@@ -264,8 +264,8 @@
                     subsequenceFeature = FeatureRepository.GetFeatureByName(feature.Key);
                 }
 
-                if (feature.Qualifiers.ContainsKey(Database.Attribute.Pseudo.GetDisplayValue())
-                 || feature.Qualifiers.ContainsKey(Database.Attribute.Pseudogene.GetDisplayValue()))
+                if (feature.Qualifiers.ContainsKey(Libiada.Database.Attribute.Pseudo.GetDisplayValue())
+                 || feature.Qualifiers.ContainsKey(Libiada.Database.Attribute.Pseudogene.GetDisplayValue()))
                 {
                     subsequenceFeature = Feature.PseudoGen;
                 }
@@ -354,14 +354,14 @@
         {
             List<NonCodingPosition> positions = ExtractNonCodingSubsequencesPositions();
             return positions.ConvertAll(p => new Subsequence
-                                                 {
-                                                     Id = db.GetNewElementId(),
-                                                     Feature = Feature.NonCodingSequence,
-                                                     Partial = false,
-                                                     SequenceId = sequenceId,
-                                                     Start = p.Start,
-                                                     Length = p.Length
-                                                 });
+            {
+                Id = db.GetNewElementId(),
+                Feature = Feature.NonCodingSequence,
+                Partial = false,
+                SequenceId = sequenceId,
+                Start = p.Start,
+                Length = p.Length
+            });
         }
 
         /// <summary>
@@ -438,7 +438,7 @@
         /// <summary>
         /// The non coding position start and length.
         /// </summary>
-        private struct NonCodingPosition
+        private readonly struct NonCodingPosition
         {
             /// <summary>
             /// The start.

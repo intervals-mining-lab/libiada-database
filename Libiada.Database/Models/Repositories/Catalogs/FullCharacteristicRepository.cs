@@ -4,12 +4,8 @@
     using System.Linq;
     using Libiada.Database;
     using LibiadaCore.Core;
-    using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
-
-    using Libiada.Database.Helpers;
-    using Libiada.Database.Models.CalculatorsData;
 
     /// <summary>
     /// The full characteristic repository.

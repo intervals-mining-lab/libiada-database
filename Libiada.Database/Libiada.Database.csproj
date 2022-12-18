@@ -12,9 +12,9 @@
 
   <ItemGroup>
     <None Remove="Libiada.edmx" />
-    <None Remove="LibiadaWeb.Context.tt" />
-    <None Remove="LibiadaWeb.edmx.diagram" />
-    <None Remove="LibiadaWeb.tt" />
+    <None Remove="Libiada.Context.tt" />
+    <None Remove="Libiada.edmx.diagram" />
+    <None Remove="Libiada.tt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +29,7 @@
     </Content>
     <Content Include="Libiada.tt">
       <DependentUpon>Libiada.edmx</DependentUpon>
-      <LastGenOutput>LibiadaWeb.cs</LastGenOutput>
+      <LastGenOutput>Libiada.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </Content>
   </ItemGroup>

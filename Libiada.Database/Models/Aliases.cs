@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using Libiada.Database;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
@@ -93,5 +93,18 @@
             Notation.AminoAcids,
             Notation.Letters
         });
+
+        /// <summary>
+        /// Sequence types with subsequences.
+        /// </summary>
+        public static readonly SequenceType[] SequenceTypesWithSubsequences = new[]
+        {
+                SequenceType.CompleteGenome,
+                SequenceType.MitochondrialGenome,
+                SequenceType.ChloroplastGenome,
+                SequenceType.Plasmid,
+                SequenceType.Plastid,
+                SequenceType.MitochondrialPlasmid
+        };
     }
 }

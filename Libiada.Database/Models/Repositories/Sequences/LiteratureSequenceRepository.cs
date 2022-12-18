@@ -4,7 +4,6 @@ namespace Libiada.Database.Models.Repositories.Sequences
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Libiada.Database;
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
@@ -46,6 +45,9 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// </param>
         /// <param name="translator">
         /// The translator id.
+        /// </param>
+        /// <param name="dropPunctuation">
+        /// Flag indicating if punctuation should be removed from text.
         /// </param>
         public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator, bool dropPunctuation = false)
         {
