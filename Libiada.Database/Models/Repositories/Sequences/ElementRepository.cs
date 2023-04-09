@@ -199,10 +199,10 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// The <see cref="IReadOnlyList{Element}"/>.
         /// </returns>
         public List<Element> GetElements(long[] elementIds) => db.Element
-                                                                     .Where(e => elementIds.Contains(e.Id))
-                                                                     .ToList()
-                                                                     .OrderBy(e => Array.IndexOf(elementIds, e.Id))
-                                                                     .ToList();
+                                                                 .Where(e => elementIds.Contains(e.Id))
+                                                                 .ToList()
+                                                                 .OrderBy(e => Array.IndexOf(elementIds, e.Id))
+                                                                 .ToList();
 
         /// <summary>
         /// The get or create pitches in db.
