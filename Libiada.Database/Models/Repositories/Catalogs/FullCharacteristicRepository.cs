@@ -10,18 +10,8 @@
     /// <summary>
     /// The full characteristic repository.
     /// </summary>
-    public class FullCharacteristicRepository
+    public class FullCharacteristicRepository : IFullCharacteristicRepository
     {
-        /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile FullCharacteristicRepository instance;
-
         /// <summary>
         /// The characteristic type links.
         /// </summary>
@@ -33,34 +23,9 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private FullCharacteristicRepository(LibiadaDatabaseEntities db)
+        public FullCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            characteristicsLinks = db.FullCharacteristicLink.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static FullCharacteristicRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            using (var db = new LibiadaDatabaseEntities())
-                            {
-                                instance = new FullCharacteristicRepository(db);
-                            }
-                        }
-                    }
-                }
-
-                return instance;
-            }
+            characteristicsLinks = libiadaDatabaseEntitiesFactory.Create().FullCharacteristicLink.ToArray();
         }
 
         /// <summary>

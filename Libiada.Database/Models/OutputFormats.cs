@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Models
+﻿namespace Libiada.Database.Models
 {
     /// <summary>
     /// The output formats.

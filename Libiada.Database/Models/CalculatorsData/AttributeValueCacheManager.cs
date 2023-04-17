@@ -18,6 +18,12 @@
         /// Dictionary of indexes of all attributeValues present in attributeValues list.
         /// </summary>
         private readonly Dictionary<AttributeValue, int> attributeValueIndexDictionary = new Dictionary<AttributeValue, int>();
+        private readonly LibiadaDatabaseEntities db;
+
+        public AttributeValueCacheManager(LibiadaDatabaseEntities db)
+        {
+            this.db = db;
+        }
 
         /// <summary>
         /// Retrieves attributes values of given subsequences from database
@@ -51,11 +57,9 @@
         /// </returns>
         private Dictionary<long, AttributeValue[]> GetSubsequencesAttributesValues(long[] subsequenceIds)
         {
-            using (var db = new LibiadaDatabaseEntities())
-            {
+            
                 var sequenceAttributeRepository = new SequenceAttributeRepository(db);
                 return sequenceAttributeRepository.GetAttributes(subsequenceIds);
-            }
         }
 
         /// <summary>

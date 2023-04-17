@@ -30,7 +30,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public CommonSequenceRepository(LibiadaDatabaseEntities db) : base(db)
+        public CommonSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
         {
         }
 
@@ -210,7 +210,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
                                                                pauseTreatments?[j],
                                                                sequentialTransfers?[j],
                                                                imageOrderExtractors?[j]);
-                for(int i = 0; i < matterIds.Length; i++)
+                for (int i = 0; i < matterIds.Length; i++)
                 {
                     sequenceIds[i][j] = sequenceIdsForOneNotation[i];
 
@@ -337,7 +337,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
                             {
                                 MatterId = matterIds[i],
                                 Notation = notations[j],
-                                OrderExtractor = imageOrderExtractors[j]??ImageOrderExtractor.LineLeftToRightTopToBottom
+                                OrderExtractor = imageOrderExtractors[j] ?? ImageOrderExtractor.LineLeftToRightTopToBottom
                             };
                             imageSequenceRepository.Create(newImageSequence, Db);
                             existingSequences.Add(newImageSequence);

@@ -8,45 +8,28 @@
     /// </summary>
     public class Cache
     {
+        private readonly LibiadaDatabaseEntities db;
+
         /// <summary>
         /// The list of matters.
         /// </summary>
         public List<Matter> Matters { get; set; }
 
         /// <summary>
-        /// The instance for singleton.
-        /// </summary>
-        private static Cache instance = null;
-
-        /// <summary>
         /// Initializes list of matters.
         /// </summary>
-        private Cache()
+        public Cache(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            using (var db = new LibiadaDatabaseEntities())
-            {
-                Matters = db.Matter.ToList();
-            }
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static Cache GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new Cache();
-            }
-            return instance;
+            this.db = libiadaDatabaseEntitiesFactory.Create();
+            Matters = db.Matter.ToList();
         }
 
         /// <summary>
         /// Clears the instance.
         /// </summary>
-        public static void Clear()
+        public void Clear()
         {
-            instance = null;
+            Matters = db.Matter.ToList();
         }
     }
 }

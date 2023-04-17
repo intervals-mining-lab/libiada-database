@@ -15,8 +15,8 @@ namespace Libiada.Database
     
     public partial class LibiadaDatabaseEntities : DbContext
     {
-        public LibiadaDatabaseEntities()
-            : base("name=LibiadaDatabaseEntities")
+        public LibiadaDatabaseEntities(string connectionString)
+            : base(connectionString)
         {
     		Database.CommandTimeout = 1000000;
         }

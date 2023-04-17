@@ -8,11 +8,12 @@ namespace Libiada.Database.Models.Repositories.Sequences
     using LibiadaCore.Core.SimpleTypes;
 
     using Libiada.Database.Helpers;
+    using Libiada.Database.Extensions;
 
     using Npgsql;
 
     using NpgsqlTypes;
-
+    
     /// <summary>
     /// The literature sequence repository.
     /// </summary>
@@ -24,7 +25,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public LiteratureSequenceRepository(LibiadaDatabaseEntities db) : base(db)
+        public LiteratureSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
         {
         }
 

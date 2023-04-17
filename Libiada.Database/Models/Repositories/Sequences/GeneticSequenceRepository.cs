@@ -9,7 +9,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
 
     using LibiadaCore.Core;
 
-    using Libiada.Database.Helpers;
+    using Libiada.Database.Extensions;
 
     using Npgsql;
 
@@ -26,7 +26,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public GeneticSequenceRepository(LibiadaDatabaseEntities db) : base(db)
+        public GeneticSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
         {
         }
 

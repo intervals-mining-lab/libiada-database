@@ -10,18 +10,8 @@
     /// <summary>
     /// The congeneric characteristic repository.
     /// </summary>
-    public class CongenericCharacteristicRepository
+    public class CongenericCharacteristicRepository : ICongenericCharacteristicRepository
     {
-        /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile CongenericCharacteristicRepository instance;
-
         /// <summary>
         /// The congeneric characteristic links.
         /// </summary>
@@ -33,34 +23,9 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private CongenericCharacteristicRepository(LibiadaDatabaseEntities db)
+        public CongenericCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            characteristicsLinks = db.CongenericCharacteristicLink.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static CongenericCharacteristicRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            using (var db = new LibiadaDatabaseEntities())
-                            {
-                                instance = new CongenericCharacteristicRepository(db);
-                            }
-                        }
-                    }
-                }
-
-                return instance;
-            }
+            characteristicsLinks = libiadaDatabaseEntitiesFactory.Create().CongenericCharacteristicLink.ToArray();
         }
 
         /// <summary>

@@ -10,18 +10,8 @@
     /// <summary>
     /// The binary characteristic repository.
     /// </summary>
-    public class BinaryCharacteristicRepository
+    public class BinaryCharacteristicRepository : IBinaryCharacteristicRepository
     {
-        /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile BinaryCharacteristicRepository instance;
-
         /// <summary>
         /// The binary characteristic links.
         /// </summary>
@@ -33,34 +23,9 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private BinaryCharacteristicRepository(LibiadaDatabaseEntities db)
+        public BinaryCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            characteristicsLinks = db.BinaryCharacteristicLink.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static BinaryCharacteristicRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            using (var db = new LibiadaDatabaseEntities())
-                            {
-                                instance = new BinaryCharacteristicRepository(db);
-                            }
-                        }
-                    }
-                }
-
-                return instance;
-            }
+            characteristicsLinks = libiadaDatabaseEntitiesFactory.Create().BinaryCharacteristicLink.ToArray();
         }
 
         /// <summary>

@@ -1,69 +1,13 @@
-﻿namespace Libiada.Database.Helpers
+﻿namespace Libiada.Database.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     using Npgsql;
     using NpgsqlTypes;
 
-    /// <summary>
-    /// The helper for database functions.
-    /// </summary>
-    public static class DbHelper
+    using System.Linq;
+    using System;
+
+    public static class LibiadaDatabaseEntitiesExtensions
     {
-        /// <summary>
-        /// The database name.
-        /// </summary>
-        private static string databaseName;
-
-        /// <summary>
-        /// Gets the db name.
-        /// </summary>
-        public static string DbName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(databaseName))
-                {
-                    try
-                    {
-                        using (var db = new LibiadaDatabaseEntities())
-                        {
-                            databaseName = string.Join("@", db.Database.Connection.DataSource, db.Database.Connection.Database);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        databaseName = $"No connection to db. Reason: {e.Message}";
-                    }
-                }
-
-                return databaseName;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether connection to db established or not.
-        /// </summary>
-        public static bool ConnectionSuccessful
-        {
-            get
-            {
-                try
-                {
-                    using (var db = new LibiadaDatabaseEntities())
-                    {
-                        return db.Database.Exists();
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-
         /// <summary>
         /// Gets new element id from database.
         /// </summary>
@@ -335,6 +279,37 @@
             const string Query = "SELECT cardinality(building) FROM chain WHERE id = @id";
             var id = new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = sequenceId };
             return db.Database.SqlQuery<int>(Query, id).First();
+        }
+
+        /// <summary>
+        /// Gets the db name.
+        /// </summary>
+        public static string TryGetDbName(this LibiadaDatabaseEntities db)
+        {
+            try
+            {
+                return string.Join("@", db.Database.Connection.DataSource, db.Database.Connection.Database);
+
+            }
+            catch (Exception e)
+            {
+                return $"No connection to db. Reason: {e.Message}";
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether connection to db established or not.
+        /// </summary>
+        public static bool IsConnectionSuccessful(this LibiadaDatabaseEntities db)
+        {
+            try
+            {
+                return db.Database.Exists();
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

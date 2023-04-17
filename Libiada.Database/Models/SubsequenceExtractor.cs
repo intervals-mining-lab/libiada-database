@@ -28,7 +28,7 @@
         /// <summary>
         /// The common sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequenceExtractor"/> class.
@@ -36,10 +36,10 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        public SubsequenceExtractor(LibiadaDatabaseEntities db)
+        public SubsequenceExtractor(LibiadaDatabaseEntities db, ICommonSequenceRepository commonSequenceRepository)
         {
             this.db = db;
-            commonSequenceRepository = new CommonSequenceRepository(db);
+            this.commonSequenceRepository = commonSequenceRepository;
         }
 
         /// <summary>

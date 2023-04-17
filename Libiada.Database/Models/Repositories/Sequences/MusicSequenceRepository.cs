@@ -11,10 +11,11 @@ namespace Libiada.Database.Models.Repositories.Sequences
     using LibiadaCore.Music;
     using LibiadaCore.Music.MusicXml;
 
+    using Libiada.Database.Extensions;
+
     using Helpers;
     using Npgsql;
     using NpgsqlTypes;
-    using LibiadaCore.Extensions;
 
     /// <summary>
     /// The music sequence repository.
@@ -37,7 +38,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public MusicSequenceRepository(LibiadaDatabaseEntities db) : base(db)
+        public MusicSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
         {
             FmotifRepository = new FmotifRepository(db);
             MeasureRepository = new MeasureRepository(db);
@@ -84,7 +85,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
             Create(sequence, measuresAlphabet, measuresSequence.Building);
 
             sequence.Notation = Notation.FormalMotifs;
-            var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable);
+            var pauseTreatments = LibiadaCore.Extensions.EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable);
             foreach (PauseTreatment pauseTreatment in pauseTreatments)
             {
                 BaseChain fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);

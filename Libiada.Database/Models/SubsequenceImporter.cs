@@ -15,12 +15,12 @@
     /// <summary>
     /// The subsequence importer.
     /// </summary>
-    public class SubsequenceImporter : IDisposable
+    public class SubsequenceImporter
     {
         /// <summary>
         /// The database context.
         /// </summary>
-        private readonly LibiadaDatabaseEntities db = new LibiadaDatabaseEntities();
+        private readonly LibiadaDatabaseEntities db;
 
         /// <summary>
         /// The attribute repository.
@@ -58,7 +58,7 @@
         /// <param name="sequence">
         /// Dna sequence for which subsequences will be imported.
         /// </param>
-        public SubsequenceImporter(DnaSequence sequence) : this(NcbiHelper.GetFeatures(sequence.RemoteId), sequence.Id)
+        public SubsequenceImporter(LibiadaDatabaseEntities db, DnaSequence sequence) : this(db, NcbiHelper.GetFeatures(sequence.RemoteId), sequence.Id)
         {
         }
 
@@ -75,8 +75,9 @@
         /// thrown if length of sequence from database
         /// is not equal to the length of downloaded sequence.
         /// </exception>
-        public SubsequenceImporter(List<FeatureItem> features, long sequenceId)
+        public SubsequenceImporter(LibiadaDatabaseEntities db, List<FeatureItem> features, long sequenceId)
         {
+            this.db = db;
             this.features = features;
             this.sequenceId = sequenceId;
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
@@ -93,14 +94,6 @@
             {
                 throw new Exception($"Local and loaded sequence length are not equal. Local length: {parentLength}, loaded length: {sourceLength}");
             }
-        }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        public void Dispose()
-        {
-            db.Dispose();
         }
 
         /// <summary>

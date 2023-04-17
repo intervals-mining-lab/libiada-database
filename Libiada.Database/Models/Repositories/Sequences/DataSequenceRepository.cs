@@ -9,8 +9,10 @@
     using LibiadaCore.Core.SimpleTypes;
 
     using Libiada.Database.Helpers;
-    using Npgsql;
+    using Libiada.Database.Extensions;
 
+    using Npgsql;
+    
     /// <summary>
     /// The data sequence repository.
     /// </summary>
@@ -22,7 +24,7 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        public DataSequenceRepository(LibiadaDatabaseEntities db) : base(db)
+        public DataSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
         {
         }
 

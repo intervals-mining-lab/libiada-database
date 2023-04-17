@@ -9,9 +9,9 @@
     public class CustomSequencesCharacterisitcsCalculator
     {
         private readonly LinkedFullCalculator[] calculators;
-        public CustomSequencesCharacterisitcsCalculator(short[] characteristicLinkIds)
+
+        public CustomSequencesCharacterisitcsCalculator(IFullCharacteristicRepository characteristicTypeLinkRepository, short[] characteristicLinkIds)
         {
-            var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
             calculators = new LinkedFullCalculator[characteristicLinkIds.Length];
             for (int i = 0; i < characteristicLinkIds.Length; i++)
             {

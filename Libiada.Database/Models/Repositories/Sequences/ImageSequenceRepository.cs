@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Database.Models.Repositories.Sequences
 {
-    using Libiada.Database.Helpers;
+    using Libiada.Database.Extensions;
 
     using Npgsql;
     using NpgsqlTypes;

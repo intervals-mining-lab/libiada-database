@@ -4,12 +4,24 @@
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Iterators;
     using Libiada.Database.Models.Repositories.Catalogs;
-    using System;
+
     using System.Collections.Generic;
     using System.Linq;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     public class LocalCharacteristicsCalculator
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+
+        public LocalCharacteristicsCalculator(LibiadaDatabaseEntities db, IFullCharacteristicRepository characteristicTypeLinkRepository, ICommonSequenceRepository commonSequenceRepository)
+        {
+            this.db = db;
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.commonSequenceRepository = commonSequenceRepository;
+        }
+
         /// <summary>
         /// The get subsequence characteristic.
         /// </summary>
@@ -38,20 +50,16 @@
             IFullCalculator calculator;
             Link link;
 
-            using (var db = new LibiadaDatabaseEntities())
-            {
-                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
+            FullCharacteristic characteristic =
+                characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+            calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
+            link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
-                FullCharacteristic characteristic =
-                    characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-                calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
+            var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
 
-                var subsequenceExtractor = new SubsequenceExtractor(db);
+            Subsequence subsequence = db.Subsequence.Single(s => s.Id == subsequenceId);
+            chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
 
-                Subsequence subsequence = db.Subsequence.Single(s => s.Id == subsequenceId);
-                chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
-            }
 
             CutRule cutRule = new SimpleCutRule(chain.Length, step, windowSize);
 

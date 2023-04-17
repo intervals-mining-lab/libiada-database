@@ -5,7 +5,7 @@
     using System.Linq;
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
-    using Libiada.Database.Helpers;
+    using Libiada.Database.Extensions;
     using Npgsql;
     using NpgsqlTypes;
 

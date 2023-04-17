@@ -4,28 +4,15 @@
     using System.Linq;
     using Libiada.Database;
     using LibiadaCore.Core;
-    using LibiadaCore.Core.ArrangementManagers;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
     using LibiadaCore.Extensions;
 
-    using Libiada.Database.Helpers;
-    using Libiada.Database.Models.CalculatorsData;
 
     /// <summary>
     /// The accordance characteristic repository.
     /// </summary>
-    public class AccordanceCharacteristicRepository
+    public class AccordanceCharacteristicRepository : IAccordanceCharacteristicRepository
     {
-        /// <summary>
-        /// The sync root.
-        /// </summary>
-        private static readonly object SyncRoot = new object();
-
-        /// <summary>
-        /// The instance.
-        /// </summary>
-        private static volatile AccordanceCharacteristicRepository instance;
-
         /// <summary>
         /// The accordance characteristics links.
         /// </summary>
@@ -37,34 +24,9 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        private AccordanceCharacteristicRepository(LibiadaDatabaseEntities db)
+        public AccordanceCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            characteristicsLinks = db.AccordanceCharacteristicLink.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the instance.
-        /// </summary>
-        public static AccordanceCharacteristicRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            using (var db = new LibiadaDatabaseEntities())
-                            {
-                                instance = new AccordanceCharacteristicRepository(db);
-                            }
-                        }
-                    }
-                }
-
-                return instance;
-            }
+            characteristicsLinks = libiadaDatabaseEntitiesFactory.Create().AccordanceCharacteristicLink.ToArray();
         }
 
         /// <summary>

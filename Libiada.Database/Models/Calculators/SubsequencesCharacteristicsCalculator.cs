@@ -9,12 +9,26 @@
     using Libiada.Database.Models.CalculatorsData;
     using Libiada.Database.Models.Repositories.Calculators;
     using Libiada.Database.Models.Repositories.Catalogs;
+    using Libiada.Database.Models.Repositories.Sequences;
 
     /// <summary>
     /// The subsequences characteristics calculator.
     /// </summary>
-    public static class SubsequencesCharacteristicsCalculator
+    public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristicsCalculator
     {
+        private readonly LibiadaDatabaseEntities db;
+        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+        private readonly ICommonSequenceRepository commonSequenceRepository;
+
+        public SubsequencesCharacteristicsCalculator(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory, 
+                                                     IFullCharacteristicRepository characteristicTypeLinkRepository, 
+                                                     ICommonSequenceRepository commonSequenceRepository)
+        {
+            this.db = libiadaDatabaseEntitiesFactory.Create();
+            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+            this.commonSequenceRepository = commonSequenceRepository;
+        }
+
         /// <summary>
         /// Calculates subsequences characteristics.
         /// </summary>
@@ -32,7 +46,7 @@
         /// Null by default.
         /// </param>
         /// <returns></returns>
-        public static double[] CalculateSubsequencesCharacteristics(long parentId, short characteristicId, Feature[] features, string[] filters = null)
+        public double[] CalculateSubsequencesCharacteristics(long parentId, short characteristicId, Feature[] features, string[] filters = null)
         {
             var characteristicsIds = new[] { characteristicId };
             SubsequenceData[] subsequencesData = CalculateSubsequencesCharacteristics(characteristicsIds, features, parentId, filters);
@@ -57,7 +71,7 @@
         /// <returns>
         /// The <see cref="T:SubsequenceData[]"/> .
         /// </returns>
-        public static SubsequenceData[] CalculateSubsequencesCharacteristics(
+        public SubsequenceData[] CalculateSubsequencesCharacteristics(
             short[] characteristicIds,
             Feature[] features,
             long parentSequenceId,
@@ -72,37 +86,32 @@
             var newCharacteristics = new List<CharacteristicValue>();
 
             // creating local context to avoid memory overflow due to possibly big cache of characteristics
-            using (var db = new LibiadaDatabaseEntities())
+
+            var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
+
+            Subsequence[] subsequences = filters == null ?
+                subsequenceExtractor.GetSubsequences(parentSequenceId, features) :
+                subsequenceExtractor.GetSubsequences(parentSequenceId, features, filters);
+
+            subsequenceData = subsequences.Select(s => new SubsequenceData(s)).ToArray();
+
+            // converting to libiada sequences
+            subsequenceIds = subsequences.Select(s => s.Id).ToArray();
+
+            characteristics = db.CharacteristicValue
+                                .Where(c => characteristicIds.Contains(c.CharacteristicLinkId) && subsequenceIds.Contains(c.SequenceId))
+                                .ToArray()
+                                .GroupBy(c => c.SequenceId)
+                                .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
+            if (characteristics.Count == subsequences.Length && characteristics.All(c => c.Value.Count == characteristicIds.Length))
             {
-                var subsequenceExtractor = new SubsequenceExtractor(db);
-
-                Subsequence[] subsequences = filters == null ?
-                    subsequenceExtractor.GetSubsequences(parentSequenceId, features) :
-                    subsequenceExtractor.GetSubsequences(parentSequenceId, features, filters);
-
-                subsequenceData = subsequences.Select(s => new SubsequenceData(s)).ToArray();
-
-                // converting to libiada sequences
-                subsequenceIds = subsequences.Select(s => s.Id).ToArray();
-
-
-
-                characteristics = db.CharacteristicValue
-                        .Where(c => characteristicIds.Contains(c.CharacteristicLinkId) && subsequenceIds.Contains(c.SequenceId))
-                        .ToArray()
-                        .GroupBy(c => c.SequenceId)
-                        .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
-                if (characteristics.Count == subsequences.Length && characteristics.All(c => c.Value.Count == characteristicIds.Length))
-                {
-                    sequences = new Dictionary<long, Chain>();
-                }
-                else
-                {
-                    sequences = subsequenceExtractor.GetSubsequencesSequences(subsequences);
-                }
+                sequences = new Dictionary<long, Chain>();
+            }
+            else
+            {
+                sequences = subsequenceExtractor.GetSubsequencesSequences(subsequences);
             }
 
-            var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
             for (int k = 0; k < characteristicIds.Length; k++)
             {
                 short characteristicLinkId = characteristicIds[k];
@@ -139,12 +148,9 @@
                 subsequenceData[i].CharacteristicsValues = values;
             }
 
-            using (var db = new LibiadaDatabaseEntities())
-            {
-                // trying to save calculated characteristics to database
-                var characteristicRepository = new CharacteristicRepository(db);
-                characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
-            }
+            // trying to save calculated characteristics to database
+            var characteristicRepository = new CharacteristicRepository(db);
+            characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
 
             return subsequenceData;
         }

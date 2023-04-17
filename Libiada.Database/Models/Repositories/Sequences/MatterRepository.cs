@@ -25,6 +25,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// The db.
         /// </summary>
         private readonly LibiadaDatabaseEntities db;
+        private readonly Cache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MatterRepository"/> class.
@@ -32,9 +33,10 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public MatterRepository(LibiadaDatabaseEntities db)
+        public MatterRepository(LibiadaDatabaseEntities db, Cache cache)
         {
             this.db = db;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -193,7 +195,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         {
             db.Matter.Add(matter);
             db.SaveChanges();
-            Cache.Clear();
+            cache.Clear();
             return matter.Id;
         }
 

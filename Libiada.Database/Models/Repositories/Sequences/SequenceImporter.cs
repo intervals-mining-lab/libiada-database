@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using Libiada.Database.Helpers;
+    using Libiada.Database.Extensions;
 
     using Npgsql;
 
@@ -35,10 +35,10 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        protected SequenceImporter(LibiadaDatabaseEntities db)
+        protected SequenceImporter(LibiadaDatabaseEntities db, Cache cache)
         {
             Db = db;
-            MatterRepository = new MatterRepository(db);
+            MatterRepository = new MatterRepository(db, cache);
             ElementRepository = new ElementRepository(db);
         }
 
