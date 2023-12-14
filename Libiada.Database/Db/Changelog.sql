@@ -3115,4 +3115,524 @@ ALTER TABLE IF EXISTS matter ADD CONSTRAINT uk_matter_multisequence UNIQUE (mult
 
 ALTER TABLE IF EXISTS matter ADD COLUMN collection_location text;
 
+-- 13.12.2023
+-- Move auth (identity) data from dbo to public schema.
+-- Tables must be created using ef core migrations.
+
+INSERT INTO "AspNetUsers"
+SELECT "Id", 
+    "UserName", 
+    UPPER("UserName") AS "NormalizedUserName", 
+    "Email", UPPER("Email") AS "NormalizedEmail", 
+    "EmailConfirmed", 
+    "PasswordHash", 
+    "SecurityStamp", 
+    NULL AS "ConcurrencyStamp",
+    "PhoneNumber", 
+    "PhoneNumberConfirmed", 
+    "TwoFactorEnabled", 
+    "LockoutEndDateUtc" AS "LockoutEnd", 
+    "LockoutEnabled", 
+    "AccessFailedCount"
+FROM dbo."AspNetUsers";
+
+INSERT INTO "AspNetPushNotificationSubscribers" 
+SELECT * FROM dbo."AspNetPushNotificationSubscribers";
+
+INSERT INTO "AspNetRoles"
+SELECT "Id", "Name", UPPER("Name") AS "NormalizedName" FROM dbo."AspNetRoles";
+
+INSERT INTO "AspNetRoles"
+SELECT * FROM dbo."AspNetUserClaims";
+
+INSERT INTO "AspNetUserLogins"
+SELECT "LoginProvider", "ProviderKey", NULL AS "ProviderDisplayName", "UserId" FROM dbo."AspNetUserLogins";
+
+INSERT INTO "AspNetUserRoles"
+SELECT * FROM dbo."AspNetUserRoles";
+
+SELECT Max("Id") + 1 FROM "AspNetUsers";
+
+ALTER TABLE "AspNetUsers" ALTER "Id" RESTART MAX_ID + 1 ; -- value should be copied from result of previous query 
+
+SELECT Max("Id") + 1 FROM "AspNetPushNotificationSubscribers";
+
+ALTER TABLE "AspNetPushNotificationSubscribers" ALTER "Id" RESTART MAX_ID + 1; -- value should be copied from result of previous query 
+
+-- Columns comments translation. 
+
+COMMENT ON COLUMN public.accordance_characteristic.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.accordance_characteristic.first_chain_id IS 'Id of the first sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.accordance_characteristic.second_chain_id IS 'Id of the second sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.accordance_characteristic.value IS 'Numerical value of the characteristic.';
+
+COMMENT ON COLUMN public.accordance_characteristic.first_element_id IS 'Id of the element of the first sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.accordance_characteristic.second_element_id IS 'Id of the element of the second sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.accordance_characteristic.characteristic_link_id IS 'Characteristic type id.';
+	
+COMMENT ON COLUMN public.accordance_characteristic_link.id IS 'Unique identifier.';
+
+COMMENT ON COLUMN public.accordance_characteristic_link.accordance_characteristic IS 'Characteristic enum numeric value.';
+
+COMMENT ON COLUMN public.accordance_characteristic_link.link IS 'Link enum numeric value.';
+
+COMMENT ON COLUMN public.binary_characteristic.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.binary_characteristic.chain_id IS 'Id of the sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.binary_characteristic.value IS 'Numerical value of the characteristic.';
+
+COMMENT ON COLUMN public.binary_characteristic.first_element_id IS 'Id of the first element of the sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.binary_characteristic.second_element_id IS 'Id of the second element of the sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.binary_characteristic.characteristic_link_id IS 'Characteristic type id.';
+
+COMMENT ON COLUMN public.binary_characteristic_link.id IS 'Unique identifier.';
+
+COMMENT ON COLUMN public.binary_characteristic_link.binary_characteristic IS 'Characteristic enum numeric value.';
+
+COMMENT ON COLUMN public.binary_characteristic_link.link IS 'Link enum numeric value.';
+
+COMMENT ON COLUMN public.chain.id IS 'Unique internal identifier of the sequence.';
+
+COMMENT ON COLUMN public.chain.created IS 'Sequence creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.chain.matter_id IS 'Id of the research object to which the sequence belongs.';
+
+COMMENT ON COLUMN public.chain.alphabet IS 'Sequence''s alphabet (array of elements ids).';
+
+COMMENT ON COLUMN public.chain.building IS 'Sequence''s order.';
+
+COMMENT ON COLUMN public.chain.remote_id IS 'Id of the sequence in remote database.';
+
+COMMENT ON COLUMN public.chain.remote_db IS 'Enum numeric value of the remote db from which sequence is downloaded.';
+
+COMMENT ON COLUMN public.chain.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.chain.description IS 'Description of the sequence.';
+
+COMMENT ON COLUMN public.chain_attribute.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.chain_attribute.chain_id IS 'Id of the sequence to which attribute belongs.';
+
+COMMENT ON COLUMN public.chain_attribute.attribute IS 'Attribute enum numeric value.';
+
+COMMENT ON COLUMN public.chain_attribute.value IS 'Text of the attribute.';
+
+COMMENT ON COLUMN public.chain_key.id IS 'Unique identifier of the sequence used in other tables. Surrogate for foreign keys.';
+
+COMMENT ON COLUMN public.congeneric_characteristic.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.congeneric_characteristic.chain_id IS 'Id of the sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.congeneric_characteristic.value IS 'Numerical value of the characteristic.';
+
+COMMENT ON COLUMN public.congeneric_characteristic.element_id IS 'Id of the element for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.congeneric_characteristic.characteristic_link_id IS 'Characteristic type id.';
+
+COMMENT ON COLUMN public.congeneric_characteristic_link.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.congeneric_characteristic_link.congeneric_characteristic IS 'Characteristic enum numeric value.';
+
+COMMENT ON COLUMN public.congeneric_characteristic_link.link IS 'Link enum numeric value.';
+
+COMMENT ON COLUMN public.congeneric_characteristic_link.arrangement_type IS 'Arrangement type enum numeric value.';
+
+COMMENT ON COLUMN public.data_chain.id IS 'Unique internal identifier of the sequence.';
+
+COMMENT ON COLUMN public.data_chain.notation IS 'Notation enum numeric value.';
+
+COMMENT ON COLUMN public.data_chain.created IS 'Sequence creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.data_chain.matter_id IS 'Id of the research object to which the sequence belongs.';
+
+COMMENT ON COLUMN public.data_chain.alphabet IS 'Sequence''s alphabet (array of elements ids).';
+
+COMMENT ON COLUMN public.data_chain.building IS 'Sequence''s order.';
+
+COMMENT ON COLUMN public.data_chain.remote_db IS 'Enum numeric value of the remote db from which sequence is downloaded.';
+
+COMMENT ON COLUMN public.data_chain.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.data_chain.remote_id IS 'Id of the sequence in remote database.';
+
+COMMENT ON COLUMN public.data_chain.description IS 'Description of the sequence.';
+
+COMMENT ON COLUMN public.dna_chain.id IS 'Unique internal identifier of the sequence.';
+
+COMMENT ON COLUMN public.dna_chain.notation IS 'Notation enum numeric value.';
+
+COMMENT ON COLUMN public.dna_chain.created IS 'Sequence creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.dna_chain.matter_id IS 'Id of the research object to which the sequence belongs.';
+
+COMMENT ON COLUMN public.dna_chain.alphabet IS 'Sequence''s alphabet (array of elements ids).';
+
+COMMENT ON COLUMN public.dna_chain.building IS 'Sequence''s order.';
+
+COMMENT ON COLUMN public.dna_chain.remote_id IS 'Id of the sequence in remote database.';
+
+COMMENT ON COLUMN public.dna_chain.remote_db IS 'Enum numeric value of the remote db from which sequence is downloaded.';
+
+COMMENT ON COLUMN public.dna_chain.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.dna_chain.description IS 'Description of the sequence.';
+
+COMMENT ON COLUMN public.dna_chain.partial IS 'Flag indicating whether sequence is partial or complete.';
+
+COMMENT ON COLUMN public.element.id IS 'Unique internal identifier of the element.';
+
+COMMENT ON COLUMN public.element.value IS 'Content of the element.';
+
+COMMENT ON COLUMN public.element.description IS 'Description of the element.';
+
+COMMENT ON COLUMN public.element.name IS 'Name of the element.';
+
+COMMENT ON COLUMN public.element.notation IS 'Notation enum numeric value.';
+
+COMMENT ON COLUMN public.element.created IS 'Element creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.element.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.element_key.id IS 'Unique identifier of the element used in other tables. Surrogate for foreign keys.';
+
+COMMENT ON COLUMN public.fmotif.id IS 'Unique internal identifier of the fmotif.';
+
+COMMENT ON COLUMN public.fmotif.value IS 'Fmotif hash value.';
+
+COMMENT ON COLUMN public.fmotif.description IS 'Fmotif description.';
+
+COMMENT ON COLUMN public.fmotif.name IS 'Fmotif name.';
+
+COMMENT ON COLUMN public.fmotif.notation IS 'Fmotif notation enum numeric value (always 6).';
+
+COMMENT ON COLUMN public.fmotif.created IS 'Fmotif creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.fmotif.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.fmotif.alphabet IS 'Fmotif''s alphabet (array of notes ids).';
+
+COMMENT ON COLUMN public.fmotif.building IS 'Fmotif''s order.';
+
+COMMENT ON COLUMN public.fmotif.fmotif_type IS 'Fmotif type enum numeric value.';
+
+COMMENT ON COLUMN public.full_characteristic.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.full_characteristic.chain_id IS 'Id of the sequence for which the characteristic is calculated.';
+
+COMMENT ON COLUMN public.full_characteristic.value IS 'Numerical value of the characteristic.';
+
+COMMENT ON COLUMN public.full_characteristic.characteristic_link_id IS 'Characteristic type id.';
+
+COMMENT ON COLUMN public.full_characteristic_link.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.full_characteristic_link.full_characteristic IS 'Characteristic enum numeric value.';
+
+COMMENT ON COLUMN public.full_characteristic_link.link IS 'Link enum numeric value.';
+
+COMMENT ON COLUMN public.full_characteristic_link.arrangement_type IS 'Arrangement type enum numeric value.';
+
+COMMENT ON COLUMN public.image_sequence.id IS 'Unique internal identifier of the image sequence.';
+
+COMMENT ON COLUMN public.image_sequence.notation IS 'Notation enum numeric value.';
+
+COMMENT ON COLUMN public.image_sequence.order_extractor IS 'Order extractor enum numeric value used in the process of creation of the sequence.';
+
+COMMENT ON COLUMN public.image_sequence.image_transformations IS 'Array of image transformations applied begore the extraction of the sequence.';
+
+COMMENT ON COLUMN public.image_sequence.matrix_transformations IS 'Array of matrix transformations applied begore the extraction of the sequence.';
+
+COMMENT ON COLUMN public.image_sequence.matter_id IS 'Id of the research object (image) to which the sequence belongs.';
+
+COMMENT ON COLUMN public.image_sequence.remote_id IS 'Id of the sequence in remote database.';
+
+COMMENT ON COLUMN public.image_sequence.remote_db IS 'Enum numeric value of the remote db from which sequence is downloaded.';
+
+COMMENT ON COLUMN public.image_sequence.created IS 'Sequence creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.image_sequence.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.literature_chain.id IS 'Unique internal identifier of the sequence.';
+
+COMMENT ON COLUMN public.literature_chain.notation IS 'Notation enum numeric value.';
+
+COMMENT ON COLUMN public.literature_chain.created IS 'Sequence creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.literature_chain.matter_id IS 'Id of the research object to which the sequence belongs.';
+
+COMMENT ON COLUMN public.literature_chain.alphabet IS 'Sequence''s alphabet (array of elements ids).';
+
+COMMENT ON COLUMN public.literature_chain.building IS 'Sequence''s order.';
+
+COMMENT ON COLUMN public.literature_chain.remote_id IS 'Id of the sequence in remote database.';
+
+COMMENT ON COLUMN public.literature_chain.remote_db IS 'Enum numeric value of the remote db from which sequence is downloaded.';
+
+COMMENT ON COLUMN public.literature_chain.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.literature_chain.description IS 'Sequence description.';
+
+COMMENT ON COLUMN public.literature_chain.original IS 'Flag indicating if this sequence is in original language or was translated.';
+
+COMMENT ON COLUMN public.matter.id IS 'Unique internal identifier of the research object.';
+
+COMMENT ON COLUMN public.matter.name IS 'Research object name.';
+
+COMMENT ON COLUMN public.matter.nature IS 'Research object nature enum numeric value.';
+
+COMMENT ON COLUMN public.matter.description IS 'Description of the research object.';
+
+COMMENT ON COLUMN public.matter.created IS 'Record creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.matter.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.matter.sequence_type IS 'Sequence type enum numeric value.';
+
+COMMENT ON COLUMN public.matter."group" IS 'Group enum numeric value.';
+
+COMMENT ON COLUMN public.matter.multisequence_id IS 'Id of the parent multisequence.';
+
+COMMENT ON COLUMN public.matter.multisequence_number IS 'Serial number in multisequence.';
+
+COMMENT ON COLUMN public.matter.source IS 'Source of the genetic sequence.';
+
+COMMENT ON COLUMN public.matter.collection_country IS 'Collection country of the genetic sequence.';
+
+COMMENT ON COLUMN public.matter.collection_date IS 'Collection date of the genetic sequence.';
+
+COMMENT ON COLUMN public.matter.collection_location IS 'Collection location of the genetic sequence.';
+
+COMMENT ON COLUMN public.measure.id IS 'Unique internal identifier of the measure.';
+
+COMMENT ON COLUMN public.measure.value IS 'Measure hash code.';
+
+COMMENT ON COLUMN public.measure.description IS 'Description of the sequence.';
+
+COMMENT ON COLUMN public.measure.name IS 'Measure name.';
+
+COMMENT ON COLUMN public.measure.notation IS 'Measure notation enum numeric value (always 7).';
+
+COMMENT ON COLUMN public.measure.created IS 'Measure creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.measure.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.measure.alphabet IS 'Measure alphabet (array of notes ids).';
+
+COMMENT ON COLUMN public.measure.building  IS 'Measure order.';
+
+COMMENT ON COLUMN public.measure.beats IS 'Time signature upper numeral (Beat numerator).';
+
+COMMENT ON COLUMN public.measure.beatbase IS 'Time signature lower numeral (Beat denominator).';
+
+COMMENT ON COLUMN public.measure.fifths IS 'Key signature of the measure (negative value represents the number of flats (bemolles) and positive represents the number of sharps (diesis)).';
+
+COMMENT ON COLUMN public.measure.major IS 'Music mode of the measure. true  represents major and false represents minor.';
+
+COMMENT ON COLUMN public.multisequence.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.multisequence.name IS 'Multisequence name.';
+
+COMMENT ON COLUMN public.multisequence.nature IS 'Multisequence nature enum numeric value.';
+
+COMMENT ON COLUMN public.music_chain.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.music_chain.notation IS 'Notation enum numeric value.';
+
+COMMENT ON COLUMN public.music_chain.created IS 'Sequence creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.music_chain.matter_id IS 'Id of the research object to which the sequence belongs.';
+
+COMMENT ON COLUMN public.music_chain.alphabet IS 'Sequence''s alphabet (array of elements ids).';
+
+COMMENT ON COLUMN public.music_chain.building IS 'Sequence''s order.';
+
+COMMENT ON COLUMN public.music_chain.remote_id IS 'Id of the sequence in the remote database.';
+
+COMMENT ON COLUMN public.music_chain.remote_db IS 'Enum numeric value of the remote db from which sequence is downloaded.';
+
+COMMENT ON COLUMN public.music_chain.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.music_chain.description IS 'Sequence description.';
+
+COMMENT ON COLUMN public.music_chain.pause_treatment IS 'Pause treatment enum numeric value.';
+
+COMMENT ON COLUMN public.music_chain.sequential_transfer IS 'Flag indicating whether or not sequential transfer was used in sequence segmentation into fmotifs.';
+
+COMMENT ON COLUMN public.note.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.note.value IS 'Note hash code.';
+
+COMMENT ON COLUMN public.note.description IS 'Note description.';
+
+COMMENT ON COLUMN public.note.name IS 'Note name.';
+
+COMMENT ON COLUMN public.note.notation IS 'Measure notation enum numeric value (always 8).';
+
+COMMENT ON COLUMN public.note.created IS 'Measure creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.note.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.note.numerator IS 'Note duration fraction numerator.';
+
+COMMENT ON COLUMN public.note.denominator IS 'Note duration fraction denominator.';
+
+COMMENT ON COLUMN public.note.triplet IS 'Flag indicating if note is a part of triplet (tuplet).';
+
+COMMENT ON COLUMN public.note.tie IS 'Note tie type enum numeric value.';
+
+COMMENT ON COLUMN public.note_pitch.note_id IS 'Note id.';
+
+COMMENT ON COLUMN public.note_pitch.pitch_id IS 'Pitch id.';
+
+COMMENT ON COLUMN public.pitch.id IS 'Unique internal identifier of the pitch.';
+
+COMMENT ON COLUMN public.pitch.octave IS 'Octave number.';
+
+COMMENT ON COLUMN public.pitch.midinumber IS 'Unique number by midi standard.';
+
+COMMENT ON COLUMN public.pitch.instrument IS 'Pitch instrument enum numeric value.';
+
+COMMENT ON COLUMN public.pitch.accidental IS 'Pitch key signature enum numeric value.';
+
+COMMENT ON COLUMN public.pitch.note_symbol IS 'Note symbol enum numeric value.';
+
+COMMENT ON COLUMN public."position".id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public."position".subsequence_id IS 'Parent subsequence id.';
+
+COMMENT ON COLUMN public."position".start IS 'Index of the fragment beginning (from zero).';
+
+COMMENT ON COLUMN public."position".length IS 'Fragment length.';
+
+COMMENT ON COLUMN public.sequence_group.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.sequence_group.name IS 'Sequences group name.';
+
+COMMENT ON COLUMN public.sequence_group.created IS 'Sequence group creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.sequence_group.creator_id IS 'Record creator user id.';
+
+COMMENT ON COLUMN public.sequence_group.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.sequence_group.modifier_id IS 'Record editor user id.';
+
+COMMENT ON COLUMN public.sequence_group.nature IS 'Sequences group nature enum numeric value.';
+
+COMMENT ON COLUMN public.sequence_group.sequence_group_type IS 'Sequence group type enum numeric value.';
+
+COMMENT ON COLUMN public.sequence_group_matter.group_id IS 'Sequence group id.';
+
+COMMENT ON COLUMN public.sequence_group_matter.matter_id IS 'Research object id.';
+
+COMMENT ON COLUMN public.subsequence.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.subsequence.created IS 'Sequence group creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.subsequence.modified IS 'Record last change date and time (updated trough trigger).';
+
+COMMENT ON COLUMN public.subsequence.chain_id IS 'Parent sequence id.';
+
+COMMENT ON COLUMN public.subsequence.start IS 'Index of the fragment beginning (from zero).';
+
+COMMENT ON COLUMN public.subsequence.length IS 'Fragment length.';
+
+COMMENT ON COLUMN public.subsequence.feature IS 'Subsequence feature enum numeric value.';
+
+COMMENT ON COLUMN public.subsequence.partial IS 'Flag indicating whether subsequence is partial or complete.';
+
+COMMENT ON COLUMN public.subsequence.remote_id IS 'Id of the subsequence in the remote database (ncbi or same as paren sequence remote db).';
+
+COMMENT ON COLUMN public.task.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.task.task_type IS 'Task type enum numeric value.';
+
+COMMENT ON COLUMN public.task.description IS 'Task description.';
+
+COMMENT ON COLUMN public.task.status IS 'Task status enum numeric value.';
+
+COMMENT ON COLUMN public.task.user_id IS 'Creator user id.';
+
+COMMENT ON COLUMN public.task.created IS 'Task creation date and time (filled trough trigger).';
+
+COMMENT ON COLUMN public.task.started IS 'Task beginning of computation date and time.';
+
+COMMENT ON COLUMN public.task.completed IS 'Task completion date and time.';
+
+COMMENT ON COLUMN public.task_result.id IS 'Unique internal identifier.';
+
+COMMENT ON COLUMN public.task_result.task_id IS 'Parent task id.';
+
+COMMENT ON COLUMN public.task_result.key IS 'Results element name.';
+
+COMMENT ON COLUMN public.task_result.value IS 'Results element value (as json).';
+
+COMMENT ON TABLE public.accordance_characteristic IS 'Contains numeric chracteristics of accordance of element in different sequences.';
+
+COMMENT ON TABLE public.accordance_characteristic_link IS 'Contatins list of possible combinations of accordance characteristics parameters.';
+
+COMMENT ON TABLE public.binary_characteristic IS 'Contains numeric chracteristics of elements dependece based on their arrangement in sequence.';
+
+COMMENT ON TABLE public.binary_characteristic_link IS 'Contatins list of possible combinations of dependence characteristics parameters.';
+
+COMMENT ON TABLE public.chain IS 'Base table for all sequences that are stored in the database as alphabet and order.';
+
+COMMENT ON TABLE public.chain_attribute IS 'Contains chains'' attributes and their values.';
+
+COMMENT ON TABLE public.chain_key IS 'Surrogate table that contains keys for all sequences tables and used for foreign key references.';
+
+COMMENT ON TABLE public.congeneric_characteristic IS 'Contains numeric chracteristics of congeneric sequences.';
+
+COMMENT ON TABLE public.congeneric_characteristic_link IS 'Contatins list of possible combinations of congeneric characteristics parameters.';
+
+COMMENT ON TABLE public.data_chain IS 'Contains sequences that represent time series and other ordered data arrays.';
+
+COMMENT ON TABLE public.dna_chain IS 'Contains sequences that represent genetic texts (DNA, RNA, gene sequecnes, etc).';
+
+COMMENT ON TABLE public.element IS 'Base table for all elements that are stored in the database and used in alphabets of sequences.';
+
+COMMENT ON TABLE public.element_key IS 'Surrogate table that contains keys for all elements tables and used for foreign key references.';
+
+COMMENT ON TABLE public.fmotif IS 'Contains elements that represent note sequences in form of formal motifs that are used as elements of segmented music sequences.';
+
+COMMENT ON TABLE public.full_characteristic IS 'Contains numeric chracteristics of complete sequences.';
+
+COMMENT ON TABLE public.full_characteristic_link IS 'Contatins list of possible combinations of characteristics parameters.';
+
+COMMENT ON TABLE public.image_sequence IS 'Contains information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables.';
+
+COMMENT ON TABLE public.literature_chain IS 'Contains sequences that represent literary works and their various translations.';
+
+COMMENT ON TABLE public.matter IS 'Contains research objects, samples, texts, etc (one research object may be represented by several sequences).';
+
+COMMENT ON TABLE public.measure IS 'Contains elements that represent note sequences in form of measures (bars) that are used as elements of segmented music sequences.';
+
+COMMENT ON TABLE public.multisequence IS 'Contains information on groups of related research objects (such as series of books, chromosomes of the same organism, etc) and their order in these groups.';
+
+COMMENT ON TABLE public.music_chain IS 'Contains sequences that represent musical works in form of note, fmotive or measure sequences.';
+
+COMMENT ON TABLE public.note IS 'Contains elements that represent notes that are used as elements of music sequences.';
+
+COMMENT ON TABLE public.note_pitch IS 'Intermediate table representing M:M relationship between note and pitch.';
+
+COMMENT ON TABLE public.pitch IS 'Note''s pitch.';
+
+COMMENT ON TABLE public."position" IS 'Contains information on additional fragment positions (for subsequences concatenated from several parts).';
+
+COMMENT ON TABLE public.sequence_group IS 'Contains information about sequences groups.';
+
+COMMENT ON TABLE public.sequence_group_matter IS 'Intermediate table for infromation on matters belonging to groups.';
+
+COMMENT ON TABLE public.subsequence IS 'Contains information on location and length of the fragments within complete sequences.';
+
+COMMENT ON TABLE public.task IS 'Contains information about computational tasks.';
+
+COMMENT ON TABLE public.task_result IS 'Contains JSON results of tasks calculation. Results are stored as key/value pairs.';
+
 COMMIT;
