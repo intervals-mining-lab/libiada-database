@@ -26,7 +26,7 @@
         /// </param>
         public AccordanceCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            characteristicsLinks = libiadaDatabaseEntitiesFactory.Create().AccordanceCharacteristicLink.ToArray();
+            characteristicsLinks = libiadaDatabaseEntitiesFactory.CreateDbContext().AccordanceCharacteristicLinks.ToArray();
         }
 
         /// <summary>

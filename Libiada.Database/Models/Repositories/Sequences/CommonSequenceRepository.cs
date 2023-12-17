@@ -4,7 +4,6 @@ namespace Libiada.Database.Models.Repositories.Sequences
 
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Text;
 
@@ -17,6 +16,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
     using Libiada.Database.Helpers;
     using Libiada.Database.Attributes;
     using Libiada.Database.Extensions;
+    using Microsoft.EntityFrameworkCore;
 
 
     /// <summary>
@@ -112,10 +112,11 @@ namespace Libiada.Database.Models.Repositories.Sequences
         public Chain GetLibiadaChain(long sequenceId)
         {
 
-            if (Db.CommonSequence.Any(s => s.Id == sequenceId))
+            if (Db.CommonSequences.Any(s => s.Id == sequenceId))
             {
-                var matter = Db.CommonSequence.Include(s => s.Matter).Single(s => s.Id == sequenceId).Matter;
-                return new Chain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
+                var DBSequence = Db.CommonSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
+                var matter = DBSequence.Matter;
+                return new Chain(DBSequence.Building.ToArray(), GetAlphabet(sequenceId), sequenceId);
             }
 
             // if it is not "real" sequence , then it must be image "sequence" 
@@ -139,13 +140,13 @@ namespace Libiada.Database.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// Loads sequence by id from db and converts it to <see cref="BaseChain"/>.
+        /// Loads sequence by id from db and converts it to <see cref="string"/>.
         /// </summary>
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
         /// <returns>
-        /// The sequence as <see cref="BaseChain"/>.
+        /// The sequence as <see cref="string"/>.
         /// </returns>
         public string GetString(long sequenceId)
         {
@@ -237,7 +238,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
                 switch (notation.GetNature())
                 {
                     case Nature.Literature:
-                        return Db.LiteratureSequence
+                        return Db.LiteratureSequences
                                  .Where(l => matterIds.Contains(l.MatterId)
                                           && l.Notation == notation
                                           && l.Language == language
@@ -247,7 +248,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
                                  .Select(s => s.Id)
                                  .ToArray();
                     case Nature.Music:
-                        return Db.MusicSequence
+                        return Db.MusicSequences
                                  .Where(m => matterIds.Contains(m.MatterId)
                                           && m.Notation == notation
                                           && m.PauseTreatment == pauseTreatment
@@ -266,7 +267,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
                                  .Select(s => s.Id)
                                  .ToArray();
                     default:
-                        return Db.CommonSequence
+                        return Db.CommonSequences
                                  .Where(c => matterIds.Contains(c.MatterId) && c.Notation == notation)
                                  .ToArray()
                                  .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })

@@ -20,6 +20,7 @@
     using Libiada.Database.Models.NcbiSequencesData;
     using Newtonsoft.Json.Linq;
     using System.Configuration;
+    using Microsoft.Extensions.Configuration;
 
 
     /// <summary>
@@ -37,7 +38,8 @@
         /// </summary>
         private static readonly object SyncRoot = new object();
 
-        private static readonly string ApiKey = ConfigurationManager.AppSettings["NcbiApiKey"];
+        // TODO: fix that
+        private static readonly string ApiKey = "";
 
         /// <summary>
         /// The last request date time.

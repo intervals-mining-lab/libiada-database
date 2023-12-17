@@ -3635,4 +3635,12 @@ COMMENT ON TABLE public.task IS 'Contains information about computational tasks.
 
 COMMENT ON TABLE public.task_result IS 'Contains JSON results of tasks calculation. Results are stored as key/value pairs.';
 
+-- 16.12.2023
+-- Add NOT NULL constraint to characteristics values columns.
+
+ALTER TABLE IF EXISTS accordance_characteristic ALTER COLUMN value SET NOT NULL;
+ALTER TABLE IF EXISTS binary_characteristic ALTER COLUMN value SET NOT NULL;
+ALTER TABLE IF EXISTS congeneric_characteristic ALTER COLUMN value SET NOT NULL;
+ALTER TABLE IF EXISTS full_characteristic ALTER COLUMN value SET NOT NULL;
+
 COMMIT;

@@ -63,15 +63,15 @@
             long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
 
             string localMeasureHash = measure.GetHashCode().ToString();
-            var dbMeasures = db.Measure.Where(m => m.Value == localMeasureHash).ToList();
+            var dbMeasures = db.Measures.Where(m => m.Value == localMeasureHash).ToList();
             if (dbMeasures.Count > 0)
             {
                 foreach (var dbMeasure in dbMeasures)
                 {
-                    long[] dbAlphabet = db.GetMeasureAlphabet(dbMeasure.Id);
+                    long[] dbAlphabet = dbMeasure.Alphabet.ToArray();
                     if (notes.SequenceEqual(dbAlphabet))
                     {
-                        int[] dbBuilding = db.GetMeasureBuilding(dbMeasure.Id);
+                        int[] dbBuilding = dbMeasure.Building.ToArray();
                         if (measureChain.Building.SequenceEqual(dbBuilding))
                         {
                             if (measure.Attributes.Key.Fifths != dbMeasure.Fifths

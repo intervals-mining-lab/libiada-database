@@ -86,7 +86,8 @@
                                                .Select(f => f.Location.GetLeafLocations())
                                                .ToArray();
 
-            int parentLength = db.GetSequenceLength(sequenceId);
+            int parentLength = db.CommonSequences.Single(cs => cs.Id == sequenceId).Building.Count;
+
             int sourceLength = features[0].Location.LocationEnd;
             positionsMap = new bool[parentLength];
 
@@ -297,10 +298,10 @@
 
             var nonCodingSubsequences = CreateNonCodingSubsequences();
 
-            db.Subsequence.AddRange(codingSubsequences);
-            db.Subsequence.AddRange(nonCodingSubsequences);
-            db.Position.AddRange(newPositions);
-            db.SequenceAttribute.AddRange(newSequenceAttributes);
+            db.Subsequences.AddRange(codingSubsequences);
+            db.Subsequences.AddRange(nonCodingSubsequences);
+            db.Positions.AddRange(newPositions);
+            db.SequenceAttributes.AddRange(newSequenceAttributes);
 
             db.SaveChanges();
 

@@ -1,5 +1,6 @@
 ﻿namespace Libiada.Database
 {
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
 
     public class LibiadaDatabaseEntitiesFactory : ILibiadaDatabaseEntitiesFactory
@@ -11,6 +12,11 @@
             this.configuration = configuration;
         }
 
-        public LibiadaDatabaseEntities Create() => new LibiadaDatabaseEntities(configuration.GetConnectionString("LibiadaDatabaseEntities"));
+        public LibiadaDatabaseEntities CreateDbContext()
+        {
+            DbContextOptions<LibiadaDatabaseEntities> options = new DbContextOptions<LibiadaDatabaseEntities>();
+            return new LibiadaDatabaseEntities(options);
+        }
+
     }
 }

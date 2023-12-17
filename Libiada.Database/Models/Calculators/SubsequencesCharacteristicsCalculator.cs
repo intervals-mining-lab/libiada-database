@@ -24,7 +24,7 @@
                                                      IFullCharacteristicRepository characteristicTypeLinkRepository, 
                                                      ICommonSequenceRepository commonSequenceRepository)
         {
-            this.db = libiadaDatabaseEntitiesFactory.Create();
+            this.db = libiadaDatabaseEntitiesFactory.CreateDbContext();
             this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
             this.commonSequenceRepository = commonSequenceRepository;
         }
@@ -98,7 +98,7 @@
             // converting to libiada sequences
             subsequenceIds = subsequences.Select(s => s.Id).ToArray();
 
-            characteristics = db.CharacteristicValue
+            characteristics = db.CharacteristicValues
                                 .Where(c => characteristicIds.Contains(c.CharacteristicLinkId) && subsequenceIds.Contains(c.SequenceId))
                                 .ToArray()
                                 .GroupBy(c => c.SequenceId)

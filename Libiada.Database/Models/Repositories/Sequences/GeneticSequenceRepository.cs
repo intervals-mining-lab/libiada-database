@@ -41,7 +41,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// </returns>
         public (string[], string[]) SplitAccessionsIntoExistingAndNotImported(string[] accessions)
         {
-            var allExistingAccessions = Db.DnaSequence
+            var allExistingAccessions = Db.DnaSequences
                                                .Where(d => d.RemoteId != null)
                                                .Select(d => d.RemoteId)
                                                .ToArray()
@@ -163,7 +163,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         public long[] GetNucleotideSequenceIds(long[] matterIds)
         {
             var chains = new long[matterIds.Length];
-            DnaSequence[] sequences = Db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides).ToArray();
+            DnaSequence[] sequences = Db.DnaSequences.Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides).ToArray();
             for (int i = 0; i < matterIds.Length; i++)
             {
                 chains[i] = sequences.Single(c => c.MatterId == matterIds[i]).Id;

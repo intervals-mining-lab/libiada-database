@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
 
     using Bio;
@@ -14,6 +13,7 @@
     using Libiada.Database.Models.Repositories.Sequences;
 
     using Attribute = Attribute;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// The subsequence extractor.
@@ -101,7 +101,7 @@
             Feature[] allFeatures = EnumExtensions.ToArray<Feature>();
             if (allFeatures.Length == features.Count)
             {
-                return db.Subsequence.Where(s => s.SequenceId == sequenceId)
+                return db.Subsequences.Where(s => s.SequenceId == sequenceId)
                     .Include(s => s.Position)
                     .Include(s => s.SequenceAttribute)
                     .ToArray();
@@ -111,13 +111,13 @@
             {
                 Feature exceptFeature = allFeatures.Except(features).Single();
 
-                return db.Subsequence.Where(s => s.SequenceId == sequenceId && s.Feature != exceptFeature)
+                return db.Subsequences.Where(s => s.SequenceId == sequenceId && s.Feature != exceptFeature)
                     .Include(s => s.Position)
                     .Include(s => s.SequenceAttribute)
                     .ToArray();
             }
 
-            return db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
+            return db.Subsequences.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
                                  .Include(s => s.Position)
                                  .Include(s => s.SequenceAttribute)
                                  .ToArray();
@@ -173,13 +173,13 @@
             Subsequence[] subsequences;
             Dictionary<long, Chain> sequences;
             Dictionary<long, string> mattersNames;
-            subsequences = db.Subsequence.Where(s => subsequencesIds.Contains(s.Id))
+            subsequences = db.Subsequences.Where(s => subsequencesIds.Contains(s.Id))
                              .Include(s => s.Position)
                              .Include(s => s.SequenceAttribute)
                              .ToArray();
             sequences = GetSubsequencesSequences(subsequences);
             var parentIds = subsequences.Select(s => s.SequenceId).ToArray();
-            mattersNames = db.DnaSequence
+            mattersNames = db.DnaSequences
                              .Include(ds => ds.Matter)
                              .Where(ds => parentIds.Contains(ds.Id))
                              .ToDictionary(ds => ds.Id, ds => ds.Matter.Name);

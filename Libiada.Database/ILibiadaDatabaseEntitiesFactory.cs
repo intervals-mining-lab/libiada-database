@@ -1,6 +1,7 @@
-﻿namespace Libiada.Database
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Libiada.Database
 {
-    using System.Data.Entity.Infrastructure;
 
     public interface ILibiadaDatabaseEntitiesFactory : IDbContextFactory<LibiadaDatabaseEntities>
     {

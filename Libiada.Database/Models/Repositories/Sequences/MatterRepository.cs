@@ -138,7 +138,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
             }
             else
             {
-                commonSequence.Matter = db.Matter.Single(m => m.Id == commonSequence.MatterId);
+                commonSequence.Matter = db.Matters.Single(m => m.Id == commonSequence.MatterId);
             }
         }
 
@@ -174,7 +174,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
                 Nature = Nature.Genetic,
                 CollectionCountry = collectionCountry,
                 CollectionLocation = collectionCoordinates,
-                CollectionDate = hasCollectionDate ? (DateTime?)collectionDate : null
+                CollectionDate = hasCollectionDate ? DateOnly.FromDateTime(collectionDate) : null
             };
 
             (matter.Group, matter.SequenceType) = GetGroupAndSequenceType($"{species} {commonName} {definition}", matter.Nature);
@@ -193,7 +193,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// </returns>
         public long SaveToDatabase(Matter matter)
         {
-            db.Matter.Add(matter);
+            db.Matters.Add(matter);
             db.SaveChanges();
             cache.Clear();
             return matter.Id;

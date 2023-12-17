@@ -25,7 +25,7 @@
         /// </param>
         public CongenericCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            characteristicsLinks = libiadaDatabaseEntitiesFactory.Create().CongenericCharacteristicLink.ToArray();
+            characteristicsLinks = libiadaDatabaseEntitiesFactory.CreateDbContext().CongenericCharacteristicLinks.ToArray();
         }
 
         /// <summary>

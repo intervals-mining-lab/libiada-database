@@ -25,7 +25,7 @@
         /// </param>
         public FullCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            characteristicsLinks = libiadaDatabaseEntitiesFactory.Create().FullCharacteristicLink.ToArray();
+            characteristicsLinks = libiadaDatabaseEntitiesFactory.CreateDbContext().FullCharacteristicLinks.ToArray();
         }
 
         /// <summary>

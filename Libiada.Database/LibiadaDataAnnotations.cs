@@ -1,5 +1,6 @@
 ﻿namespace Libiada.Database
 {
+    using Microsoft.AspNetCore.Identity;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
@@ -47,13 +48,13 @@
         /// Gets or sets the creator.
         /// </summary>
         [Display(Name = "Creator")]
-        public AspNetUser Creator { get; set; }
+        public IdentityUser<int> Creator { get; set; }
 
         /// <summary>
         /// Gets or sets the modifier.
         /// </summary>
         [Display(Name = "Modifier")]
-        public AspNetUser Modifier { get; set; }
+        public IdentityUser<int> Modifier { get; set; }
 
         [Display(Name = "Sequence group type")]
         [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "None")]

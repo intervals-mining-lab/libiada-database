@@ -25,7 +25,7 @@
         /// </param>
         public BinaryCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            characteristicsLinks = libiadaDatabaseEntitiesFactory.Create().BinaryCharacteristicLink.ToArray();
+            characteristicsLinks = libiadaDatabaseEntitiesFactory.CreateDbContext().BinaryCharacteristicLinks.ToArray();
         }
 
         /// <summary>

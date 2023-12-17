@@ -1,0 +1,2125 @@
+{
+  "Name": "LibiadaDatabaseEntities",
+  "PreserveCasingUsingRegex": false,
+  "IncludeUnknownSchemas": false,
+  "SplitEntityTypeConfigurations": false,
+  "CaseSensitive": false,
+  "Schemas": [
+    {
+      "SchemaName": "public",
+      "IncludeUnknownTables": false,
+      "IncludeUnknownViews": false,
+      "IncludeUnknownFunctions": false,
+      "Namespace": null,
+      "Entities": [
+        {
+          "Name": "accordance_characteristic_link",
+          "EntityName": "AccordanceCharacteristicLink",
+          "NewName": "AccordanceCharacteristicLink",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "accordance_characteristic",
+              "PropertyName": "AccordanceCharacteristic",
+              "NewType": "LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators.AccordanceCharacteristic"
+            },
+            {
+              "Name": "link",
+              "PropertyName": "Link",
+              "NewType": "LibiadaCore.Core.Link"
+            }
+          ]
+        },
+        {
+          "Name": "accordance_characteristic",
+          "EntityName": "AccordanceCharacteristic",
+          "NewName": "AccordanceCharacteristicValue",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "first_chain_id",
+              "PropertyName": "FirstChainId",
+              "NewName": "FirstSequenceId"
+            },
+            {
+              "Name": "second_chain_id",
+              "PropertyName": "SecondChainId",
+              "NewName": "SecondSequenceId"
+            },
+            {
+              "Name": "characteristic_link_id",
+              "PropertyName": "CharacteristicLinkId"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            },
+            {
+              "Name": "first_element_id",
+              "PropertyName": "FirstElementId"
+            },
+            {
+              "Name": "second_element_id",
+              "PropertyName": "SecondElementId"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "FirstElement",
+              "FkName": "fk_accordance_characteristic_first_element",
+              "ToEntity": "Element",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "SecondElementNavigation",
+              "NewName": "SecondElement",
+              "FkName": "fk_accordance_characteristic_second_element",
+              "ToEntity": "Element",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "FirstChain",
+              "NewName": "FirstSequence",
+              "FkName": "fk_accordance_characteristic_first_chain",
+              "ToEntity": "CommonSequence",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "SecondChain",
+              "NewName": "SecondSequence",
+              "FkName": "fk_accordance_characteristic_second_chain",
+              "ToEntity": "CommonSequence",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "CharacteristicLink",
+              "NewName": "AccordanceCharacteristicLink",
+              "FkName": "fk_accordance_characteristic_link",
+              "ToEntity": "AccordanceCharacteristicLink",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "binary_characteristic_link",
+          "EntityName": "BinaryCharacteristicLink",
+          "NewName": "BinaryCharacteristicLink",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "binary_characteristic",
+              "PropertyName": "BinaryCharacteristic",
+              "NewType": "LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators.BinaryCharacteristic"
+            },
+            {
+              "Name": "link",
+              "PropertyName": "Link",
+              "NewType": "LibiadaCore.Core.Link"
+            }
+          ]
+        },
+        {
+          "Name": "binary_characteristic",
+          "EntityName": "BinaryCharacteristic",
+          "NewName": "BinaryCharacteristicValue",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "chain_id",
+              "PropertyName": "ChainId",
+              "NewName": "SequenceId"
+            },
+            {
+              "Name": "characteristic_link_id",
+              "PropertyName": "CharacteristicLinkId"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            },
+            {
+              "Name": "first_element_id",
+              "PropertyName": "FirstElementId"
+            },
+            {
+              "Name": "second_element_id",
+              "PropertyName": "SecondElementId"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "FirstElement",
+              "FkName": "fk_binary_characteristic_first_element",
+              "ToEntity": "Element",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "SecondElementNavigation",
+              "NewName": "SecondElement",
+              "FkName": "fk_binary_characteristic_second_element",
+              "ToEntity": "Element",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "Chain",
+              "NewName": "Sequence",
+              "FkName": "fk_binary_characteristic_chain",
+              "ToEntity": "CommonSequence",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "CharacteristicLink",
+              "NewName": "BinaryCharacteristicLink",
+              "FkName": "fk_binary_characteristic_link",
+              "ToEntity": "BinaryCharacteristicLink",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "task",
+          "EntityName": "Task",
+          "NewName": "CalculationTask",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "task_type",
+              "PropertyName": "TaskType",
+              "NewType": "Libiada.Database.Tasks.TaskType"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            },
+            {
+              "Name": "status",
+              "PropertyName": "Status",
+              "NewType": "Libiada.Database.Tasks.TaskState"
+            },
+            {
+              "Name": "user_id",
+              "PropertyName": "UserId"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "started",
+              "PropertyName": "Started"
+            },
+            {
+              "Name": "completed",
+              "PropertyName": "Completed"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "User",
+              "NewName": "AspNetUser",
+              "FkName": "fk_task_user",
+              "ToEntity": "AspNetUser",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "TaskResults",
+              "NewName": "TaskResult",
+              "FkName": "fk_task_result_task",
+              "ToEntity": "TaskResult",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "full_characteristic",
+          "EntityName": "FullCharacteristic",
+          "NewName": "CharacteristicValue",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "chain_id",
+              "PropertyName": "ChainId",
+              "NewName": "SequenceId"
+            },
+            {
+              "Name": "characteristic_link_id",
+              "PropertyName": "CharacteristicLinkId"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "Chain",
+              "NewName": "Sequence",
+              "FkName": "fk_characteristic_chain",
+              "ToEntity": "CommonSequence",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "CharacteristicLink",
+              "NewName": "FullCharacteristicLink",
+              "FkName": "fk_full_characteristic_link",
+              "ToEntity": "FullCharacteristicLink",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "chain",
+          "EntityName": "Chain",
+          "NewName": "CommonSequence",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "matter_id",
+              "PropertyName": "MatterId"
+            },
+            {
+              "Name": "remote_db",
+              "PropertyName": "RemoteDb",
+              "NewType": "RemoteDb"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "remote_id",
+              "PropertyName": "RemoteId"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "Matter",
+              "FkName": "fk_chain_matter",
+              "ToEntity": "Matter",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "BinaryCharacteristics",
+              "NewName": "BinaryCharacteristicValue",
+              "FkName": "fk_binary_characteristic_chain",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "FullCharacteristics",
+              "NewName": "CharacteristicValue",
+              "FkName": "fk_characteristic_chain",
+              "ToEntity": "CharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "congeneric_characteristic_link",
+          "EntityName": "CongenericCharacteristicLink",
+          "NewName": "CongenericCharacteristicLink",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "congeneric_characteristic",
+              "PropertyName": "CongenericCharacteristic",
+              "NewType": "LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators.CongenericCharacteristic"
+            },
+            {
+              "Name": "link",
+              "PropertyName": "Link",
+              "NewType": "LibiadaCore.Core.Link"
+            },
+            {
+              "Name": "arrangement_type",
+              "PropertyName": "ArrangementType",
+              "NewType": "LibiadaCore.Core.ArrangementManagers.ArrangementType"
+            }
+          ]
+        },
+        {
+          "Name": "congeneric_characteristic",
+          "EntityName": "CongenericCharacteristic",
+          "NewName": "CongenericCharacteristicValue",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "chain_id",
+              "PropertyName": "ChainId",
+              "NewName": "SequenceId"
+            },
+            {
+              "Name": "characteristic_link_id",
+              "PropertyName": "CharacteristicLinkId"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            },
+            {
+              "Name": "element_id",
+              "PropertyName": "ElementId"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "CharacteristicLink",
+              "NewName": "CongenericCharacteristicLink",
+              "FkName": "fk_congeneric_characteristic_link",
+              "ToEntity": "CongenericCharacteristicLink",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "ElementNavigation",
+              "NewName": "Element",
+              "FkName": "fk_congeneric_characteristic_element",
+              "ToEntity": "Element",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "data_chain",
+          "EntityName": "DataChain",
+          "NewName": "DataSequence",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "matter_id",
+              "PropertyName": "MatterId"
+            },
+            {
+              "Name": "remote_db",
+              "PropertyName": "RemoteDb",
+              "NewType": "RemoteDb"
+            },
+            {
+              "Name": "remote_id",
+              "PropertyName": "RemoteId"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "Matter",
+              "FkName": "fk_data_chain_matter",
+              "ToEntity": "Matter",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "BinaryCharacteristics",
+              "NewName": "BinaryCharacteristicValue",
+              "FkName": "fk_binary_characteristic_data_chain",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "CongenericCharacteristics",
+              "NewName": "CongenericCharacteristicValue",
+              "FkName": "fk_congeneric_characteristic_data_chain",
+              "ToEntity": "CongenericCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "FullCharacteristics",
+              "NewName": "CharacteristicValue",
+              "FkName": "fk_characteristic_data_chain",
+              "ToEntity": "CharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "dna_chain",
+          "EntityName": "DnaChain",
+          "NewName": "DnaSequence",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "matter_id",
+              "PropertyName": "MatterId"
+            },
+            {
+              "Name": "remote_db",
+              "PropertyName": "RemoteDb",
+              "NewType": "RemoteDb"
+            },
+            {
+              "Name": "remote_id",
+              "PropertyName": "RemoteId"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "partial",
+              "PropertyName": "Partial"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "BinaryCharacteristics",
+              "NewName": "BinaryCharacteristicValue",
+              "FkName": "fk_binary_characteristic_dna_chain",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "FullCharacteristics",
+              "NewName": "CharacteristicValue",
+              "FkName": "fk_characteristic_dna_chain",
+              "ToEntity": "CharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "MatterNavigation",
+              "NewName": "Matter",
+              "FkName": "fk_dna_chain_matter",
+              "ToEntity": "Matter",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "Subsequences",
+              "NewName": "Subsequence",
+              "FkName": "fk_subsequence_dna_chain",
+              "ToEntity": "Subsequence",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "ChainAttributes",
+              "NewName": "SequenceAttribute",
+              "FkName": "fk_chain_attribute_dna_chain",
+              "ToEntity": "SequenceAttribute",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "element",
+          "EntityName": "Element",
+          "NewName": "Element",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            },
+            {
+              "Name": "name",
+              "PropertyName": "Name"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "BinaryCharacteristicFirstElements",
+              "NewName": "FirstElementBinaryCharacteristic",
+              "FkName": "fk_binary_characteristic_first_element",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "BinaryCharacteristicSecondElementNavigations",
+              "NewName": "SecondElementBinaryCharacteristic",
+              "FkName": "fk_binary_characteristic_second_element",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "AccordanceCharacteristicFirstElements",
+              "NewName": "FirstElementAccordanceCharacteristic",
+              "FkName": "fk_accordance_characteristic_first_element",
+              "ToEntity": "AccordanceCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "AccordanceCharacteristicSecondElementNavigations",
+              "NewName": "SecondElementAccordanceCharacteristic",
+              "FkName": "fk_accordance_characteristic_second_element",
+              "ToEntity": "AccordanceCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "CongenericCharacteristics",
+              "NewName": "CongenericCharacteristic",
+              "FkName": "fk_congeneric_characteristic_element",
+              "ToEntity": "CongenericCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "fmotif",
+          "EntityName": "Fmotif",
+          "NewName": "Fmotif",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            },
+            {
+              "Name": "name",
+              "PropertyName": "Name"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "fmotif_type",
+              "PropertyName": "FmotifType",
+              "NewType": "LibiadaCore.Core.SimpleTypes.FmotifType"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "BinaryCharacteristics",
+              "NewName": "BinaryCharacteristicValue",
+              "FkName": "fk_binary_characteristic_fmotif",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "CongenericCharacteristics",
+              "NewName": "CongenericCharacteristicValue",
+              "FkName": "fk_congeneric_characteristic_fmotif",
+              "ToEntity": "CongenericCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "FullCharacteristics",
+              "NewName": "CharacteristicValue",
+              "FkName": "fk_characteristic_fmotif",
+              "ToEntity": "CharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "full_characteristic_link",
+          "EntityName": "FullCharacteristicLink",
+          "NewName": "FullCharacteristicLink",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "full_characteristic",
+              "PropertyName": "FullCharacteristic",
+              "NewType": "LibiadaCore.Core.Characteristics.Calculators.FullCalculators.FullCharacteristic"
+            },
+            {
+              "Name": "link",
+              "PropertyName": "Link",
+              "NewType": "LibiadaCore.Core.Link"
+            },
+            {
+              "Name": "arrangement_type",
+              "PropertyName": "ArrangementType",
+              "NewType": "LibiadaCore.Core.ArrangementManagers.ArrangementType"
+            }
+          ]
+        },
+        {
+          "Name": "image_sequence",
+          "EntityName": "ImageSequence",
+          "NewName": "ImageSequence",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "order_extractor",
+              "PropertyName": "OrderExtractor",
+              "NewType": "Libiada.Database.ImageOrderExtractor"
+            },
+            {
+              "Name": "matter_id",
+              "PropertyName": "MatterId"
+            },
+            {
+              "Name": "remote_id",
+              "PropertyName": "RemoteId"
+            },
+            {
+              "Name": "remote_db",
+              "PropertyName": "RemoteDb"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "Matter",
+              "FkName": "fk_image_sequence_matter",
+              "ToEntity": "Matter",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "literature_chain",
+          "EntityName": "LiteratureChain",
+          "NewName": "LiteratureSequence",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "matter_id",
+              "PropertyName": "MatterId"
+            },
+            {
+              "Name": "translator",
+              "PropertyName": "Translator",
+              "NewType": "Translator"
+            },
+            {
+              "Name": "original",
+              "PropertyName": "Original"
+            },
+            {
+              "Name": "language",
+              "PropertyName": "Language",
+              "NewType": "Language"
+            },
+            {
+              "Name": "remote_db",
+              "PropertyName": "RemoteDb",
+              "NewType": "RemoteDb"
+            },
+            {
+              "Name": "remote_id",
+              "PropertyName": "RemoteId"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "BinaryCharacteristics",
+              "NewName": "BinaryCharacteristicValue",
+              "FkName": "fk_binary_characteristic_literature_chain",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "CongenericCharacteristics",
+              "NewName": "CongenericCharacteristicValue",
+              "FkName": "fk_congeneric_characteristic_literature_chain",
+              "ToEntity": "CongenericCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "FullCharacteristics",
+              "NewName": "CharacteristicValue",
+              "FkName": "fk_characteristic_literature_chain",
+              "ToEntity": "CharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "MatterNavigation",
+              "NewName": "Matter",
+              "FkName": "fk_literature_chain_matter",
+              "ToEntity": "Matter",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "matter",
+          "EntityName": "Matter",
+          "NewName": "Matter",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "name",
+              "PropertyName": "Name"
+            },
+            {
+              "Name": "nature",
+              "PropertyName": "Nature",
+              "NewType": "Nature"
+            },
+            {
+              "Name": "sequence_type",
+              "PropertyName": "SequenceType",
+              "NewType": "SequenceType"
+            },
+            {
+              "Name": "group",
+              "PropertyName": "Group",
+              "NewType": "Group"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "multisequence_id",
+              "PropertyName": "MultisequenceId"
+            },
+            {
+              "Name": "multisequence_number",
+              "PropertyName": "MultisequenceNumber"
+            },
+            {
+              "Name": "source",
+              "PropertyName": "Source"
+            },
+            {
+              "Name": "collection_country",
+              "PropertyName": "CollectionCountry"
+            },
+            {
+              "Name": "collection_date",
+              "PropertyName": "CollectionDate"
+            },
+            {
+              "Name": "collection_location",
+              "PropertyName": "CollectionLocation"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "Chains",
+              "NewName": "Sequence",
+              "FkName": "fk_chain_matter",
+              "ToEntity": "CommonSequence",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "DnaChains",
+              "NewName": "DnaSequence",
+              "FkName": "fk_dna_chain_matter",
+              "ToEntity": "DnaSequence",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "LiteratureChains",
+              "NewName": "LiteratureSequence",
+              "FkName": "fk_literature_chain_matter",
+              "ToEntity": "LiteratureSequence",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "MusicChains",
+              "NewName": "MusicSequence",
+              "FkName": "fk_music_chain_matter",
+              "ToEntity": "MusicSequence",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "DataChains",
+              "NewName": "DataSequence",
+              "FkName": "fk_data_chain_matter",
+              "ToEntity": "DataSequence",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "SequenceGroups",
+              "NewName": "SequenceGroup",
+              "FkName": "sequence_group_matter",
+              "ToEntity": "SequenceGroup",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "MultisequenceNavigation",
+              "NewName": "Multisequence",
+              "FkName": "fk_matter_multisequence",
+              "ToEntity": "Multisequence",
+              "Multiplicity": "0..1"
+            },
+            {
+              "Name": "ImageSequences",
+              "NewName": "ImageSequence",
+              "FkName": "fk_image_sequence_matter",
+              "ToEntity": "ImageSequence",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "measure",
+          "EntityName": "Measure",
+          "NewName": "Measure",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            },
+            {
+              "Name": "name",
+              "PropertyName": "Name"
+            },
+            {
+              "Name": "beats",
+              "PropertyName": "Beats"
+            },
+            {
+              "Name": "beatbase",
+              "PropertyName": "Beatbase"
+            },
+            {
+              "Name": "fifths",
+              "PropertyName": "Fifths"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "major",
+              "PropertyName": "Major",
+              "NewName": "major"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "BinaryCharacteristics",
+              "NewName": "BinaryCharacteristicValue",
+              "FkName": "fk_binary_characteristic_measure",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "CongenericCharacteristics",
+              "NewName": "CongenericCharacteristicValue",
+              "FkName": "fk_congeneric_characteristic_measure",
+              "ToEntity": "CongenericCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "FullCharacteristics",
+              "NewName": "CharacteristicValue",
+              "FkName": "fk_characteristic_measure",
+              "ToEntity": "CharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "multisequence",
+          "EntityName": "Multisequence",
+          "NewName": "Multisequence",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "name",
+              "PropertyName": "Name"
+            },
+            {
+              "Name": "nature",
+              "PropertyName": "Nature",
+              "NewType": "Nature"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "Matters",
+              "FkName": "fk_matter_multisequence",
+              "ToEntity": "Matter",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "music_chain",
+          "EntityName": "MusicChain",
+          "NewName": "MusicSequence",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "matter_id",
+              "PropertyName": "MatterId"
+            },
+            {
+              "Name": "remote_db",
+              "PropertyName": "RemoteDb",
+              "NewType": "RemoteDb"
+            },
+            {
+              "Name": "remote_id",
+              "PropertyName": "RemoteId"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            },
+            {
+              "Name": "pause_treatment",
+              "PropertyName": "PauseTreatment",
+              "NewType": "LibiadaCore.Music.PauseTreatment"
+            },
+            {
+              "Name": "sequential_transfer",
+              "PropertyName": "SequentialTransfer"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "MatterNavigation",
+              "NewName": "Matter",
+              "FkName": "fk_music_chain_matter",
+              "ToEntity": "Matter",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "BinaryCharacteristics",
+              "NewName": "BinaryCharacteristicValue",
+              "FkName": "fk_binary_characteristic_music_chain",
+              "ToEntity": "BinaryCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "CongenericCharacteristics",
+              "NewName": "CongenericCharacteristicValue",
+              "FkName": "fk_congeneric_characteristic_music_chain",
+              "ToEntity": "CongenericCharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "FullCharacteristics",
+              "NewName": "CharacteristicValue",
+              "FkName": "fk_characteristic_music_chain",
+              "ToEntity": "CharacteristicValue",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "note",
+          "EntityName": "Note",
+          "NewName": "Note",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            },
+            {
+              "Name": "description",
+              "PropertyName": "Description"
+            },
+            {
+              "Name": "name",
+              "PropertyName": "Name"
+            },
+            {
+              "Name": "notation",
+              "PropertyName": "Notation",
+              "NewType": "Notation"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "numerator",
+              "PropertyName": "Numerator"
+            },
+            {
+              "Name": "denominator",
+              "PropertyName": "Denominator"
+            },
+            {
+              "Name": "triplet",
+              "PropertyName": "Triplet"
+            },
+            {
+              "Name": "tie",
+              "PropertyName": "Tie",
+              "NewType": "LibiadaCore.Core.SimpleTypes.Tie"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "Pitches",
+              "NewName": "Pitch",
+              "FkName": "note_pitch",
+              "ToEntity": "Pitch",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "pitch",
+          "EntityName": "Pitch",
+          "NewName": "Pitch",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "octave",
+              "PropertyName": "Octave"
+            },
+            {
+              "Name": "midinumber",
+              "PropertyName": "Midinumber"
+            },
+            {
+              "Name": "instrument",
+              "PropertyName": "Instrument",
+              "NewType": "LibiadaCore.Core.SimpleTypes.Instrument"
+            },
+            {
+              "Name": "accidental",
+              "PropertyName": "Accidental",
+              "NewType": "LibiadaCore.Core.SimpleTypes.Accidental"
+            },
+            {
+              "Name": "note_symbol",
+              "PropertyName": "NoteSymbol",
+              "NewType": "LibiadaCore.Core.SimpleTypes.NoteSymbol"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "Notes",
+              "NewName": "Note",
+              "FkName": "note_pitch",
+              "ToEntity": "Note",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "position",
+          "EntityName": "Position",
+          "NewName": "Position",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "subsequence_id",
+              "PropertyName": "SubsequenceId"
+            },
+            {
+              "Name": "start",
+              "PropertyName": "Start"
+            },
+            {
+              "Name": "length",
+              "PropertyName": "Length"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "Subsequence",
+              "FkName": "fk_position_subsequence",
+              "ToEntity": "Subsequence",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "chain_attribute",
+          "EntityName": "ChainAttribute",
+          "NewName": "SequenceAttribute",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "chain_id",
+              "PropertyName": "ChainId",
+              "NewName": "SequenceId"
+            },
+            {
+              "Name": "attribute",
+              "PropertyName": "Attribute",
+              "NewType": "Attribute"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "Chain",
+              "NewName": "DnaSequence",
+              "FkName": "fk_chain_attribute_dna_chain",
+              "ToEntity": "DnaSequence",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "Chain",
+              "NewName": "Subsequence",
+              "FkName": "fk_chain_attribute_subsequence",
+              "ToEntity": "Subsequence",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "sequence_group",
+          "EntityName": "SequenceGroup",
+          "NewName": "SequenceGroup",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "name",
+              "PropertyName": "Name"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "creator_id",
+              "PropertyName": "CreatorId"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "modifier_id",
+              "PropertyName": "ModifierId"
+            },
+            {
+              "Name": "nature",
+              "PropertyName": "Nature",
+              "NewType": "Nature"
+            },
+            {
+              "Name": "sequence_group_type",
+              "PropertyName": "SequenceGroupType",
+              "NewType": "SequenceGroupType"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "Matters",
+              "FkName": "sequence_group_matter",
+              "ToEntity": "Matter",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": null,
+              "NewName": "Creator",
+              "FkName": "fk_sequence_group_creator",
+              "ToEntity": "AspNetUser",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "ModifierNavigation",
+              "NewName": "Modifier",
+              "FkName": "fk_sequence_group_modifier",
+              "ToEntity": "AspNetUser",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "subsequence",
+          "EntityName": "Subsequence",
+          "NewName": "Subsequence",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "created",
+              "PropertyName": "Created"
+            },
+            {
+              "Name": "modified",
+              "PropertyName": "Modified"
+            },
+            {
+              "Name": "chain_id",
+              "PropertyName": "ChainId",
+              "NewName": "SequenceId"
+            },
+            {
+              "Name": "start",
+              "PropertyName": "Start"
+            },
+            {
+              "Name": "length",
+              "PropertyName": "Length"
+            },
+            {
+              "Name": "feature",
+              "PropertyName": "Feature",
+              "NewType": "Feature"
+            },
+            {
+              "Name": "remote_id",
+              "PropertyName": "RemoteId"
+            },
+            {
+              "Name": "partial",
+              "PropertyName": "Partial"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "Chain",
+              "NewName": "DnaSequence",
+              "FkName": "fk_subsequence_dna_chain",
+              "ToEntity": "DnaSequence",
+              "Multiplicity": "1"
+            },
+            {
+              "Name": "ChainAttributes",
+              "NewName": "SequenceAttribute",
+              "FkName": "fk_chain_attribute_subsequence",
+              "ToEntity": "SequenceAttribute",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "Positions",
+              "NewName": "Position",
+              "FkName": "fk_position_subsequence",
+              "ToEntity": "Position",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "task_result",
+          "EntityName": "TaskResult",
+          "NewName": "TaskResult",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "id",
+              "PropertyName": "Id"
+            },
+            {
+              "Name": "task_id",
+              "PropertyName": "TaskId"
+            },
+            {
+              "Name": "key",
+              "PropertyName": "Key"
+            },
+            {
+              "Name": "value",
+              "PropertyName": "Value"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "TaskNavigation",
+              "NewName": "Task",
+              "FkName": "fk_task_result_task",
+              "ToEntity": "CalculationTask",
+              "Multiplicity": "1"
+            }
+          ]
+        }
+      ],
+      "Functions": []
+    },
+    {
+      "SchemaName": "dbo",
+      "IncludeUnknownTables": false,
+      "IncludeUnknownViews": false,
+      "IncludeUnknownFunctions": false,
+      "Namespace": null,
+      "Entities": [
+        {
+          "Name": "AspNetPushNotificationSubscribers",
+          "EntityName": "AspNetPushNotificationSubscriber",
+          "NewName": "AspNetPushNotificationSubscriber",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "Id"
+            },
+            {
+              "Name": "UserId"
+            },
+            {
+              "Name": "Endpoint"
+            },
+            {
+              "Name": "P256dh"
+            },
+            {
+              "Name": "Auth"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "User",
+              "NewName": "AspNetUser",
+              "FkName": "FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId",
+              "ToEntity": "AspNetUser",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "AspNetRoles",
+          "EntityName": "AspNetRole",
+          "NewName": "AspNetRole",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "Id"
+            },
+            {
+              "Name": "Name"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "AspNetUsers",
+              "FkName": "AspNetUserRoles",
+              "ToEntity": "AspNetUser",
+              "IsPrincipal": true,
+              "Multiplicity": ""
+            }
+          ]
+        },
+        {
+          "Name": "AspNetUsers",
+          "EntityName": "AspNetUser",
+          "NewName": "AspNetUser",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "Id"
+            },
+            {
+              "Name": "Email"
+            },
+            {
+              "Name": "EmailConfirmed"
+            },
+            {
+              "Name": "PasswordHash"
+            },
+            {
+              "Name": "SecurityStamp"
+            },
+            {
+              "Name": "PhoneNumber"
+            },
+            {
+              "Name": "PhoneNumberConfirmed"
+            },
+            {
+              "Name": "TwoFactorEnabled"
+            },
+            {
+              "Name": "LockoutEndDateUtc"
+            },
+            {
+              "Name": "LockoutEnabled"
+            },
+            {
+              "Name": "AccessFailedCount"
+            },
+            {
+              "Name": "UserName"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": null,
+              "NewName": "AspNetUserClaims",
+              "FkName": "FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId",
+              "ToEntity": "AspNetUserClaim",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "AspNetUserLoginsNavigation",
+              "NewName": "AspNetUserLogins",
+              "FkName": "FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId",
+              "ToEntity": "AspNetUserLogin",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": "TasksNavigation",
+              "NewName": "Tasks",
+              "FkName": "fk_task_user",
+              "ToEntity": "CalculationTask",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            },
+            {
+              "Name": null,
+              "NewName": "AspNetRoles",
+              "FkName": "AspNetUserRoles",
+              "ToEntity": "AspNetRole",
+              "IsPrincipal": true,
+              "Multiplicity": ""
+            },
+            {
+              "Name": "AspNetPushNotificationSubscribersNavigation",
+              "NewName": "AspNetPushNotificationSubscribers",
+              "FkName": "FK_dbo_AspNetPushNotificationSubscribers_dbo_AspNetUsers_UserId",
+              "ToEntity": "AspNetPushNotificationSubscriber",
+              "IsPrincipal": true,
+              "Multiplicity": "*"
+            }
+          ]
+        },
+        {
+          "Name": "AspNetUserClaims",
+          "EntityName": "AspNetUserClaim",
+          "NewName": "AspNetUserClaim",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "Id"
+            },
+            {
+              "Name": "UserId"
+            },
+            {
+              "Name": "ClaimType"
+            },
+            {
+              "Name": "ClaimValue"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "User",
+              "NewName": "AspNetUser",
+              "FkName": "FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId",
+              "ToEntity": "AspNetUser",
+              "Multiplicity": "1"
+            }
+          ]
+        },
+        {
+          "Name": "AspNetUserLogins",
+          "EntityName": "AspNetUserLogin",
+          "NewName": "AspNetUserLogin",
+          "IncludeUnknownColumns": true,
+          "Properties": [
+            {
+              "Name": "LoginProvider"
+            },
+            {
+              "Name": "ProviderKey"
+            },
+            {
+              "Name": "UserId"
+            }
+          ],
+          "Navigations": [
+            {
+              "Name": "User",
+              "NewName": "AspNetUser",
+              "FkName": "FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId",
+              "ToEntity": "AspNetUser",
+              "Multiplicity": "1"
+            }
+          ]
+        }
+      ],
+      "Functions": []
+    }
+  ],
+  "ForeignKeys": [
+    {
+      "Name": "fk_accordance_characteristic_first_element",
+      "PrincipalEntity": "Element",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "AccordanceCharacteristicValue",
+      "DependentProperties": [
+        "first_element_id"
+      ]
+    },
+    {
+      "Name": "fk_accordance_characteristic_second_element",
+      "PrincipalEntity": "Element",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "AccordanceCharacteristicValue",
+      "DependentProperties": [
+        "second_element_id"
+      ]
+    },
+    {
+      "Name": "fk_accordance_characteristic_first_chain",
+      "PrincipalEntity": "CommonSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "AccordanceCharacteristicValue",
+      "DependentProperties": [
+        "first_chain_id"
+      ]
+    },
+    {
+      "Name": "fk_accordance_characteristic_second_chain",
+      "PrincipalEntity": "CommonSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "AccordanceCharacteristicValue",
+      "DependentProperties": [
+        "second_chain_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_first_element",
+      "PrincipalEntity": "Element",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "first_element_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_second_element",
+      "PrincipalEntity": "Element",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "second_element_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_chain",
+      "PrincipalEntity": "CommonSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_characteristic_chain",
+      "PrincipalEntity": "CommonSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_congeneric_characteristic_element",
+      "PrincipalEntity": "Element",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CongenericCharacteristicValue",
+      "DependentProperties": [
+        "element_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_data_chain",
+      "PrincipalEntity": "DataSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_congeneric_characteristic_data_chain",
+      "PrincipalEntity": "DataSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CongenericCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_characteristic_data_chain",
+      "PrincipalEntity": "DataSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_dna_chain",
+      "PrincipalEntity": "DnaSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_characteristic_dna_chain",
+      "PrincipalEntity": "DnaSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_subsequence_dna_chain",
+      "PrincipalEntity": "DnaSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "Subsequence",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_chain_attribute_dna_chain",
+      "PrincipalEntity": "DnaSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "SequenceAttribute",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_fmotif",
+      "PrincipalEntity": "Fmotif",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_congeneric_characteristic_fmotif",
+      "PrincipalEntity": "Fmotif",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CongenericCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_characteristic_fmotif",
+      "PrincipalEntity": "Fmotif",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_literature_chain",
+      "PrincipalEntity": "LiteratureSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_congeneric_characteristic_literature_chain",
+      "PrincipalEntity": "LiteratureSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CongenericCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_characteristic_literature_chain",
+      "PrincipalEntity": "LiteratureSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_measure",
+      "PrincipalEntity": "Measure",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_congeneric_characteristic_measure",
+      "PrincipalEntity": "Measure",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CongenericCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_characteristic_measure",
+      "PrincipalEntity": "Measure",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_binary_characteristic_music_chain",
+      "PrincipalEntity": "MusicSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "BinaryCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_congeneric_characteristic_music_chain",
+      "PrincipalEntity": "MusicSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CongenericCharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_characteristic_music_chain",
+      "PrincipalEntity": "MusicSequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "CharacteristicValue",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    },
+    {
+      "Name": "fk_chain_attribute_subsequence",
+      "PrincipalEntity": "Subsequence",
+      "PrincipalProperties": [
+        "id"
+      ],
+      "DependentEntity": "SequenceAttribute",
+      "DependentProperties": [
+        "chain_id"
+      ]
+    }
+  ]
+}

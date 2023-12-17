@@ -36,7 +36,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <summary>
         /// Gets the cached elements.
         /// </summary>
-        private Element[] CachedElements => lazyCache ?? (lazyCache = db.Element.Where(e => Aliases.StaticNotations.Contains(e.Notation)).ToArray());
+        private Element[] CachedElements => lazyCache ?? (lazyCache = db.Elements.Where(e => Aliases.StaticNotations.Contains(e.Notation)).ToArray());
 
         /// <summary>
         /// The dispose.
@@ -61,7 +61,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         {
             IEnumerable<string> elements = alphabet.Select(e => e.ToString());
 
-            int existingElementsCount = db.Element.Count(e => elements.Contains(e.Value) && e.Notation == notation);
+            int existingElementsCount = db.Elements.Count(e => elements.Contains(e.Value) && e.Notation == notation);
 
             return alphabet.Cardinality == existingElementsCount;
         }
@@ -81,7 +81,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
             var result = new Note[alphabet.Cardinality];
             ValueNote[] notesAlphabet = alphabet.Cast<ValueNote>().ToArray();
             string[] stringNotes = notesAlphabet.Select(n => n.ToString()).ToArray();
-            Dictionary<string, Note> existingNotes = db.Note.Where(n => stringNotes.Contains(n.Value))
+            Dictionary<string, Note> existingNotes = db.Notes.Where(n => stringNotes.Contains(n.Value))
                                                             .ToDictionary(n => n.Value);
             for (int i = 0; i < notesAlphabet.Length; i++)
             {
@@ -109,14 +109,14 @@ namespace Libiada.Database.Models.Repositories.Sequences
                         Denominator = note.Duration.Denominator,
                         Numerator = note.Duration.Numerator,
                         Tie = note.Tie,
-                        Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
+                        Pitches = db.Pitches.Where(p => pitches.Contains(p.Id)).ToList(),
                         Notation = Notation.Notes
                     };
                     newNotes.Add(result[i]);
                 }
             }
 
-            db.Note.AddRange(newNotes);
+            db.Notes.AddRange(newNotes);
             db.SaveChanges();
             return result.Select(n => n.Id).ToArray();
         }
@@ -159,7 +159,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
 
             Element[] elements = staticNotation ?
                             CachedElements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToArray() :
-                            db.Element.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToArray();
+                            db.Elements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToArray();
 
             return (from stringElement in stringElements
                     join element in elements
@@ -198,7 +198,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="IReadOnlyList{Element}"/>.
         /// </returns>
-        public List<Element> GetElements(long[] elementIds) => db.Element
+        public List<Element> GetElements(long[] elementIds) => db.Elements
                                                                  .Where(e => elementIds.Contains(e.Id))
                                                                  .ToList()
                                                                  .OrderBy(e => Array.IndexOf(elementIds, e.Id))
@@ -218,7 +218,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
             var newPitches = new List<Database.Pitch>();
             var result = new Database.Pitch[pitches.Count];
             int[] midiNumbers = pitches.Select(p => p.MidiNumber).ToArray();
-            Dictionary<int, Database.Pitch> existingPitches = db.Pitch.Where(p => midiNumbers.Contains(p.Midinumber))
+            Dictionary<int, Database.Pitch> existingPitches = db.Pitches.Where(p => midiNumbers.Contains(p.Midinumber))
                                                                         .ToDictionary(p => p.Midinumber);
             for (int i = 0; i < pitches.Count; i++)
             {
@@ -248,7 +248,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
                 }
             }
 
-            db.Pitch.AddRange(newPitches);
+            db.Pitches.AddRange(newPitches);
             db.SaveChanges();
             return result.Select(p => p.Id).ToArray();
         }
@@ -266,13 +266,13 @@ namespace Libiada.Database.Models.Repositories.Sequences
         {
             string[] elements = libiadaAlphabet.Select(e => e.ToString()).ToArray();
 
-            List<string> existingElements = db.Element
+            List<string> existingElements = db.Elements
                                               .Where(e => elements.Contains(e.Value) && e.Notation == notation)
                                               .Select(e => e.Value)
                                               .ToList();
 
             List<string> newElements = elements.Where(e => !existingElements.Contains(e)).ToList();
-            db.Element.AddRange(newElements.ConvertAll(e => new Element
+            db.Elements.AddRange(newElements.ConvertAll(e => new Element
                                                                 {
                                                                     Value = e,
                                                                     Name = e,

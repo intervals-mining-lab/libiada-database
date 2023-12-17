@@ -57,7 +57,7 @@
 
             var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
 
-            Subsequence subsequence = db.Subsequence.Single(s => s.Id == subsequenceId);
+            Subsequence subsequence = db.Subsequences.Single(s => s.Id == subsequenceId);
             chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
 
 

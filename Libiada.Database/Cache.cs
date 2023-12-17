@@ -20,8 +20,8 @@
         /// </summary>
         public Cache(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
         {
-            this.db = libiadaDatabaseEntitiesFactory.Create();
-            Matters = db.Matter.ToList();
+            this.db = libiadaDatabaseEntitiesFactory.CreateDbContext();
+            Matters = db.Matters.ToList();
         }
 
         /// <summary>
@@ -29,7 +29,7 @@
         /// </summary>
         public void Clear()
         {
-            Matters = db.Matter.ToList();
+            Matters = db.Matters.ToList();
         }
     }
 }
