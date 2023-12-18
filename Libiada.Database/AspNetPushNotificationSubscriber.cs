@@ -20,5 +20,5 @@ public partial class AspNetPushNotificationSubscriber
 
     public string Auth { get; set; } = null!;
 
-    public virtual IdentityUser<int> AspNetUser { get; set; } = null!;
+    public virtual AspNetUser AspNetUser { get; set; } = null!;
 }

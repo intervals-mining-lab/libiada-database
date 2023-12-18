@@ -51,9 +51,9 @@ public partial class SequenceGroup
     /// </summary>
     public SequenceGroupType? SequenceGroupType { get; set; }
 
-    public virtual IdentityUser<int> Creator { get; set; } = null!;
+    public virtual AspNetUser Creator { get; set; } = null!;
 
-    public virtual IdentityUser<int> Modifier { get; set; } = null!;
+    public virtual AspNetUser Modifier { get; set; } = null!;
 
     public virtual ICollection<Matter> Matters { get; set; } = new List<Matter>();
 }

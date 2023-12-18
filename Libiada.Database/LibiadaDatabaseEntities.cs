@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
  
 namespace Libiada.Database;
 
-public partial class LibiadaDatabaseEntities : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
+public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, AspNetRole, int>
 {
     //public LibiadaDatabaseEntities()
     //{

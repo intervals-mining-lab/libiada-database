@@ -48,13 +48,13 @@
         /// Gets or sets the creator.
         /// </summary>
         [Display(Name = "Creator")]
-        public IdentityUser<int> Creator { get; set; }
+        public AspNetUser Creator { get; set; }
 
         /// <summary>
         /// Gets or sets the modifier.
         /// </summary>
         [Display(Name = "Modifier")]
-        public IdentityUser<int> Modifier { get; set; }
+        public AspNetUser Modifier { get; set; }
 
         [Display(Name = "Sequence group type")]
         [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "None")]

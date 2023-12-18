@@ -51,7 +51,7 @@ public partial class CalculationTask
     /// </summary>
     public DateTime? Completed { get; set; }
 
-    public virtual IdentityUser<int> AspNetUser { get; set; } = null!;
+    public virtual AspNetUser AspNetUser { get; set; } = null!;
 
     public virtual ICollection<TaskResult> TaskResult { get; set; } = new List<TaskResult>();
 }
