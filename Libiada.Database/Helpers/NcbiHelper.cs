@@ -19,14 +19,14 @@
 
     using Libiada.Database.Models.NcbiSequencesData;
     using Newtonsoft.Json.Linq;
-    using System.Configuration;
     using Microsoft.Extensions.Configuration;
+    using System.Net.Http;
 
 
     /// <summary>
     /// The ncbi helper.
     /// </summary>
-    public static class NcbiHelper
+    public class NcbiHelper : INcbiHelper
     {
         /// <summary>
         /// The base url for all eutils.
@@ -39,12 +39,19 @@
         private static readonly object SyncRoot = new object();
 
         // TODO: fix that
-        private static readonly string ApiKey = "";
+        private readonly string ApiKey = "";
 
         /// <summary>
         /// The last request date time.
         /// </summary>
-        private static DateTimeOffset lastRequestDateTime = DateTimeOffset.MinValue;
+        private DateTimeOffset lastRequestDateTime = DateTimeOffset.MinValue;
+
+        private readonly HttpClient httpClient = new HttpClient();
+
+        public NcbiHelper(IConfiguration config)
+        {
+            ApiKey = config["NcbiApiKey"];
+        }
 
         /// <summary>
         /// Extracts features from genBank file downloaded from ncbi.
@@ -55,7 +62,7 @@
         /// <returns>
         /// The <see cref="List{FeatureItem}"/>.
         /// </returns>
-        public static List<FeatureItem> GetFeatures(string accession)
+        public List<FeatureItem> GetFeatures(string accession)
         {
             GenBankMetadata metadata = GetMetadata(DownloadGenBankSequence(accession));
             return metadata.Features.All;
@@ -109,7 +116,7 @@
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        public static Stream GetFastaFileStream(string accession)
+        public Stream GetFastaFileStream(string accession)
         {
             string url = GetEfetchParamsString("fasta", accession);
             return GetResponseStream(url);
@@ -124,7 +131,7 @@
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        public static ISequence DownloadGenBankSequence(string accession)
+        public ISequence DownloadGenBankSequence(string accession)
         {
             ISequenceParser parser = new GenBankParser();
             string url = GetEfetchParamsString("gbwithparts", accession);
@@ -193,13 +200,13 @@
         /// <returns>
         /// 
         /// </returns>
-        public static List<NuccoreObject> ExecuteESummaryRequest(string searchTerm, bool includePartial)
+        public List<NuccoreObject> ExecuteESummaryRequest(string searchTerm, bool includePartial)
         {
             (string ncbiWebEnvironment, string queryKey) = ExecuteESearchRequest(searchTerm);
             return ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, includePartial);
         }
 
-        public static List<NuccoreObject> ExecuteESummaryRequest(string ncbiWebEnvironment, string queryKey, bool includePartial)
+        public List<NuccoreObject> ExecuteESummaryRequest(string ncbiWebEnvironment, string queryKey, bool includePartial)
         {
             var nuccoreObjects = new List<NuccoreObject>();
             const short retmax = 500;
@@ -260,7 +267,7 @@
         /// <returns>
         /// Tuple of NcbiWebEnvironment and QueryKey <see cref="string"/>s.
         /// </returns>
-        public static (string, string) ExecuteESearchRequest(string searchTerm)
+        public (string, string) ExecuteESearchRequest(string searchTerm)
         {
             var urlEsearch = $"esearch.fcgi?db=nuccore&term={searchTerm}&usehistory=y&retmode=json";
             var esearchResponseString = GetResponceString(urlEsearch);
@@ -273,9 +280,9 @@
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public static (string, string) ExecuteEPostRequest(string ids)
+        public (string, string) ExecuteEPostRequest(string ids)
         {
-            string urlEPost = $"epost.fcgi";
+            const string urlEPost = $"epost.fcgi";
             string requestResult;
             using (var webClient = new WebClient())
             {
@@ -353,7 +360,7 @@
         /// <returns>
         /// 
         /// </returns>
-        private static string GetResponceString(string url)
+        private string GetResponceString(string url)
         {
             var response = GetResponseStream(url);
             StreamReader reader = new StreamReader(response);
@@ -391,7 +398,7 @@
         /// <exception cref="Exception">
         /// Thrown if response stream is null.
         /// </exception>
-        private static Stream GetResponseStream(string url)
+        private Stream GetResponseStream(string url)
         {
             // adding api key to request if there is any
             if (!string.IsNullOrEmpty(ApiKey))
@@ -404,18 +411,14 @@
             var memoryStream = new MemoryStream();
 
             WaitForRequest();
-            using (var downloader = new WebClient())
-            {
-                using (Stream stream = downloader.OpenRead(resultUrl))
-                {
-                    if (stream == null)
-                    {
-                        throw new Exception("Response stream was null.");
-                    }
+            using Stream stream = httpClient.GetStreamAsync(resultUrl).Result;
 
-                    stream.CopyTo(memoryStream);
-                }
+            if (stream == null)
+            {
+                throw new Exception("Response stream was null.");
             }
+
+            stream.CopyTo(memoryStream);
 
             memoryStream.Position = 0;
             return memoryStream;
@@ -425,7 +428,7 @@
         /// NCBI allows only 3 (10 for registered users) requests per second.
         /// So we wait between requests to be sure.
         /// </summary>
-        private static void WaitForRequest()
+        private void WaitForRequest()
         {
             lock (SyncRoot)
             {
