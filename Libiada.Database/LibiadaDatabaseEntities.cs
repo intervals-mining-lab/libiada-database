@@ -5,22 +5,20 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Microsoft.Extensions.Configuration;
+
 
  
 namespace Libiada.Database;
 
 public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, AspNetRole, int>
 {
-    //public LibiadaDatabaseEntities()
-    //{
-    //}
-    //public LibiadaDatabaseEntities(string a_connectionString)
-    //{
-    //    this.Database.SetConnectionString(a_connectionString);
-    //}
-    public LibiadaDatabaseEntities(DbContextOptions<LibiadaDatabaseEntities> options)
+    private readonly IConfiguration configuration;
+
+    public LibiadaDatabaseEntities(DbContextOptions<LibiadaDatabaseEntities> options, IConfiguration configuration)
         : base(options)
     {
+        this.configuration = configuration;
     }
 
     public virtual DbSet<AccordanceCharacteristicLink> AccordanceCharacteristicLinks { get; set; }
@@ -79,9 +77,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
     public virtual DbSet<TaskResult> TaskResults { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=localhost;Database=test;Username=postgres;Persist Security Info=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql(configuration.GetConnectionString("LibiadaDatabaseEntities"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

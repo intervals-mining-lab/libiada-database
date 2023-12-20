@@ -15,7 +15,7 @@
         public LibiadaDatabaseEntities CreateDbContext()
         {
             DbContextOptions<LibiadaDatabaseEntities> options = new DbContextOptions<LibiadaDatabaseEntities>();
-            return new LibiadaDatabaseEntities(options);
+            return new LibiadaDatabaseEntities(options, configuration);
         }
 
     }
