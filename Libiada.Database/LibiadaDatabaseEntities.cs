@@ -77,7 +77,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
     public virtual DbSet<TaskResult> TaskResults { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql(configuration.GetConnectionString("LibiadaDatabaseEntities"));
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql(configuration.GetConnectionString("LibiadaDatabaseEntities") ?? throw new InvalidOperationException("Connection string 'LibiadaDatabaseEntities' not found."));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

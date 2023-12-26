@@ -38,7 +38,6 @@
         /// </summary>
         private static readonly object SyncRoot = new object();
 
-        // TODO: fix that
         private readonly string ApiKey = "";
 
         /// <summary>
