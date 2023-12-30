@@ -39,17 +39,17 @@ public partial class CalculationTask
     /// <summary>
     /// Task creation date and time (filled trough trigger).
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
 
     /// <summary>
     /// Task beginning of computation date and time.
     /// </summary>
-    public DateTime? Started { get; set; }
+    public DateTimeOffset? Started { get; set; }
 
     /// <summary>
     /// Task completion date and time.
     /// </summary>
-    public DateTime? Completed { get; set; }
+    public DateTimeOffset? Completed { get; set; }
 
     public virtual AspNetUser AspNetUser { get; set; } = null!;
 

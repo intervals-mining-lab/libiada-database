@@ -91,7 +91,7 @@
         /// </summary>
         [Display(Name = "Collection date")]
         [DataType(DataType.Date)]
-        public DateTime? CollectionDate { get; set; }
+        public DateTimeOffset? CollectionDate { get; set; }
     }
 
     /// <summary>

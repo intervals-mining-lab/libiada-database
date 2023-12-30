@@ -53,12 +53,12 @@ public partial class ImageSequence
     /// <summary>
     /// Sequence creation date and time (filled trough trigger).
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
 
     /// <summary>
     /// Record last change date and time (updated trough trigger).
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTimeOffset Modified { get; set; }
 
     public virtual Matter Matter { get; set; } = null!;
 }

@@ -23,7 +23,7 @@ public partial class DataSequence
     /// <summary>
     /// Sequence creation date and time (filled trough trigger).
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
 
     /// <summary>
     /// Id of the research object to which the sequence belongs.
@@ -53,7 +53,7 @@ public partial class DataSequence
     /// <summary>
     /// Record last change date and time (updated trough trigger).
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTimeOffset Modified { get; set; }
 
     /// <summary>
     /// Description of the sequence.

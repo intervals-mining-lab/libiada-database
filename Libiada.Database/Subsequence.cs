@@ -18,12 +18,12 @@ public partial class Subsequence
     /// <summary>
     /// Sequence group creation date and time (filled trough trigger).
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
 
     /// <summary>
     /// Record last change date and time (updated trough trigger).
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTimeOffset Modified { get; set; }
 
     /// <summary>
     /// Parent sequence id.

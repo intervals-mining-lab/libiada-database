@@ -433,12 +433,12 @@
             {
                 int delay = string.IsNullOrEmpty(ApiKey) ? 334 : 100;
 
-                if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, delay))
+                if (DateTimeOffset.UtcNow - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, delay))
                 {
                     Thread.Sleep(delay);
                 }
 
-                lastRequestDateTime = DateTimeOffset.Now;
+                lastRequestDateTime = DateTimeOffset.UtcNow;
             }
         }
     }

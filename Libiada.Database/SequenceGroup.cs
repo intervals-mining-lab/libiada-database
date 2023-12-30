@@ -24,7 +24,7 @@ public partial class SequenceGroup
     /// <summary>
     /// Sequence group creation date and time (filled trough trigger).
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTimeOffset Created { get; set; }
 
     /// <summary>
     /// Record creator user id.
@@ -34,7 +34,7 @@ public partial class SequenceGroup
     /// <summary>
     /// Record last change date and time (updated trough trigger).
     /// </summary>
-    public DateTime Modified { get; set; }
+    public DateTimeOffset Modified { get; set; }
 
     /// <summary>
     /// Record editor user id.
