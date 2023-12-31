@@ -77,7 +77,7 @@
         /// The group.
         /// </param>
         [Test]
-        public void GroupHasDisplayValueTest([Values]Group group) => Assert.That(group.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void GroupHasDisplayValueTest([Values] Group group) => Assert.That(group.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all groups have description.
@@ -86,7 +86,7 @@
         /// The group.
         /// </param>
         [Test]
-        public void GroupHasDescriptionTest([Values]Group group) => Assert.That(group.GetDescription(), Is.Not.Null.And.Not.Empty);
+        public void GroupHasDescriptionTest([Values] Group group) => Assert.That(group.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all groups have valid nature attribute.
@@ -95,7 +95,7 @@
         /// The group.
         /// </param>
         [Test]
-        public void GroupHasNatureTest([Values]Group group) => Assert.That(natures,Has.Member(@group.GetNature()));
+        public void GroupHasNatureTest([Values] Group group) => Assert.That(natures, Has.Member(@group.GetNature()));
 
         /// <summary>
         /// Tests that all groups values are unique.

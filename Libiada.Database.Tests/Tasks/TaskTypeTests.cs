@@ -104,7 +104,7 @@
         /// The task type.
         /// </param>
         [Test]
-        public void TaskTypeHasDisplayValueTest([Values]TaskType taskType) => Assert.That(taskType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void TaskTypeHasDisplayValueTest([Values] TaskType taskType) => Assert.That(taskType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         // TODO: fix that
 

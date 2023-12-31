@@ -26,7 +26,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public GeneticSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
+        public GeneticSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
         {
         }
 

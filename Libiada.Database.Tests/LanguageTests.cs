@@ -61,7 +61,7 @@
         /// The language.
         /// </param>
         [Test]
-        public void LanguageHasDisplayValueTest([Values]Language language) => Assert.That(language.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void LanguageHasDisplayValueTest([Values] Language language) => Assert.That(language.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all languages have description.
@@ -70,7 +70,7 @@
         /// The language.
         /// </param>
         [Test]
-        public void LanguageHasDescriptionTest([Values]Language language) => Assert.That(language.GetDescription(), Is.Not.Null.And.Not.Empty);
+        public void LanguageHasDescriptionTest([Values] Language language) => Assert.That(language.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all languages values are unique.

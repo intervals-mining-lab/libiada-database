@@ -167,7 +167,6 @@
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
         }
     }
 }

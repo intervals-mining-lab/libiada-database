@@ -81,7 +81,7 @@
         /// The sequence type.
         /// </param>
         [Test]
-        public void SequenceTypeHasDisplayValueTest([Values]SequenceType sequenceType) => Assert.That(sequenceType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void SequenceTypeHasDisplayValueTest([Values] SequenceType sequenceType) => Assert.That(sequenceType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all sequence types have description.
@@ -90,7 +90,7 @@
         /// The sequence Type.
         /// </param>
         [Test]
-        public void SequenceTypeHasDescriptionTest([Values]SequenceType sequenceType) => Assert.That(sequenceType.GetDescription(), Is.Not.Null.And.Not.Empty);
+        public void SequenceTypeHasDescriptionTest([Values] SequenceType sequenceType) => Assert.That(sequenceType.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all sequence types have valid nature attribute.
@@ -99,7 +99,7 @@
         /// The sequence Type.
         /// </param>
         [Test]
-        public void SequenceTypeHasNatureTest([Values]SequenceType sequenceType) => Assert.That(natures, Has.Member(sequenceType.GetNature()));
+        public void SequenceTypeHasNatureTest([Values] SequenceType sequenceType) => Assert.That(natures, Has.Member(sequenceType.GetNature()));
 
         /// <summary>
         /// Tests that all sequence types values are unique.

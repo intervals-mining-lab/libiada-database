@@ -111,7 +111,7 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasDisplayValueTest([Values]Feature feature) => Assert.That(feature.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void FeatureHasDisplayValueTest([Values] Feature feature) => Assert.That(feature.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all features have description.
@@ -120,7 +120,7 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasDescriptionTest([Values]Feature feature) => Assert.That(feature.GetDescription(), Is.Not.Null.And.Not.Empty);
+        public void FeatureHasDescriptionTest([Values] Feature feature) => Assert.That(feature.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all features have valid nature attribute.
@@ -129,7 +129,7 @@
         /// The feature.
         /// </param>
         [Test]
-        public void FeatureHasValidNatureTest([Values]Feature feature) => Assert.That(natures, Has.Member(feature.GetNature()));
+        public void FeatureHasValidNatureTest([Values] Feature feature) => Assert.That(natures, Has.Member(feature.GetNature()));
 
         /// <summary>
         /// Tests that all features values are unique.

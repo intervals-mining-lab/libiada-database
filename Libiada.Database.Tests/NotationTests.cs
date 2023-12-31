@@ -80,7 +80,7 @@
         /// The notation.
         /// </param>
         [Test]
-        public void NotationHasDisplayValueTest([Values]Notation notation) => Assert.That(notation.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void NotationHasDisplayValueTest([Values] Notation notation) => Assert.That(notation.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all notations have description.
@@ -89,7 +89,7 @@
         /// The notation.
         /// </param>
         [Test]
-        public void NotationHasDescriptionTest([Values]Notation notation) => Assert.That(notation.GetDescription(), Is.Not.Null.And.Not.Empty);
+        public void NotationHasDescriptionTest([Values] Notation notation) => Assert.That(notation.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all notations have valid nature attribute.
@@ -98,7 +98,7 @@
         /// The notation.
         /// </param>
         [Test]
-        public void NotationHasNatureTest([Values]Notation notation) => Assert.That(natures, Has.Member(notation.GetNature()));
+        public void NotationHasNatureTest([Values] Notation notation) => Assert.That(natures, Has.Member(notation.GetNature()));
 
         /// <summary>
         /// Tests that all notations values are unique.

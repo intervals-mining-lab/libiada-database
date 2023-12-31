@@ -35,11 +35,11 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        protected SequenceImporter(LibiadaDatabaseEntities db, Cache cache)
+        protected SequenceImporter(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache)
         {
-            Db = db;
-            MatterRepository = new MatterRepository(db, cache);
-            ElementRepository = new ElementRepository(db);
+            Db = dbFactory.CreateDbContext();
+            MatterRepository = new MatterRepository(Db, cache);
+            ElementRepository = new ElementRepository(Db);
         }
 
         /// <summary>

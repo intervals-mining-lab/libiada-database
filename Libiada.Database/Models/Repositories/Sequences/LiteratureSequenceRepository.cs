@@ -25,7 +25,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public LiteratureSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
+        public LiteratureSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
         {
         }
 
@@ -137,7 +137,6 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            Db.Dispose();
         }
     }
 }

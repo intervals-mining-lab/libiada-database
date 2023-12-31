@@ -13,9 +13,9 @@ namespace Libiada.Database.Models.Repositories.Sequences
     using LibiadaCore.Images;
     using LibiadaCore.Core.SimpleTypes;
 
-    using Libiada.Database.Helpers;
     using Libiada.Database.Attributes;
     using Libiada.Database.Extensions;
+
     using Microsoft.EntityFrameworkCore;
 
 
@@ -30,7 +30,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public CommonSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
+        public CommonSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
         {
         }
 
@@ -188,11 +188,11 @@ namespace Libiada.Database.Models.Repositories.Sequences
         public long[][] GetSequenceIds(
             long[] matterIds,
             Notation[] notations,
-            Language?[] languages,
-            Translator?[] translators,
-            PauseTreatment?[] pauseTreatments,
-            bool?[] sequentialTransfers,
-            ImageOrderExtractor?[] imageOrderExtractors)
+            Language[] languages,
+            Translator[] translators,
+            PauseTreatment[] pauseTreatments,
+            bool[] sequentialTransfers,
+            ImageOrderExtractor[] imageOrderExtractors)
         {
 
 
@@ -206,11 +206,11 @@ namespace Libiada.Database.Models.Repositories.Sequences
             {
                 var sequenceIdsForOneNotation = GetSequenceIds(matterIds,
                                                                notations[j],
-                                                               languages?[j],
-                                                               translators?[j],
-                                                               pauseTreatments?[j],
-                                                               sequentialTransfers?[j],
-                                                               imageOrderExtractors?[j]);
+                                                               languages.IsNullOrEmpty() ? null : languages[j],
+                                                               translators.IsNullOrEmpty() ? null : translators[j],
+                                                               pauseTreatments.IsNullOrEmpty() ? null : pauseTreatments[j],
+                                                               sequentialTransfers.IsNullOrEmpty() ? null : sequentialTransfers[j],
+                                                               imageOrderExtractors.IsNullOrEmpty() ? null : imageOrderExtractors[j]);
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     sequenceIds[i][j] = sequenceIdsForOneNotation[i];
@@ -315,7 +315,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="imageOrderExtractors">
         /// Reading trajectories.
         /// </param>
-        private void CreateMissingImageSequences(long[] matterIds, Notation[] notations, ImageOrderExtractor?[] imageOrderExtractors)
+        private void CreateMissingImageSequences(long[] matterIds, Notation[] notations, ImageOrderExtractor[] imageOrderExtractors)
         {
             if (notations[0].GetNature() == Nature.Image)
             {
@@ -338,7 +338,7 @@ namespace Libiada.Database.Models.Repositories.Sequences
                             {
                                 MatterId = matterIds[i],
                                 Notation = notations[j],
-                                OrderExtractor = imageOrderExtractors[j] ?? ImageOrderExtractor.LineLeftToRightTopToBottom
+                                OrderExtractor = imageOrderExtractors.IsNullOrEmpty() ? ImageOrderExtractor.LineLeftToRightTopToBottom : imageOrderExtractors[j] 
                             };
                             imageSequenceRepository.Create(newImageSequence, Db);
                             existingSequences.Add(newImageSequence);

@@ -24,7 +24,7 @@
         /// <param name="db">
         /// The db.
         /// </param>
-        public DataSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
+        public DataSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
         {
         }
 

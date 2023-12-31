@@ -64,7 +64,7 @@
         /// The task state.
         /// </param>
         [Test]
-        public void TaskStateHasDisplayValueTest([Values]TaskState taskState) => Assert.That(taskState.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void TaskStateHasDisplayValueTest([Values] TaskState taskState) => Assert.That(taskState.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all task states have description.
@@ -73,7 +73,7 @@
         /// The task state.
         /// </param>
         [Test]
-        public void TaskStateHasDescriptionTest([Values]TaskState taskState) => Assert.That(taskState.GetDescription(), Is.Not.Null.And.Not.Empty);
+        public void TaskStateHasDescriptionTest([Values] TaskState taskState) => Assert.That(taskState.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all task states values are unique.

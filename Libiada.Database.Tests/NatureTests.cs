@@ -65,7 +65,7 @@
         /// The nature.
         /// </param>
         [Test]
-        public void NatureHasDisplayValueTest([Values]Nature nature) => Assert.That(nature.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void NatureHasDisplayValueTest([Values] Nature nature) => Assert.That(nature.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all natures have description.
@@ -74,7 +74,7 @@
         /// The nature.
         /// </param>
         [Test]
-        public void NatureHasDescriptionTest([Values]Nature nature) => Assert.That(nature.GetDescription(), Is.Not.Null.And.Not.Empty);
+        public void NatureHasDescriptionTest([Values] Nature nature) => Assert.That(nature.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all natures values are unique.

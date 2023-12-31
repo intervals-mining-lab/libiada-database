@@ -62,7 +62,7 @@
         /// The translator.
         /// </param>
         [Test]
-        public void TranslatorHasDisplayValueTest([Values]Translator translator) => Assert.That(translator.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+        public void TranslatorHasDisplayValueTest([Values] Translator translator) => Assert.That(translator.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all translators have description.
@@ -71,7 +71,7 @@
         /// The translator.
         /// </param>
         [Test]
-        public void TranslatorHasDescriptionTest([Values]Translator translator) => Assert.That(translator.GetDescription(), Is.Not.Null.And.Not.Empty);
+        public void TranslatorHasDescriptionTest([Values] Translator translator) => Assert.That(translator.GetDescription(), Is.Not.Null.And.Not.Empty);
 
         /// <summary>
         /// Tests that all translators values are unique.

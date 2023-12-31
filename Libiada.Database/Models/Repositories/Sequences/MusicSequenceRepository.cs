@@ -38,10 +38,10 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// <param name="db">
         /// The db.
         /// </param>
-        public MusicSequenceRepository(LibiadaDatabaseEntities db, Cache cache) : base(db, cache)
+        public MusicSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
         {
-            FmotifRepository = new FmotifRepository(db);
-            MeasureRepository = new MeasureRepository(db);
+            FmotifRepository = new FmotifRepository(Db);
+            MeasureRepository = new MeasureRepository(Db);
         }
 
         /// <summary>
@@ -170,7 +170,6 @@ namespace Libiada.Database.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            Db.Dispose();
         }
 
         /// <summary>
