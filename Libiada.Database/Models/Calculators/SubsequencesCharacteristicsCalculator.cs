@@ -10,6 +10,7 @@
     using Libiada.Database.Models.Repositories.Calculators;
     using Libiada.Database.Models.Repositories.Catalogs;
     using Libiada.Database.Models.Repositories.Sequences;
+    using Libiada.Database.Extensions;
 
     /// <summary>
     /// The subsequences characteristics calculator.
@@ -89,7 +90,7 @@
 
             var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
 
-            Subsequence[] subsequences = filters == null ?
+            Subsequence[] subsequences = filters.IsNullOrEmpty() ?
                 subsequenceExtractor.GetSubsequences(parentSequenceId, features) :
                 subsequenceExtractor.GetSubsequences(parentSequenceId, features, filters);
 
