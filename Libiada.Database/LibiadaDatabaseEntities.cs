@@ -77,7 +77,12 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
     public virtual DbSet<TaskResult> TaskResults { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql(configuration.GetConnectionString("LibiadaDatabaseEntities") ?? throw new InvalidOperationException("Connection string 'LibiadaDatabaseEntities' not found."));
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        string environment = configuration["ASPNETCORE_ENVIRONMENT"];
+        string connectionString = configuration.GetConnectionString($"LibiadaDatabaseEntities_{environment}") ?? throw new InvalidOperationException("Connection string 'LibiadaDatabaseEntities' not found.");
+        optionsBuilder.UseNpgsql(connectionString);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
