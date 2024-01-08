@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Microsoft.Extensions.Configuration;
@@ -79,7 +75,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string connectionString = configuration.GetConnectionString($"LibiadaDatabaseEntities") ?? throw new InvalidOperationException("Connection string 'LibiadaDatabaseEntities' not found.");
+        string connectionString = configuration.GetConnectionString($"LibiadaDatabaseEntities") ?? throw new Exception("Connection string 'LibiadaDatabaseEntities' is not found.");
         optionsBuilder.UseNpgsql(connectionString);
     }
 
@@ -162,16 +158,18 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
         modelBuilder.Entity<AspNetPushNotificationSubscriber>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_dbo.AspNetPushNotificationSubscribers");
+            entity.HasKey(e => e.Id).HasName("PK.AspNetPushNotificationSubscribers");
 
-            entity.ToTable("AspNetPushNotificationSubscribers", "dbo", tb => tb.HasComment("Table for storing data about devices that are subscribers to push notifications."));
+            entity.ToTable("AspNetPushNotificationSubscribers", tb => tb.HasComment("Table for storing data about devices that are subscribers to push notifications."));
+
+            entity.HasIndex(e => new { e.UserId, e.Endpoint }, "uk_AspNetPushNotificationSubscribers").IsUnique();
 
             entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
             entity.Property(e => e.UserId).HasDefaultValue(0);
 
             entity.HasOne(d => d.AspNetUser).WithMany()
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_dbo.AspNetPushNotificationSubscribers_dbo.AspNetUsers_UserId");
+                .HasConstraintName("FK.AspNetPushNotificationSubscribers.AspNetUsers_UserId");
         });
 
         modelBuilder.Entity<BinaryCharacteristicLink>(entity =>

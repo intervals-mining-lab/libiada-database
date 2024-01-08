@@ -49,7 +49,7 @@
 
         public NcbiHelper(IConfiguration config)
         {
-            ApiKey = config["NcbiApiKey"];
+            ApiKey = config["NcbiApiKey"] ?? throw new Exception($"NcbiApiKey is not found in confiuguration.");
         }
 
         /// <summary>

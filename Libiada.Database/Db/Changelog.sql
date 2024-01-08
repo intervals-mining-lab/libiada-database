@@ -3806,4 +3806,9 @@ ALTER TABLE IF EXISTS binary_characteristic ALTER COLUMN value SET NOT NULL;
 ALTER TABLE IF EXISTS congeneric_characteristic ALTER COLUMN value SET NOT NULL;
 ALTER TABLE IF EXISTS full_characteristic ALTER COLUMN value SET NOT NULL;
 
+-- 08.01.2024
+-- Add unique constraint on AspNetPushNotificationSubscribers' user id and endpoint.
+
+ALTER TABLE "AspNetPushNotificationSubscribers" ADD CONSTRAINT "uk_AspNetPushNotificationSubscribers" UNIQUE ("UserId", "Endpoint");
+	
 COMMIT;
