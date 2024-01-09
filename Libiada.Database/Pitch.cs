@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using LibiadaCore.Core.SimpleTypes;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Libiada.Database;
@@ -8,37 +11,48 @@ namespace Libiada.Database;
 /// <summary>
 /// Note&apos;s pitch.
 /// </summary>
+[Table("pitch")]
+[Index("Octave", "Instrument", "Accidental", "NoteSymbol", Name = "uk_pitch", IsUnique = true)]
 public partial class Pitch  
 {
     /// <summary>
     /// Unique internal identifier of the pitch.
     /// </summary>
+    [Key]
+    [Column("id")]
     public int Id { get; set; }
 
     /// <summary>
     /// Octave number.
     /// </summary>
+    [Column("octave")]
     public int Octave { get; set; }
 
     /// <summary>
     /// Unique number by midi standard.
     /// </summary>
+    [Column("midinumber")]
     public int Midinumber { get; set; }
 
     /// <summary>
     /// Pitch instrument enum numeric value.
     /// </summary>
+    [Column("instrument")]
     public Instrument Instrument { get; set; }
 
     /// <summary>
     /// Pitch key signature enum numeric value.
     /// </summary>
+    [Column("accidental")]
     public Accidental Accidental { get; set; }
 
     /// <summary>
     /// Note symbol enum numeric value.
     /// </summary>
+    [Column("note_symbol")]
     public NoteSymbol NoteSymbol { get; set; }
 
+    [ForeignKey("PitchId")]
+    [InverseProperty("Pitches")]
     public virtual ICollection<Note> Notes { get; set; } = new List<Note>();
 }

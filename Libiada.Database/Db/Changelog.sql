@@ -3134,6 +3134,7 @@ ALTER TABLE public."AspNetPushNotificationSubscribers" ALTER COLUMN "Id" ADD GEN
     NO MAXVALUE
     CACHE 1
 );
+COMMENT ON TABLE public."AspNetPushNotificationSubscribers" IS 'Table for storing data about devices that are subscribers to push notifications.';
 
 CREATE TABLE public."AspNetRoleClaims" (
     "Id" integer NOT NULL,

@@ -93,18 +93,11 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("accordance_characteristic_link", tb => tb.HasComment("Contatins list of possible combinations of accordance characteristics parameters."));
 
-            entity.HasIndex(e => new { e.AccordanceCharacteristic, e.Link }, "uk_accordance_characteristic_link").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.AccordanceCharacteristic)
-                .HasComment("Characteristic enum numeric value.")
-                .HasColumnName("accordance_characteristic");
-            entity.Property(e => e.Link)
-                .HasComment("Link enum numeric value.")
-                .HasColumnName("link");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.AccordanceCharacteristic).HasComment("Characteristic enum numeric value.");
+            entity.Property(e => e.Link).HasComment("Link enum numeric value.");
         });
 
         modelBuilder.Entity<AccordanceCharacteristicValue>(entity =>
@@ -113,11 +106,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("accordance_characteristic", tb => tb.HasComment("Contains numeric chracteristics of accordance of element in different sequences."));
 
-            entity.HasIndex(e => e.FirstSequenceId, "ix_accordance_characteristic_first_chain_id");
-
             entity.HasIndex(e => e.FirstSequenceId, "ix_accordance_characteristic_first_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
-
-            entity.HasIndex(e => e.SecondSequenceId, "ix_accordance_characteristic_second_chain_id");
 
             entity.HasIndex(e => e.SecondSequenceId, "ix_accordance_characteristic_second_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
@@ -125,50 +114,26 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => new { e.FirstSequenceId, e.SecondSequenceId, e.CharacteristicLinkId }, "ix_accordance_characteristic_sequences_ids_characteristic_link_").HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.FirstSequenceId, e.SecondSequenceId, e.FirstElementId, e.SecondElementId, e.CharacteristicLinkId }, "uk_accordance_characteristic").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.CharacteristicLinkId)
-                .HasComment("Characteristic type id.")
-                .HasColumnName("characteristic_link_id");
-            entity.Property(e => e.FirstElementId)
-                .HasComment("Id of the element of the first sequence for which the characteristic is calculated.")
-                .HasColumnName("first_element_id");
-            entity.Property(e => e.FirstSequenceId)
-                .HasComment("Id of the first sequence for which the characteristic is calculated.")
-                .HasColumnName("first_chain_id");
-            entity.Property(e => e.SecondElementId)
-                .HasComment("Id of the element of the second sequence for which the characteristic is calculated.")
-                .HasColumnName("second_element_id");
-            entity.Property(e => e.SecondSequenceId)
-                .HasComment("Id of the second sequence for which the characteristic is calculated.")
-                .HasColumnName("second_chain_id");
-            entity.Property(e => e.Value)
-                .HasComment("Numerical value of the characteristic.")
-                .HasColumnName("value");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.CharacteristicLinkId).HasComment("Characteristic type id.");
+            entity.Property(e => e.FirstElementId).HasComment("Id of the element of the first sequence for which the characteristic is calculated.");
+            entity.Property(e => e.FirstSequenceId).HasComment("Id of the first sequence for which the characteristic is calculated.");
+            entity.Property(e => e.SecondElementId).HasComment("Id of the element of the second sequence for which the characteristic is calculated.");
+            entity.Property(e => e.SecondSequenceId).HasComment("Id of the second sequence for which the characteristic is calculated.");
+            entity.Property(e => e.Value).HasComment("Numerical value of the characteristic.");
 
             entity.HasOne(d => d.AccordanceCharacteristicLink).WithMany(p => p.AccordanceCharacteristicValues)
-                .HasForeignKey(d => d.CharacteristicLinkId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_accordance_characteristic_link");
         });
 
         modelBuilder.Entity<AspNetPushNotificationSubscriber>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK.AspNetPushNotificationSubscribers");
+            entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            entity.ToTable("AspNetPushNotificationSubscribers", tb => tb.HasComment("Table for storing data about devices that are subscribers to push notifications."));
-
-            entity.HasIndex(e => new { e.UserId, e.Endpoint }, "uk_AspNetPushNotificationSubscribers").IsUnique();
-
-            entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
-            entity.Property(e => e.UserId).HasDefaultValue(0);
-
-            entity.HasOne(d => d.AspNetUser).WithMany()
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.AspNetUser).WithMany(p => p.AspNetPushNotificationSubscribers)
                 .HasConstraintName("FK.AspNetPushNotificationSubscribers.AspNetUsers_UserId");
         });
 
@@ -178,18 +143,11 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("binary_characteristic_link", tb => tb.HasComment("Contatins list of possible combinations of dependence characteristics parameters."));
 
-            entity.HasIndex(e => new { e.BinaryCharacteristic, e.Link }, "uk_binary_characteristic_link").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.BinaryCharacteristic)
-                .HasComment("Characteristic enum numeric value.")
-                .HasColumnName("binary_characteristic");
-            entity.Property(e => e.Link)
-                .HasComment("Link enum numeric value.")
-                .HasColumnName("link");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.BinaryCharacteristic).HasComment("Characteristic enum numeric value.");
+            entity.Property(e => e.Link).HasComment("Link enum numeric value.");
         });
 
         modelBuilder.Entity<BinaryCharacteristicValue>(entity =>
@@ -198,36 +156,20 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("binary_characteristic", tb => tb.HasComment("Contains numeric chracteristics of elements dependece based on their arrangement in sequence."));
 
-            entity.HasIndex(e => e.SequenceId, "ix_binary_characteristic_chain_id");
-
             entity.HasIndex(e => e.SequenceId, "ix_binary_characteristic_first_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
             entity.HasIndex(e => new { e.SequenceId, e.CharacteristicLinkId }, "ix_binary_characteristic_sequence_id_characteristic_link_id_bri").HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.SequenceId, e.FirstElementId, e.SecondElementId, e.CharacteristicLinkId }, "uk_binary_characteristic").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.CharacteristicLinkId)
-                .HasComment("Characteristic type id.")
-                .HasColumnName("characteristic_link_id");
-            entity.Property(e => e.FirstElementId)
-                .HasComment("Id of the first element of the sequence for which the characteristic is calculated.")
-                .HasColumnName("first_element_id");
-            entity.Property(e => e.SecondElementId)
-                .HasComment("Id of the second element of the sequence for which the characteristic is calculated.")
-                .HasColumnName("second_element_id");
-            entity.Property(e => e.SequenceId)
-                .HasComment("Id of the sequence for which the characteristic is calculated.")
-                .HasColumnName("chain_id");
-            entity.Property(e => e.Value)
-                .HasComment("Numerical value of the characteristic.")
-                .HasColumnName("value");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.CharacteristicLinkId).HasComment("Characteristic type id.");
+            entity.Property(e => e.FirstElementId).HasComment("Id of the first element of the sequence for which the characteristic is calculated.");
+            entity.Property(e => e.SecondElementId).HasComment("Id of the second element of the sequence for which the characteristic is calculated.");
+            entity.Property(e => e.SequenceId).HasComment("Id of the sequence for which the characteristic is calculated.");
+            entity.Property(e => e.Value).HasComment("Numerical value of the characteristic.");
 
             entity.HasOne(d => d.BinaryCharacteristicLink).WithMany(p => p.BinaryCharacteristicValues)
-                .HasForeignKey(d => d.CharacteristicLinkId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_binary_characteristic_link");
         });
@@ -240,32 +182,16 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.Completed)
-                .HasComment("Task completion date and time.")
-                .HasColumnName("completed");
-            entity.Property(e => e.Created)
-                .HasComment("Task creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Task description.")
-                .HasColumnName("description");
-            entity.Property(e => e.Started)
-                .HasComment("Task beginning of computation date and time.")
-                .HasColumnName("started");
-            entity.Property(e => e.Status)
-                .HasComment("Task status enum numeric value.")
-                .HasColumnName("status");
-            entity.Property(e => e.TaskType)
-                .HasComment("Task type enum numeric value.")
-                .HasColumnName("task_type");
-            entity.Property(e => e.UserId)
-                .HasComment("Creator user id.")
-                .HasColumnName("user_id");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.Completed).HasComment("Task completion date and time.");
+            entity.Property(e => e.Created).HasComment("Task creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Task description.");
+            entity.Property(e => e.Started).HasComment("Task beginning of computation date and time.");
+            entity.Property(e => e.Status).HasComment("Task status enum numeric value.");
+            entity.Property(e => e.TaskType).HasComment("Task type enum numeric value.");
+            entity.Property(e => e.UserId).HasComment("Creator user id.");
 
-            entity.HasOne(d => d.AspNetUser).WithMany()
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.AspNetUser).WithMany(p => p.CalculationTasks)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_task_user");
         });
@@ -276,32 +202,18 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("full_characteristic", tb => tb.HasComment("Contains numeric chracteristics of complete sequences."));
 
-            entity.HasIndex(e => e.SequenceId, "ix_characteristic_chain_id");
-
-            entity.HasIndex(e => e.CharacteristicLinkId, "ix_characteristic_characteristic_type_link");
-
             entity.HasIndex(e => e.CharacteristicLinkId, "ix_full_characteristic_characteristic_link_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
             entity.HasIndex(e => e.SequenceId, "ix_full_characteristic_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.SequenceId, e.CharacteristicLinkId }, "uk_characteristic").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('characteristics_id_seq'::regclass)")
-                .HasComment("Unique internal identifier.")
-                .HasColumnName("id");
-            entity.Property(e => e.CharacteristicLinkId)
-                .HasComment("Characteristic type id.")
-                .HasColumnName("characteristic_link_id");
-            entity.Property(e => e.SequenceId)
-                .HasComment("Id of the sequence for which the characteristic is calculated.")
-                .HasColumnName("chain_id");
-            entity.Property(e => e.Value)
-                .HasComment("Numerical value of the characteristic.")
-                .HasColumnName("value");
+                .HasComment("Unique internal identifier.");
+            entity.Property(e => e.CharacteristicLinkId).HasComment("Characteristic type id.");
+            entity.Property(e => e.SequenceId).HasComment("Id of the sequence for which the characteristic is calculated.");
+            entity.Property(e => e.Value).HasComment("Numerical value of the characteristic.");
 
             entity.HasOne(d => d.FullCharacteristicLink).WithMany(p => p.CharacteristicValues)
-                .HasForeignKey(d => d.CharacteristicLinkId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_full_characteristic_link");
         });
@@ -314,47 +226,24 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => e.Alphabet, "ix_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
-            entity.HasIndex(e => e.MatterId, "ix_chain_matter_id");
-
-            entity.HasIndex(e => e.Notation, "ix_chain_notation_id");
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier of the sequence.")
-                .HasColumnName("id");
-            entity.Property(e => e.Alphabet)
-                .HasComment("Sequence's alphabet (array of elements ids).")
-                .HasColumnName("alphabet");
-            entity.Property(e => e.Building)
-                .HasComment("Sequence's order.")
-                .HasColumnName("building");
+                .HasComment("Unique internal identifier of the sequence.");
+            entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
+            entity.Property(e => e.Building).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Description of the sequence.")
-                .HasColumnName("description");
-            entity.Property(e => e.MatterId)
-                .HasComment("Id of the research object to which the sequence belongs.")
-                .HasColumnName("matter_id");
+                .HasComment("Sequence creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Description of the sequence.");
+            entity.Property(e => e.MatterId).HasComment("Id of the research object to which the sequence belongs.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Notation)
-                .HasComment("Notation of the sequence (words, letters, notes, nucleotides, etc.).")
-                .HasColumnName("notation");
-            entity.Property(e => e.RemoteDb)
-                .HasComment("Enum numeric value of the remote db from which sequence is downloaded.")
-                .HasColumnName("remote_db");
-            entity.Property(e => e.RemoteId)
-                .HasMaxLength(255)
-                .HasComment("Id of the sequence in remote database.")
-                .HasColumnName("remote_id");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Notation).HasComment("Notation of the sequence (words, letters, notes, nucleotides, etc.).");
+            entity.Property(e => e.RemoteDb).HasComment("Enum numeric value of the remote db from which sequence is downloaded.");
+            entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.Sequence)
-                .HasForeignKey(d => d.MatterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_chain_matter");
         });
@@ -365,21 +254,12 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("congeneric_characteristic_link", tb => tb.HasComment("Contatins list of possible combinations of congeneric characteristics parameters."));
 
-            entity.HasIndex(e => new { e.CongenericCharacteristic, e.Link, e.ArrangementType }, "uk_congeneric_characteristic_link").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.ArrangementType)
-                .HasComment("Arrangement type enum numeric value.")
-                .HasColumnName("arrangement_type");
-            entity.Property(e => e.CongenericCharacteristic)
-                .HasComment("Characteristic enum numeric value.")
-                .HasColumnName("congeneric_characteristic");
-            entity.Property(e => e.Link)
-                .HasComment("Link enum numeric value.")
-                .HasColumnName("link");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.ArrangementType).HasComment("Arrangement type enum numeric value.");
+            entity.Property(e => e.CongenericCharacteristic).HasComment("Characteristic enum numeric value.");
+            entity.Property(e => e.Link).HasComment("Link enum numeric value.");
         });
 
         modelBuilder.Entity<CongenericCharacteristicValue>(entity =>
@@ -387,10 +267,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.HasKey(e => e.Id).HasName("pk_congeneric_characteristic");
 
             entity.ToTable("congeneric_characteristic", tb => tb.HasComment("Contains numeric chracteristics of congeneric sequences."));
-
-            entity.HasIndex(e => new { e.SequenceId, e.ElementId }, "fki_congeneric_characteristic_alphabet_element");
-
-            entity.HasIndex(e => e.SequenceId, "ix_congeneric_characteristic_chain_id");
 
             entity.HasIndex(e => e.CharacteristicLinkId, "ix_congeneric_characteristic_characteristic_link_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
@@ -400,27 +276,15 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => new { e.SequenceId, e.ElementId }, "ix_congeneric_characteristic_sequence_id_element_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.SequenceId, e.ElementId, e.CharacteristicLinkId }, "uk_congeneric_characteristic").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.CharacteristicLinkId)
-                .HasComment("Characteristic type id.")
-                .HasColumnName("characteristic_link_id");
-            entity.Property(e => e.ElementId)
-                .HasComment("Id of the element for which the characteristic is calculated.")
-                .HasColumnName("element_id");
-            entity.Property(e => e.SequenceId)
-                .HasComment("Id of the sequence for which the characteristic is calculated.")
-                .HasColumnName("chain_id");
-            entity.Property(e => e.Value)
-                .HasComment("Numerical value of the characteristic.")
-                .HasColumnName("value");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.CharacteristicLinkId).HasComment("Characteristic type id.");
+            entity.Property(e => e.ElementId).HasComment("Id of the element for which the characteristic is calculated.");
+            entity.Property(e => e.SequenceId).HasComment("Id of the sequence for which the characteristic is calculated.");
+            entity.Property(e => e.Value).HasComment("Numerical value of the characteristic.");
 
             entity.HasOne(d => d.CongenericCharacteristicLink).WithMany(p => p.CongenericCharacteristicValues)
-                .HasForeignKey(d => d.CharacteristicLinkId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_congeneric_characteristic_link");
         });
@@ -433,49 +297,24 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => e.Alphabet, "data_chain_alphabet_idx").HasAnnotation("Npgsql:IndexMethod", "gin");
 
-            entity.HasIndex(e => e.MatterId, "data_chain_matter_id_idx");
-
-            entity.HasIndex(e => e.Notation, "data_chain_notation_id_idx");
-
-            entity.HasIndex(e => new { e.Notation, e.MatterId }, "uk_data_chain").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier of the sequence.")
-                .HasColumnName("id");
-            entity.Property(e => e.Alphabet)
-                .HasComment("Sequence's alphabet (array of elements ids).")
-                .HasColumnName("alphabet");
-            entity.Property(e => e.Building)
-                .HasComment("Sequence's order.")
-                .HasColumnName("building");
+                .HasComment("Unique internal identifier of the sequence.");
+            entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
+            entity.Property(e => e.Building).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Description of the sequence.")
-                .HasColumnName("description");
-            entity.Property(e => e.MatterId)
-                .HasComment("Id of the research object to which the sequence belongs.")
-                .HasColumnName("matter_id");
+                .HasComment("Sequence creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Description of the sequence.");
+            entity.Property(e => e.MatterId).HasComment("Id of the research object to which the sequence belongs.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Notation)
-                .HasComment("Notation enum numeric value.")
-                .HasColumnName("notation");
-            entity.Property(e => e.RemoteDb)
-                .HasComment("Enum numeric value of the remote db from which sequence is downloaded.")
-                .HasColumnName("remote_db");
-            entity.Property(e => e.RemoteId)
-                .HasMaxLength(255)
-                .HasComment("Id of the sequence in remote database.")
-                .HasColumnName("remote_id");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Notation).HasComment("Notation enum numeric value.");
+            entity.Property(e => e.RemoteDb).HasComment("Enum numeric value of the remote db from which sequence is downloaded.");
+            entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.DataSequence)
-                .HasForeignKey(d => d.MatterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_data_chain_matter");
         });
@@ -488,53 +327,27 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => e.Alphabet, "ix_dna_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
-            entity.HasIndex(e => e.MatterId, "ix_dna_chain_matter_id");
-
-            entity.HasIndex(e => e.Notation, "ix_dna_chain_notation_id");
-
-            entity.HasIndex(e => new { e.MatterId, e.Notation }, "uk_dna_chain").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier of the sequence.")
-                .HasColumnName("id");
-            entity.Property(e => e.Alphabet)
-                .HasComment("Sequence's alphabet (array of elements ids).")
-                .HasColumnName("alphabet");
-            entity.Property(e => e.Building)
-                .HasComment("Sequence's order.")
-                .HasColumnName("building");
+                .HasComment("Unique internal identifier of the sequence.");
+            entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
+            entity.Property(e => e.Building).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Description of the sequence.")
-                .HasColumnName("description");
-            entity.Property(e => e.MatterId)
-                .HasComment("Id of the research object to which the sequence belongs.")
-                .HasColumnName("matter_id");
+                .HasComment("Sequence creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Description of the sequence.");
+            entity.Property(e => e.MatterId).HasComment("Id of the research object to which the sequence belongs.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Notation)
-                .HasComment("Notation enum numeric value.")
-                .HasColumnName("notation");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Notation).HasComment("Notation enum numeric value.");
             entity.Property(e => e.Partial)
                 .HasDefaultValue(false)
-                .HasComment("Flag indicating whether sequence is partial or complete.")
-                .HasColumnName("partial");
-            entity.Property(e => e.RemoteDb)
-                .HasComment("Enum numeric value of the remote db from which sequence is downloaded.")
-                .HasColumnName("remote_db");
-            entity.Property(e => e.RemoteId)
-                .HasMaxLength(255)
-                .HasComment("Id of the sequence in remote database.")
-                .HasColumnName("remote_id");
+                .HasComment("Flag indicating whether sequence is partial or complete.");
+            entity.Property(e => e.RemoteDb).HasComment("Enum numeric value of the remote db from which sequence is downloaded.");
+            entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.DnaSequence)
-                .HasForeignKey(d => d.MatterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_dna_chain_matter");
         });
@@ -545,38 +358,19 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("element", tb => tb.HasComment("Base table for all elements that are stored in the database and used in alphabets of sequences."));
 
-            entity.HasIndex(e => e.Notation, "ix_element_notation_id");
-
-            entity.HasIndex(e => e.Value, "ix_element_value");
-
-            entity.HasIndex(e => new { e.Value, e.Notation }, "uk_element_value_notation").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier of the element.")
-                .HasColumnName("id");
+                .HasComment("Unique internal identifier of the element.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Element creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Description of the element.")
-                .HasColumnName("description");
+                .HasComment("Element creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Description of the element.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasComment("Name of the element.")
-                .HasColumnName("name");
-            entity.Property(e => e.Notation)
-                .HasComment("Notation enum numeric value.")
-                .HasColumnName("notation");
-            entity.Property(e => e.Value)
-                .HasMaxLength(255)
-                .HasComment("Content of the element.")
-                .HasColumnName("value");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Name).HasComment("Name of the element.");
+            entity.Property(e => e.Notation).HasComment("Notation enum numeric value.");
+            entity.Property(e => e.Value).HasComment("Content of the element.");
         });
 
         modelBuilder.Entity<Fmotif>(entity =>
@@ -589,39 +383,20 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier of the fmotif.")
-                .HasColumnName("id");
-            entity.Property(e => e.Alphabet)
-                .HasComment("Fmotif's alphabet (array of notes ids).")
-                .HasColumnName("alphabet");
-            entity.Property(e => e.Building)
-                .HasComment("Fmotif's order.")
-                .HasColumnName("building");
+                .HasComment("Unique internal identifier of the fmotif.");
+            entity.Property(e => e.Alphabet).HasComment("Fmotif's alphabet (array of notes ids).");
+            entity.Property(e => e.Building).HasComment("Fmotif's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Fmotif creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Fmotif description.")
-                .HasColumnName("description");
-            entity.Property(e => e.FmotifType)
-                .HasComment("Fmotif type enum numeric value.")
-                .HasColumnName("fmotif_type");
+                .HasComment("Fmotif creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Fmotif description.");
+            entity.Property(e => e.FmotifType).HasComment("Fmotif type enum numeric value.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasComment("Fmotif name.")
-                .HasColumnName("name");
-            entity.Property(e => e.Notation)
-                .HasComment("Fmotif notation enum numeric value (always 6).")
-                .HasColumnName("notation");
-            entity.Property(e => e.Value)
-                .HasMaxLength(255)
-                .HasComment("Fmotif hash value.")
-                .HasColumnName("value");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Name).HasComment("Fmotif name.");
+            entity.Property(e => e.Notation).HasComment("Fmotif notation enum numeric value (always 6).");
+            entity.Property(e => e.Value).HasComment("Fmotif hash value.");
         });
 
         modelBuilder.Entity<FullCharacteristicLink>(entity =>
@@ -630,21 +405,12 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("full_characteristic_link", tb => tb.HasComment("Contatins list of possible combinations of characteristics parameters."));
 
-            entity.HasIndex(e => new { e.FullCharacteristic, e.Link, e.ArrangementType }, "uk_full_characteristic_link").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.ArrangementType)
-                .HasComment("Arrangement type enum numeric value.")
-                .HasColumnName("arrangement_type");
-            entity.Property(e => e.FullCharacteristic)
-                .HasComment("Characteristic enum numeric value.")
-                .HasColumnName("full_characteristic");
-            entity.Property(e => e.Link)
-                .HasComment("Link enum numeric value.")
-                .HasColumnName("link");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.ArrangementType).HasComment("Arrangement type enum numeric value.");
+            entity.Property(e => e.FullCharacteristic).HasComment("Characteristic enum numeric value.");
+            entity.Property(e => e.Link).HasComment("Link enum numeric value.");
         });
 
         modelBuilder.Entity<ImageSequence>(entity =>
@@ -653,44 +419,24 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("image_sequence", tb => tb.HasComment("Contains information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables."));
 
-            entity.HasIndex(e => e.MatterId, "ix_image_sequence_matter_id");
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier of the image sequence.")
-                .HasColumnName("id");
+                .HasComment("Unique internal identifier of the image sequence.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.ImageTransformations)
-                .HasComment("Array of image transformations applied begore the extraction of the sequence.")
-                .HasColumnName("image_transformations");
-            entity.Property(e => e.MatrixTransformations)
-                .HasComment("Array of matrix transformations applied begore the extraction of the sequence.")
-                .HasColumnName("matrix_transformations");
-            entity.Property(e => e.MatterId)
-                .HasComment("Id of the research object (image) to which the sequence belongs.")
-                .HasColumnName("matter_id");
+                .HasComment("Sequence creation date and time (filled trough trigger).");
+            entity.Property(e => e.ImageTransformations).HasComment("Array of image transformations applied begore the extraction of the sequence.");
+            entity.Property(e => e.MatrixTransformations).HasComment("Array of matrix transformations applied begore the extraction of the sequence.");
+            entity.Property(e => e.MatterId).HasComment("Id of the research object (image) to which the sequence belongs.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Notation)
-                .HasComment("Notation enum numeric value.")
-                .HasColumnName("notation");
-            entity.Property(e => e.OrderExtractor)
-                .HasComment("Order extractor enum numeric value used in the process of creation of the sequence.")
-                .HasColumnName("order_extractor");
-            entity.Property(e => e.RemoteDb)
-                .HasComment("Enum numeric value of the remote db from which sequence is downloaded.")
-                .HasColumnName("remote_db");
-            entity.Property(e => e.RemoteId)
-                .HasComment("Id of the sequence in remote database.")
-                .HasColumnName("remote_id");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Notation).HasComment("Notation enum numeric value.");
+            entity.Property(e => e.OrderExtractor).HasComment("Order extractor enum numeric value used in the process of creation of the sequence.");
+            entity.Property(e => e.RemoteDb).HasComment("Enum numeric value of the remote db from which sequence is downloaded.");
+            entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.ImageSequence)
-                .HasForeignKey(d => d.MatterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_image_sequence_matter");
         });
@@ -703,61 +449,29 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => e.Alphabet, "ix_literature_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
-            entity.HasIndex(e => e.MatterId, "ix_literature_chain_matter_id");
-
-            entity.HasIndex(e => new { e.MatterId, e.Language }, "ix_literature_chain_matter_language");
-
-            entity.HasIndex(e => e.Notation, "ix_literature_chain_notation_id");
-
-            entity.HasIndex(e => new { e.Notation, e.MatterId, e.Language, e.Translator }, "uk_literature_chain").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier of the sequence.")
-                .HasColumnName("id");
-            entity.Property(e => e.Alphabet)
-                .HasComment("Sequence's alphabet (array of elements ids).")
-                .HasColumnName("alphabet");
-            entity.Property(e => e.Building)
-                .HasComment("Sequence's order.")
-                .HasColumnName("building");
+                .HasComment("Unique internal identifier of the sequence.");
+            entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
+            entity.Property(e => e.Building).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Sequence description.")
-                .HasColumnName("description");
-            entity.Property(e => e.Language)
-                .HasComment("Primary language of literary work.")
-                .HasColumnName("language");
-            entity.Property(e => e.MatterId)
-                .HasComment("Id of the research object to which the sequence belongs.")
-                .HasColumnName("matter_id");
+                .HasComment("Sequence creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Sequence description.");
+            entity.Property(e => e.Language).HasComment("Primary language of literary work.");
+            entity.Property(e => e.MatterId).HasComment("Id of the research object to which the sequence belongs.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Notation)
-                .HasComment("Notation enum numeric value.")
-                .HasColumnName("notation");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Notation).HasComment("Notation enum numeric value.");
             entity.Property(e => e.Original)
                 .HasDefaultValue(true)
-                .HasComment("Flag indicating if this sequence is in original language or was translated.")
-                .HasColumnName("original");
-            entity.Property(e => e.RemoteDb)
-                .HasComment("Enum numeric value of the remote db from which sequence is downloaded.")
-                .HasColumnName("remote_db");
-            entity.Property(e => e.RemoteId)
-                .HasMaxLength(255)
-                .HasComment("Id of the sequence in remote database.")
-                .HasColumnName("remote_id");
-            entity.Property(e => e.Translator)
-                .HasComment("Author of translation or automated translator.")
-                .HasColumnName("translator");
+                .HasComment("Flag indicating if this sequence is in original language or was translated.");
+            entity.Property(e => e.RemoteDb).HasComment("Enum numeric value of the remote db from which sequence is downloaded.");
+            entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
+            entity.Property(e => e.Translator).HasComment("Author of translation or automated translator.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.LiteratureSequence)
-                .HasForeignKey(d => d.MatterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_literature_chain_matter");
         });
@@ -768,60 +482,28 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("matter", tb => tb.HasComment("Contains research objects, samples, texts, etc (one research object may be represented by several sequences)."));
 
-            entity.HasIndex(e => e.Nature, "ix_matter_nature");
-
-            entity.HasIndex(e => new { e.Name, e.Nature }, "uk_matter").IsUnique();
-
-            entity.HasIndex(e => new { e.MultisequenceId, e.MultisequenceNumber }, "uk_matter_multisequence").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier of the research object.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.CollectionCountry)
-                .HasComment("Collection country of the genetic sequence.")
-                .HasColumnName("collection_country");
-            entity.Property(e => e.CollectionDate)
-                .HasComment("Collection date of the genetic sequence.")
-                .HasColumnName("collection_date");
-            entity.Property(e => e.CollectionLocation)
-                .HasComment("Collection location of the genetic sequence.")
-                .HasColumnName("collection_location");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.CollectionCountry).HasComment("Collection country of the genetic sequence.");
+            entity.Property(e => e.CollectionDate).HasComment("Collection date of the genetic sequence.");
+            entity.Property(e => e.CollectionLocation).HasComment("Collection location of the genetic sequence.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Description of the research object.")
-                .HasColumnName("description");
-            entity.Property(e => e.Group)
-                .HasComment("Group enum numeric value.")
-                .HasColumnName("group");
+                .HasComment("Record creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Description of the research object.");
+            entity.Property(e => e.Group).HasComment("Group enum numeric value.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.MultisequenceId)
-                .HasComment("Id of the parent multisequence.")
-                .HasColumnName("multisequence_id");
-            entity.Property(e => e.MultisequenceNumber)
-                .HasComment("Serial number in multisequence.")
-                .HasColumnName("multisequence_number");
-            entity.Property(e => e.Name)
-                .HasComment("Research object name.")
-                .HasColumnName("name");
-            entity.Property(e => e.Nature)
-                .HasComment("Research object nature enum numeric value.")
-                .HasColumnName("nature");
-            entity.Property(e => e.SequenceType)
-                .HasComment("Sequence type enum numeric value.")
-                .HasColumnName("sequence_type");
-            entity.Property(e => e.Source)
-                .HasComment("Source of the genetic sequence.")
-                .HasColumnName("source");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.MultisequenceId).HasComment("Id of the parent multisequence.");
+            entity.Property(e => e.MultisequenceNumber).HasComment("Serial number in multisequence.");
+            entity.Property(e => e.Name).HasComment("Research object name.");
+            entity.Property(e => e.Nature).HasComment("Research object nature enum numeric value.");
+            entity.Property(e => e.SequenceType).HasComment("Sequence type enum numeric value.");
+            entity.Property(e => e.Source).HasComment("Source of the genetic sequence.");
 
             entity.HasOne(d => d.Multisequence).WithMany(p => p.Matters)
-                .HasForeignKey(d => d.MultisequenceId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_matter_multisequence");
 
@@ -855,50 +537,25 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => e.Alphabet, "ix_measure_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
-            entity.HasIndex(e => e.Notation, "ix_measure_notation_id");
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier of the measure.")
-                .HasColumnName("id");
-            entity.Property(e => e.Alphabet)
-                .HasComment("Measure alphabet (array of notes ids).")
-                .HasColumnName("alphabet");
-            entity.Property(e => e.Beatbase)
-                .HasComment("Time signature lower numeral (Beat denominator).")
-                .HasColumnName("beatbase");
-            entity.Property(e => e.Beats)
-                .HasComment("Time signature upper numeral (Beat numerator).")
-                .HasColumnName("beats");
-            entity.Property(e => e.Building)
-                .HasComment("Measure order.")
-                .HasColumnName("building");
+                .HasComment("Unique internal identifier of the measure.");
+            entity.Property(e => e.Alphabet).HasComment("Measure alphabet (array of notes ids).");
+            entity.Property(e => e.Beatbase).HasComment("Time signature lower numeral (Beat denominator).");
+            entity.Property(e => e.Beats).HasComment("Time signature upper numeral (Beat numerator).");
+            entity.Property(e => e.Building).HasComment("Measure order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Measure creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Description of the sequence.")
-                .HasColumnName("description");
-            entity.Property(e => e.Fifths)
-                .HasComment("Key signature of the measure (negative value represents the number of flats (bemolles) and positive represents the number of sharps (diesis)).")
-                .HasColumnName("fifths");
+                .HasComment("Measure creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Description of the sequence.");
+            entity.Property(e => e.Fifths).HasComment("Key signature of the measure (negative value represents the number of flats (bemolles) and positive represents the number of sharps (diesis)).");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasComment("Measure name.")
-                .HasColumnName("name");
-            entity.Property(e => e.Notation)
-                .HasComment("Measure notation enum numeric value (always 7).")
-                .HasColumnName("notation");
-            entity.Property(e => e.Value)
-                .HasMaxLength(255)
-                .HasComment("Measure hash code.")
-                .HasColumnName("value");
-            entity.Property(e => e.major).HasComment("Music mode of the measure. true  represents major and false represents minor.");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Name).HasComment("Measure name.");
+            entity.Property(e => e.Notation).HasComment("Measure notation enum numeric value (always 7).");
+            entity.Property(e => e.Value).HasComment("Measure hash code.");
+            entity.Property(e => e.Major).HasComment("Music mode of the measure. true  represents major and false represents minor.");
         });
 
         modelBuilder.Entity<Multisequence>(entity =>
@@ -907,18 +564,11 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("multisequence", tb => tb.HasComment("Contains information on groups of related research objects (such as series of books, chromosomes of the same organism, etc) and their order in these groups."));
 
-            entity.HasIndex(e => e.Name, "uk_multisequence_name").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasComment("Multisequence name.")
-                .HasColumnName("name");
-            entity.Property(e => e.Nature)
-                .HasComment("Multisequence nature enum numeric value.")
-                .HasColumnName("nature");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.Name).HasComment("Multisequence name.");
+            entity.Property(e => e.Nature).HasComment("Multisequence nature enum numeric value.");
         });
 
         modelBuilder.Entity<MusicSequence>(entity =>
@@ -929,56 +579,28 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => e.Alphabet, "ix_music_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
-            entity.HasIndex(e => e.MatterId, "ix_music_chain_matter_id");
-
-            entity.HasIndex(e => e.Notation, "ix_music_chain_notation_id");
-
-            entity.HasIndex(e => new { e.MatterId, e.Notation, e.PauseTreatment, e.SequentialTransfer }, "uk_music_chain").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier.")
-                .HasColumnName("id");
-            entity.Property(e => e.Alphabet)
-                .HasComment("Sequence's alphabet (array of elements ids).")
-                .HasColumnName("alphabet");
-            entity.Property(e => e.Building)
-                .HasComment("Sequence's order.")
-                .HasColumnName("building");
+                .HasComment("Unique internal identifier.");
+            entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
+            entity.Property(e => e.Building).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Description)
-                .HasComment("Sequence description.")
-                .HasColumnName("description");
-            entity.Property(e => e.MatterId)
-                .HasComment("Id of the research object to which the sequence belongs.")
-                .HasColumnName("matter_id");
+                .HasComment("Sequence creation date and time (filled trough trigger).");
+            entity.Property(e => e.Description).HasComment("Sequence description.");
+            entity.Property(e => e.MatterId).HasComment("Id of the research object to which the sequence belongs.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Notation)
-                .HasComment("Notation enum numeric value.")
-                .HasColumnName("notation");
-            entity.Property(e => e.PauseTreatment)
-                .HasComment("Pause treatment enum numeric value.")
-                .HasColumnName("pause_treatment");
-            entity.Property(e => e.RemoteDb)
-                .HasComment("Enum numeric value of the remote db from which sequence is downloaded.")
-                .HasColumnName("remote_db");
-            entity.Property(e => e.RemoteId)
-                .HasMaxLength(255)
-                .HasComment("Id of the sequence in the remote database.")
-                .HasColumnName("remote_id");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Notation).HasComment("Notation enum numeric value.");
+            entity.Property(e => e.PauseTreatment).HasComment("Pause treatment enum numeric value.");
+            entity.Property(e => e.RemoteDb).HasComment("Enum numeric value of the remote db from which sequence is downloaded.");
+            entity.Property(e => e.RemoteId).HasComment("Id of the sequence in the remote database.");
             entity.Property(e => e.SequentialTransfer)
                 .HasDefaultValue(false)
-                .HasComment("Flag indicating whether or not sequential transfer was used in sequence segmentation into fmotifs.")
-                .HasColumnName("sequential_transfer");
+                .HasComment("Flag indicating whether or not sequential transfer was used in sequence segmentation into fmotifs.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.MusicSequence)
-                .HasForeignKey(d => d.MatterId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_music_chain_matter");
         });
@@ -989,48 +611,23 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("note", tb => tb.HasComment("Contains elements that represent notes that are used as elements of music sequences."));
 
-            entity.HasIndex(e => e.Notation, "ix_note_notation_id");
-
-            entity.HasIndex(e => e.Value, "uk_note").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier.")
-                .HasColumnName("id");
+                .HasComment("Unique internal identifier.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Measure creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Denominator)
-                .HasComment("Note duration fraction denominator.")
-                .HasColumnName("denominator");
-            entity.Property(e => e.Description)
-                .HasComment("Note description.")
-                .HasColumnName("description");
+                .HasComment("Measure creation date and time (filled trough trigger).");
+            entity.Property(e => e.Denominator).HasComment("Note duration fraction denominator.");
+            entity.Property(e => e.Description).HasComment("Note description.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasComment("Note name.")
-                .HasColumnName("name");
-            entity.Property(e => e.Notation)
-                .HasComment("Measure notation enum numeric value (always 8).")
-                .HasColumnName("notation");
-            entity.Property(e => e.Numerator)
-                .HasComment("Note duration fraction numerator.")
-                .HasColumnName("numerator");
-            entity.Property(e => e.Tie)
-                .HasComment("Note tie type enum numeric value.")
-                .HasColumnName("tie");
-            entity.Property(e => e.Triplet)
-                .HasComment("Flag indicating if note is a part of triplet (tuplet).")
-                .HasColumnName("triplet");
-            entity.Property(e => e.Value)
-                .HasMaxLength(255)
-                .HasComment("Note hash code.")
-                .HasColumnName("value");
+                .HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Name).HasComment("Note name.");
+            entity.Property(e => e.Notation).HasComment("Measure notation enum numeric value (always 8).");
+            entity.Property(e => e.Numerator).HasComment("Note duration fraction numerator.");
+            entity.Property(e => e.Tie).HasComment("Note tie type enum numeric value.");
+            entity.Property(e => e.Triplet).HasComment("Flag indicating if note is a part of triplet (tuplet).");
+            entity.Property(e => e.Value).HasComment("Note hash code.");
 
             entity.HasMany(d => d.Pitches).WithMany(p => p.Notes)
                 .UsingEntity<Dictionary<string, object>>(
@@ -1061,27 +658,14 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("pitch", tb => tb.HasComment("Note's pitch."));
 
-            entity.HasIndex(e => new { e.Octave, e.Instrument, e.Accidental, e.NoteSymbol }, "uk_pitch").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier of the pitch.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.Accidental)
-                .HasComment("Pitch key signature enum numeric value.")
-                .HasColumnName("accidental");
-            entity.Property(e => e.Instrument)
-                .HasComment("Pitch instrument enum numeric value.")
-                .HasColumnName("instrument");
-            entity.Property(e => e.Midinumber)
-                .HasComment("Unique number by midi standard.")
-                .HasColumnName("midinumber");
-            entity.Property(e => e.NoteSymbol)
-                .HasComment("Note symbol enum numeric value.")
-                .HasColumnName("note_symbol");
-            entity.Property(e => e.Octave)
-                .HasComment("Octave number.")
-                .HasColumnName("octave");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.Accidental).HasComment("Pitch key signature enum numeric value.");
+            entity.Property(e => e.Instrument).HasComment("Pitch instrument enum numeric value.");
+            entity.Property(e => e.Midinumber).HasComment("Unique number by midi standard.");
+            entity.Property(e => e.NoteSymbol).HasComment("Note symbol enum numeric value.");
+            entity.Property(e => e.Octave).HasComment("Octave number.");
         });
 
         modelBuilder.Entity<Position>(entity =>
@@ -1090,29 +674,16 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("position", tb => tb.HasComment("Contains information on additional fragment positions (for subsequences concatenated from several parts)."));
 
-            entity.HasIndex(e => e.SubsequenceId, "ix_position_subsequence_id");
-
             entity.HasIndex(e => e.SubsequenceId, "ix_position_subsequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
-
-            entity.HasIndex(e => new { e.SubsequenceId, e.Start, e.Length }, "uk_piece").IsUnique();
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('piece_id_seq'::regclass)")
-                .HasComment("Unique internal identifier.")
-                .HasColumnName("id");
-            entity.Property(e => e.Length)
-                .HasComment("Fragment length.")
-                .HasColumnName("length");
-            entity.Property(e => e.Start)
-                .HasComment("Index of the fragment beginning (from zero).")
-                .HasColumnName("start");
-            entity.Property(e => e.SubsequenceId)
-                .HasComment("Parent subsequence id.")
-                .HasColumnName("subsequence_id");
+                .HasComment("Unique internal identifier.");
+            entity.Property(e => e.Length).HasComment("Fragment length.");
+            entity.Property(e => e.Start).HasComment("Index of the fragment beginning (from zero).");
+            entity.Property(e => e.SubsequenceId).HasComment("Parent subsequence id.");
 
-            entity.HasOne(d => d.Subsequence).WithMany(p => p.Position)
-                .HasForeignKey(d => d.SubsequenceId)
-                .HasConstraintName("fk_position_subsequence");
+            entity.HasOne(d => d.Subsequence).WithMany(p => p.Position).HasConstraintName("fk_position_subsequence");
         });
 
         modelBuilder.Entity<SequenceAttribute>(entity =>
@@ -1123,24 +694,14 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.HasIndex(e => e.SequenceId, "ix_sequence_attribute_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.SequenceId, e.Attribute, e.Value }, "uk_chain_attribute").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.Attribute)
-                .HasComment("Attribute enum numeric value.")
-                .HasColumnName("attribute");
-            entity.Property(e => e.SequenceId)
-                .HasComment("Id of the sequence to which attribute belongs.")
-                .HasColumnName("chain_id");
-            entity.Property(e => e.Value)
-                .HasComment("Text of the attribute.")
-                .HasColumnName("value");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.Attribute).HasComment("Attribute enum numeric value.");
+            entity.Property(e => e.SequenceId).HasComment("Id of the sequence to which attribute belongs.");
+            entity.Property(e => e.Value).HasComment("Text of the attribute.");
 
             entity.HasOne(d => d.Subsequence).WithMany(p => p.SequenceAttribute)
-                .HasForeignKey(d => d.SequenceId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -1150,44 +711,18 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("sequence_group", tb => tb.HasComment("Contains information about sequences groups."));
 
-            entity.HasIndex(e => e.Name, "uk_sequence_group_name").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence group creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.CreatorId)
-                .HasComment("Record creator user id.")
-                .HasColumnName("creator_id");
-            entity.Property(e => e.Modified)
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
-            entity.Property(e => e.ModifierId)
-                .HasComment("Record editor user id.")
-                .HasColumnName("modifier_id");
-            entity.Property(e => e.Name)
-                .HasComment("Sequences group name.")
-                .HasColumnName("name");
-            entity.Property(e => e.Nature)
-                .HasComment("Sequences group nature enum numeric value.")
-                .HasColumnName("nature");
-            entity.Property(e => e.SequenceGroupType)
-                .HasComment("Sequence group type enum numeric value.")
-                .HasColumnName("sequence_group_type");
-
-            entity.HasOne(d => d.Creator).WithMany()
-                .HasForeignKey(d => d.CreatorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_sequence_group_creator");
-
-            entity.HasOne(d => d.Modifier).WithMany()
-                .HasForeignKey(d => d.ModifierId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_sequence_group_modifier");
+                .HasComment("Sequence group creation date and time (filled trough trigger).");
+            entity.Property(e => e.CreatorId).HasComment("Record creator user id.");
+            entity.Property(e => e.Modified).HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.ModifierId).HasComment("Record editor user id.");
+            entity.Property(e => e.Name).HasComment("Sequences group name.");
+            entity.Property(e => e.Nature).HasComment("Sequences group nature enum numeric value.");
+            entity.Property(e => e.SequenceGroupType).HasComment("Sequence group type enum numeric value.");
         });
 
         modelBuilder.Entity<Subsequence>(entity =>
@@ -1195,10 +730,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.HasKey(e => e.Id).HasName("pk_subsequence");
 
             entity.ToTable("subsequence", tb => tb.HasComment("Contains information on location and length of the fragments within complete sequences."));
-
-            entity.HasIndex(e => new { e.SequenceId, e.Feature }, "ix_subsequence_chain_feature");
-
-            entity.HasIndex(e => e.SequenceId, "ix_subsequence_chain_id");
 
             entity.HasIndex(e => e.Feature, "ix_subsequence_feature_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
@@ -1208,36 +739,21 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
-                .HasComment("Unique internal identifier.")
-                .HasColumnName("id");
+                .HasComment("Unique internal identifier.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence group creation date and time (filled trough trigger).")
-                .HasColumnName("created");
-            entity.Property(e => e.Feature)
-                .HasComment("Subsequence feature enum numeric value.")
-                .HasColumnName("feature");
-            entity.Property(e => e.Length)
-                .HasComment("Fragment length.")
-                .HasColumnName("length");
+                .HasComment("Sequence group creation date and time (filled trough trigger).");
+            entity.Property(e => e.Feature).HasComment("Subsequence feature enum numeric value.");
+            entity.Property(e => e.Length).HasComment("Fragment length.");
             entity.Property(e => e.Modified)
                 .HasDefaultValueSql("now()")
-                .HasComment("Record last change date and time (updated trough trigger).")
-                .HasColumnName("modified");
+                .HasComment("Record last change date and time (updated trough trigger).");
             entity.Property(e => e.Partial)
                 .HasDefaultValue(false)
-                .HasComment("Flag indicating whether subsequence is partial or complete.")
-                .HasColumnName("partial");
-            entity.Property(e => e.RemoteId)
-                .HasMaxLength(255)
-                .HasComment("Id of the subsequence in the remote database (ncbi or same as paren sequence remote db).")
-                .HasColumnName("remote_id");
-            entity.Property(e => e.SequenceId)
-                .HasComment("Parent sequence id.")
-                .HasColumnName("chain_id");
-            entity.Property(e => e.Start)
-                .HasComment("Index of the fragment beginning (from zero).")
-                .HasColumnName("start");
+                .HasComment("Flag indicating whether subsequence is partial or complete.");
+            entity.Property(e => e.RemoteId).HasComment("Id of the subsequence in the remote database (ncbi or same as paren sequence remote db).");
+            entity.Property(e => e.SequenceId).HasComment("Parent sequence id.");
+            entity.Property(e => e.Start).HasComment("Index of the fragment beginning (from zero).");
         });
 
         modelBuilder.Entity<TaskResult>(entity =>
@@ -1246,26 +762,14 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
 
             entity.ToTable("task_result", tb => tb.HasComment("Contains JSON results of tasks calculation. Results are stored as key/value pairs."));
 
-            entity.HasIndex(e => new { e.TaskId, e.Key }, "uk_task_result").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasComment("Unique internal identifier.")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasColumnName("id");
-            entity.Property(e => e.Key)
-                .HasComment("Results element name.")
-                .HasColumnName("key");
-            entity.Property(e => e.TaskId)
-                .HasComment("Parent task id.")
-                .HasColumnName("task_id");
-            entity.Property(e => e.Value)
-                .HasComment("Results element value (as json).")
-                .HasColumnType("json")
-                .HasColumnName("value");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+            entity.Property(e => e.Key).HasComment("Results element name.");
+            entity.Property(e => e.TaskId).HasComment("Parent task id.");
+            entity.Property(e => e.Value).HasComment("Results element value (as json).");
 
-            entity.HasOne(d => d.Task).WithMany(p => p.TaskResult)
-                .HasForeignKey(d => d.TaskId)
-                .HasConstraintName("fk_task_result_task");
+            entity.HasOne(d => d.Task).WithMany(p => p.TaskResult).HasConstraintName("fk_task_result_task");
         });
 
         OnModelCreatingGeneratedFunctions(modelBuilder);
