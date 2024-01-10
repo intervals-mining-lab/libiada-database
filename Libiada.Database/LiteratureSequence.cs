@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Libiada.Database;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -29,6 +26,7 @@ public partial class LiteratureSequence
     /// Notation enum numeric value.
     /// </summary>
     [Column("notation")]
+    [Display(Name = "Notation of elements in sequence")]
     public Notation Notation { get; set; }
 
     /// <summary>
@@ -41,6 +39,7 @@ public partial class LiteratureSequence
     /// Id of the research object to which the sequence belongs.
     /// </summary>
     [Column("matter_id")]
+    [Display(Name = "Sequence belonges to research object")]
     public long MatterId { get; set; }
 
     /// <summary>
@@ -60,12 +59,14 @@ public partial class LiteratureSequence
     /// </summary>
     [Column("remote_id")]
     [StringLength(255)]
+    [Display(Name = "Id in remote database")]
     public string? RemoteId { get; set; }
 
     /// <summary>
     /// Enum numeric value of the remote db from which sequence is downloaded.
     /// </summary>
     [Column("remote_db")]
+    [Display(Name = "Remote database")]
     public RemoteDb? RemoteDb { get; set; }
 
     /// <summary>
@@ -84,6 +85,7 @@ public partial class LiteratureSequence
     /// Flag indicating if this sequence is in original language or was translated.
     /// </summary>
     [Column("original")]
+    [Display(Name = "Literary work is in original language (not in translation)")]
     public bool Original { get; set; }
 
     /// <summary>

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Libiada.Database;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -76,23 +74,28 @@ public partial class Measure
     /// Time signature upper numeral (Beat numerator).
     /// </summary>
     [Column("beats")]
+    [Display(Name = "Time signature upper numeral (Beat numerator)")]
     public int Beats { get; set; }
 
     /// <summary>
     /// Time signature lower numeral (Beat denominator).
     /// </summary>
     [Column("beatbase")]
+    [Display(Name = "Time signature lower numeral (Beat denominator)")]
     public int Beatbase { get; set; }
 
     /// <summary>
     /// Key signature of the measure (negative value represents the number of flats (bemolles) and positive represents the number of sharps (diesis)).
     /// </summary>
     [Column("fifths")]
+    [Display(Name = "Clef (key signature) of the measure")]
+    [Description("Negative value represents the number of flats (bemolles) and positive represents the number of sharps (diesis).")]
     public int Fifths { get; set; }
 
     /// <summary>
     /// Music mode of the measure. true  represents major and false represents minor.
     /// </summary>
     [Column("major")]
+    [Display(Name = "Music mode of the measure")]
     public bool Major { get; set; }
 }

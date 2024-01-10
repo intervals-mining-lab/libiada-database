@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Libiada.Database;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -38,6 +35,7 @@ public partial class SequenceGroup
     /// Record creator user id.
     /// </summary>
     [Column("creator_id")]
+    [Display(Name = "Creator")]
     public int CreatorId { get; set; }
 
     /// <summary>
@@ -50,6 +48,7 @@ public partial class SequenceGroup
     /// Record editor user id.
     /// </summary>
     [Column("modifier_id")]
+    [Display(Name = "Modifier")]
     public int ModifierId { get; set; }
 
     /// <summary>

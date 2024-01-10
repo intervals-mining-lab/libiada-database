@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Libiada.Database;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -27,6 +24,7 @@ public partial class CommonSequence
     /// Notation of the sequence (words, letters, notes, nucleotides, etc.).
     /// </summary>
     [Column("notation")]
+    [Display(Name = "Notation of elements in the sequence")]
     public Notation Notation { get; set; }
 
     /// <summary>
@@ -39,6 +37,7 @@ public partial class CommonSequence
     /// Id of the research object to which the sequence belongs.
     /// </summary>
     [Column("matter_id")]
+    [Display(Name = "Sequence belonges to research object")]
     public long MatterId { get; set; }
 
     /// <summary>
@@ -58,12 +57,14 @@ public partial class CommonSequence
     /// </summary>
     [Column("remote_id")]
     [StringLength(255)]
+    [Display(Name = "Id in remote database")]
     public string? RemoteId { get; set; }
 
     /// <summary>
     /// Enum numeric value of the remote db from which sequence is downloaded.
     /// </summary>
     [Column("remote_db")]
+    [Display(Name = "Remote database")]
     public RemoteDb? RemoteDb { get; set; }
 
     /// <summary>

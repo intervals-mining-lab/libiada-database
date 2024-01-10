@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Libiada.Database;
 using LibiadaCore.Core.SimpleTypes;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace Libiada.Database;
@@ -76,5 +72,6 @@ public partial class Fmotif
     /// Fmotif type enum numeric value.
     /// </summary>
     [Column("fmotif_type")]
+    [Display(Name = "Fmotif type")]
     public FmotifType FmotifType { get; set; }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Libiada.Database;
 using LibiadaCore.Core.SimpleTypes;
 using Microsoft.EntityFrameworkCore;
 
@@ -66,18 +63,21 @@ public partial class Note
     /// Note duration fraction numerator.
     /// </summary>
     [Column("numerator")]
+    [Display(Name = "Note duration fraction numerator")]
     public int Numerator { get; set; }
 
     /// <summary>
     /// Note duration fraction denominator.
     /// </summary>
     [Column("denominator")]
+    [Display(Name = "Note duration fraction denominator")]
     public int Denominator { get; set; }
 
     /// <summary>
     /// Flag indicating if note is a part of triplet (tuplet).
     /// </summary>
     [Column("triplet")]
+    [Display(Name = "Flag indicating if note is a part of triplet (tuplet)")]
     public bool Triplet { get; set; }
 
     /// <summary>

@@ -1,8 +1,5 @@
 ﻿namespace Libiada.Database
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     /// <summary>
     /// Custom cache for storing matter table data.
     /// </summary>

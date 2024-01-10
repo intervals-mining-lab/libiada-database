@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,12 +36,14 @@ public partial class BinaryCharacteristicValue
     /// Id of the first element of the sequence for which the characteristic is calculated.
     /// </summary>
     [Column("first_element_id")]
+    [Display(Name = "First element")]
     public long FirstElementId { get; set; }
 
     /// <summary>
     /// Id of the second element of the sequence for which the characteristic is calculated.
     /// </summary>
     [Column("second_element_id")]
+    [Display(Name = "Second element")]
     public long SecondElementId { get; set; }
 
     /// <summary>

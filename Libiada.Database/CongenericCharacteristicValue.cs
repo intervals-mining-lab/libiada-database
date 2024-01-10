@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +37,7 @@ public partial class CongenericCharacteristicValue
     /// Id of the element for which the characteristic is calculated.
     /// </summary>
     [Column("element_id")]
+    [Display(Name = "Element")]
     public long ElementId { get; set; }
 
     /// <summary>

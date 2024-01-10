@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Libiada.Database;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -58,6 +55,7 @@ public partial class Matter
     /// Sequence type enum numeric value.
     /// </summary>
     [Column("sequence_type")]
+    [Display(Name = "Sequence type")]
     public SequenceType SequenceType { get; set; }
 
     /// <summary>
@@ -76,6 +74,7 @@ public partial class Matter
     /// Serial number in multisequence.
     /// </summary>
     [Column("multisequence_number")]
+    [Display(Name = "Multisequence number")]
     public short? MultisequenceNumber { get; set; }
 
     /// <summary>
@@ -88,12 +87,14 @@ public partial class Matter
     /// Collection country of the genetic sequence.
     /// </summary>
     [Column("collection_country")]
+    [Display(Name = "Collection country")]
     public string? CollectionCountry { get; set; }
 
     /// <summary>
     /// Collection date of the genetic sequence.
     /// </summary>
     [Column("collection_date")]
+    [Display(Name = "Collection date")]
     public DateOnly? CollectionDate { get; set; }
 
     /// <summary>

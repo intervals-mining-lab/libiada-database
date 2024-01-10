@@ -3811,5 +3811,10 @@ ALTER TABLE IF EXISTS full_characteristic ALTER COLUMN value SET NOT NULL;
 -- Add unique constraint on AspNetPushNotificationSubscribers' user id and endpoint.
 
 ALTER TABLE "AspNetPushNotificationSubscribers" ADD CONSTRAINT "uk_AspNetPushNotificationSubscribers" UNIQUE ("UserId", "Endpoint");
-	
+
+-- 09.01.2024
+-- Delete "dbo" schema as it is not needed anymore.
+
+DROP SCHEMA IF EXISTS dbo CASCADE;
+
 COMMIT;
