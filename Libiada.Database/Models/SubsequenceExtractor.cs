@@ -1,380 +1,379 @@
-﻿namespace Libiada.Database.Models
+﻿namespace Libiada.Database.Models;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Bio;
+using Bio.Extensions;
+
+using Libiada.Core.Core;
+using Libiada.Core.Extensions;
+
+using Libiada.Database.Models.Repositories.Sequences;
+
+using Attribute = Attribute;
+using Microsoft.EntityFrameworkCore;
+
+/// <summary>
+/// The subsequence extractor.
+/// </summary>
+public class SubsequenceExtractor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Bio;
-    using Bio.Extensions;
-
-    using LibiadaCore.Core;
-    using LibiadaCore.Extensions;
-
-    using Libiada.Database.Models.Repositories.Sequences;
-
-    using Attribute = Attribute;
-    using Microsoft.EntityFrameworkCore;
+    /// <summary>
+    /// The db.
+    /// </summary>
+    private readonly LibiadaDatabaseEntities db;
 
     /// <summary>
-    /// The subsequence extractor.
+    /// The common sequence repository.
     /// </summary>
-    public class SubsequenceExtractor
+    private readonly ICommonSequenceRepository commonSequenceRepository;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SubsequenceExtractor"/> class.
+    /// </summary>
+    /// <param name="db">
+    /// The db.
+    /// </param>
+    public SubsequenceExtractor(LibiadaDatabaseEntities db, ICommonSequenceRepository commonSequenceRepository)
     {
-        /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaDatabaseEntities db;
+        this.db = db;
+        this.commonSequenceRepository = commonSequenceRepository;
+    }
 
-        /// <summary>
-        /// The common sequence repository.
-        /// </summary>
-        private readonly ICommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubsequenceExtractor"/> class.
-        /// </summary>
-        /// <param name="db">
-        /// The db.
-        /// </param>
-        public SubsequenceExtractor(LibiadaDatabaseEntities db, ICommonSequenceRepository commonSequenceRepository)
+    /// <summary>
+    /// Extracts sequences for given subsequences from database.
+    /// </summary>
+    /// <param name="subsequences">
+    /// The subsequences.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List{Chain}"/>.
+    /// </returns>
+    public Dictionary<long, Chain> GetSubsequencesSequences(Subsequence[] subsequences)
+    {
+        long[] parentSequenceIds = subsequences.Select(s => s.SequenceId).Distinct().ToArray();
+        Dictionary<long, Sequence> parentSequences = new Dictionary<long, Sequence>();
+        foreach (long id in parentSequenceIds)
         {
-            this.db = db;
-            this.commonSequenceRepository = commonSequenceRepository;
+            parentSequences[id] = GetDotNetBioSequence(id);
         }
 
-        /// <summary>
-        /// Extracts sequences for given subsequences from database.
-        /// </summary>
-        /// <param name="subsequences">
-        /// The subsequences.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Chain}"/>.
-        /// </returns>
-        public Dictionary<long, Chain> GetSubsequencesSequences(Subsequence[] subsequences)
+        var result = new Dictionary<long, Chain>();
+
+        foreach (Subsequence subsequence in subsequences)
         {
-            long[] parentSequenceIds = subsequences.Select(s => s.SequenceId).Distinct().ToArray();
-            Dictionary<long, Sequence> parentSequences = new Dictionary<long, Sequence>();
-            foreach (long id in parentSequenceIds)
-            {
-                parentSequences[id] = GetDotNetBioSequence(id);
-            }
-
-            var result = new Dictionary<long, Chain>();
-
-            foreach (Subsequence subsequence in subsequences)
-            {
-                Chain sequence = GetSequence(parentSequences[subsequence.SequenceId], subsequence);
-                result[subsequence.Id] = sequence;
-            }
-
-            return result;
+            Chain sequence = GetSequence(parentSequences[subsequence.SequenceId], subsequence);
+            result[subsequence.Id] = sequence;
         }
 
-        /// <summary>
-        /// Extracts sequence for given subsequence from database.
-        /// </summary>
-        /// <param name="subsequence">
-        /// Subsequence to be extracted from database.
-        /// </param>
-        /// <returns></returns>
-        public Chain GetSubsequenceSequence(Subsequence subsequence)
+        return result;
+    }
+
+    /// <summary>
+    /// Extracts sequence for given subsequence from database.
+    /// </summary>
+    /// <param name="subsequence">
+    /// Subsequence to be extracted from database.
+    /// </param>
+    /// <returns></returns>
+    public Chain GetSubsequenceSequence(Subsequence subsequence)
+    {
+        Sequence sourceSequence = GetDotNetBioSequence(subsequence.SequenceId);
+        return GetSequence(sourceSequence, subsequence);
+    }
+
+    /// <summary>
+    /// The extract sequences.
+    /// </summary>
+    /// <param name="sequenceId">
+    /// The sequence id.
+    /// </param>
+    /// <param name="features">
+    /// The feature ids.
+    /// </param>
+    /// <returns>
+    /// The <see cref="List{Subsequence}"/>.
+    /// </returns>
+    public Subsequence[] GetSubsequences(long sequenceId, IReadOnlyList<Feature> features)
+    {
+        Feature[] allFeatures = EnumExtensions.ToArray<Feature>();
+        if (allFeatures.Length == features.Count)
         {
-            Sequence sourceSequence = GetDotNetBioSequence(subsequence.SequenceId);
-            return GetSequence(sourceSequence, subsequence);
+            return db.Subsequences.Where(s => s.SequenceId == sequenceId)
+                .Include(s => s.Position)
+                .Include(s => s.SequenceAttribute)
+                .ToArray();
         }
 
-        /// <summary>
-        /// The extract sequences.
-        /// </summary>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        /// <param name="features">
-        /// The feature ids.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Subsequence}"/>.
-        /// </returns>
-        public Subsequence[] GetSubsequences(long sequenceId, IReadOnlyList<Feature> features)
+        if (allFeatures.Length - 1 == features.Count)
         {
-            Feature[] allFeatures = EnumExtensions.ToArray<Feature>();
-            if (allFeatures.Length == features.Count)
-            {
-                return db.Subsequences.Where(s => s.SequenceId == sequenceId)
-                    .Include(s => s.Position)
-                    .Include(s => s.SequenceAttribute)
-                    .ToArray();
-            }
+            Feature exceptFeature = allFeatures.Except(features).Single();
 
-            if (allFeatures.Length - 1 == features.Count)
-            {
-                Feature exceptFeature = allFeatures.Except(features).Single();
-
-                return db.Subsequences.Where(s => s.SequenceId == sequenceId && s.Feature != exceptFeature)
-                    .Include(s => s.Position)
-                    .Include(s => s.SequenceAttribute)
-                    .ToArray();
-            }
-
-            return db.Subsequences.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
-                                 .Include(s => s.Position)
-                                 .Include(s => s.SequenceAttribute)
-                                 .ToArray();
+            return db.Subsequences.Where(s => s.SequenceId == sequenceId && s.Feature != exceptFeature)
+                .Include(s => s.Position)
+                .Include(s => s.SequenceAttribute)
+                .ToArray();
         }
 
-        /// <summary>
-        /// Extracts only filtered subsequences.
-        /// </summary>
-        /// <param name="sequenceId">
-        /// Sequences id.
-        /// </param>
-        /// <param name="features">
-        /// Subsequences features.
-        /// </param>
-        /// <param name="filters">
-        /// Filters for the subsequences.
-        /// Filters are applied in "OR" logic (if subsequence corresponds to any filter it is added to calculation).
-        /// </param>
-        /// <returns>
-        /// Array of subsequences.
-        /// </returns>
-        public Subsequence[] GetSubsequences(long sequenceId, IReadOnlyList<Feature> features, string[] filters)
-        {
-            filters = filters.ConvertAll(f => f.ToLowerInvariant()).ToArray();
-            var result = new List<Subsequence>();
-            Subsequence[] allSubsequences = GetSubsequences(sequenceId, features);
-
-            foreach (Subsequence subsequence in allSubsequences)
-            {
-                if (IsSubsequenceAttributePassesFilters(subsequence, Attribute.Product, filters)
-                 || IsSubsequenceAttributePassesFilters(subsequence, Attribute.Gene, filters)
-                 || IsSubsequenceAttributePassesFilters(subsequence, Attribute.LocusTag, filters))
-                {
-                    result.Add(subsequence);
-                }
-            }
-
-            return result.ToArray();
-        }
-
-        /// <summary>
-        /// Extracts <see cref="Sequence"/> for given subsequences ids
-        /// and formats header sutable for fasta file.
-        /// </summary>
-        /// <param name="subsequencesIds">
-        /// Subsequences ids.
-        /// </param>
-        /// <returns>
-        /// Array of <see cref="ISequence"/> for given ids.
-        /// </returns>
-        public ISequence[] GetBioSequencesForFastaConverter(long[] subsequencesIds)
-        {
-            Subsequence[] subsequences;
-            Dictionary<long, Chain> sequences;
-            Dictionary<long, string> mattersNames;
-            subsequences = db.Subsequences.Where(s => subsequencesIds.Contains(s.Id))
+        return db.Subsequences.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
                              .Include(s => s.Position)
                              .Include(s => s.SequenceAttribute)
                              .ToArray();
-            sequences = GetSubsequencesSequences(subsequences);
-            var parentIds = subsequences.Select(s => s.SequenceId).ToArray();
-            mattersNames = db.DnaSequences
-                             .Include(ds => ds.Matter)
-                             .Where(ds => parentIds.Contains(ds.Id))
-                             .ToDictionary(ds => ds.Id, ds => ds.Matter.Name);
+    }
 
-            ISequence[] bioSequences = new ISequence[subsequences.Length];
-            for (int i = 0; i < subsequences.Length; i++)
-            {
-                var subsequence = subsequences[i];
-                var bioSequence = new Sequence(Alphabets.DNA, sequences[subsequence.Id].ToString());
-                bioSequence.ID = $"{mattersNames[subsequence.SequenceId].Replace(' ', '_')}?from={subsequence.Start}to={subsequence.Start + subsequence.Length}";
-                bioSequences[i] = bioSequence;
-            }
+    /// <summary>
+    /// Extracts only filtered subsequences.
+    /// </summary>
+    /// <param name="sequenceId">
+    /// Sequences id.
+    /// </param>
+    /// <param name="features">
+    /// Subsequences features.
+    /// </param>
+    /// <param name="filters">
+    /// Filters for the subsequences.
+    /// Filters are applied in "OR" logic (if subsequence corresponds to any filter it is added to calculation).
+    /// </param>
+    /// <returns>
+    /// Array of subsequences.
+    /// </returns>
+    public Subsequence[] GetSubsequences(long sequenceId, IReadOnlyList<Feature> features, string[] filters)
+    {
+        filters = filters.ConvertAll(f => f.ToLowerInvariant()).ToArray();
+        var result = new List<Subsequence>();
+        Subsequence[] allSubsequences = GetSubsequences(sequenceId, features);
 
-            return bioSequences;
-        }
-
-        /// <summary>
-        ///Extracts subsequence from given parent sequence.
-        /// </summary>
-        /// <param name="source">
-        /// Parent sequence for extraction.
-        /// </param>
-        /// <param name="subsequence">
-        /// Subsequence to be extracted from parent sequence.
-        /// </param>
-        /// <returns>
-        /// Extracted from given position sequence as <see cref="Chain"/>.
-        /// </returns>
-        private Chain GetSequence(Sequence source, Subsequence subsequence)
+        foreach (Subsequence subsequence in allSubsequences)
         {
-            if (subsequence.Position.Count == 0)
+            if (IsSubsequenceAttributePassesFilters(subsequence, Attribute.Product, filters)
+             || IsSubsequenceAttributePassesFilters(subsequence, Attribute.Gene, filters)
+             || IsSubsequenceAttributePassesFilters(subsequence, Attribute.LocusTag, filters))
             {
-                return GetSimpleSubsequence(source, subsequence);
-            }
-            else
-            {
-                return GetJoinedSubsequence(source, subsequence);
+                result.Add(subsequence);
             }
         }
 
-        /// <summary>
-        /// Extracts .net bio <see cref="Sequence"/> from database.
-        /// </summary>
-        /// <param name="sequenceId">
-        /// Id of the sequence to be retrieved from database.
-        /// </param>
-        /// <returns>
-        /// Subsequence as .net bio <see cref="Sequence"/>.
-        /// </returns>
-        private Sequence GetDotNetBioSequence(long sequenceId)
+        return result.ToArray();
+    }
+
+    /// <summary>
+    /// Extracts <see cref="Sequence"/> for given subsequences ids
+    /// and formats header sutable for fasta file.
+    /// </summary>
+    /// <param name="subsequencesIds">
+    /// Subsequences ids.
+    /// </param>
+    /// <returns>
+    /// Array of <see cref="ISequence"/> for given ids.
+    /// </returns>
+    public ISequence[] GetBioSequencesForFastaConverter(long[] subsequencesIds)
+    {
+        Subsequence[] subsequences;
+        Dictionary<long, Chain> sequences;
+        Dictionary<long, string> mattersNames;
+        subsequences = db.Subsequences.Where(s => subsequencesIds.Contains(s.Id))
+                         .Include(s => s.Position)
+                         .Include(s => s.SequenceAttribute)
+                         .ToArray();
+        sequences = GetSubsequencesSequences(subsequences);
+        var parentIds = subsequences.Select(s => s.SequenceId).ToArray();
+        mattersNames = db.DnaSequences
+                         .Include(ds => ds.Matter)
+                         .Where(ds => parentIds.Contains(ds.Id))
+                         .ToDictionary(ds => ds.Id, ds => ds.Matter.Name);
+
+        ISequence[] bioSequences = new ISequence[subsequences.Length];
+        for (int i = 0; i < subsequences.Length; i++)
         {
-            string parentChain = commonSequenceRepository.GetString(sequenceId);
-            return new Sequence(Alphabets.DNA, parentChain);
+            var subsequence = subsequences[i];
+            var bioSequence = new Sequence(Alphabets.DNA, sequences[subsequence.Id].ToString());
+            bioSequence.ID = $"{mattersNames[subsequence.SequenceId].Replace(' ', '_')}?from={subsequence.Start}to={subsequence.Start + subsequence.Length}";
+            bioSequences[i] = bioSequence;
         }
 
-        /// <summary>
-        /// Checks if subsequence attribute passes filters.
-        /// </summary>
-        /// <param name="subsequence">
-        /// The subsequence.
-        /// </param>
-        /// <param name="attribute">
-        /// The attribute.
-        /// </param>
-        /// <param name="filters">
-        /// The filters.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        private bool IsSubsequenceAttributePassesFilters(Subsequence subsequence, Attribute attribute, string[] filters)
-        {
-            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == attribute))
-            {
-                string value = subsequence.SequenceAttribute.Single(sa => sa.Attribute == attribute).Value.ToLowerInvariant();
-                return filters.Any(f => value.Contains(f));
-            }
+        return bioSequences;
+    }
 
-            return false;
+    /// <summary>
+    ///Extracts subsequence from given parent sequence.
+    /// </summary>
+    /// <param name="source">
+    /// Parent sequence for extraction.
+    /// </param>
+    /// <param name="subsequence">
+    /// Subsequence to be extracted from parent sequence.
+    /// </param>
+    /// <returns>
+    /// Extracted from given position sequence as <see cref="Chain"/>.
+    /// </returns>
+    private Chain GetSequence(Sequence source, Subsequence subsequence)
+    {
+        if (subsequence.Position.Count == 0)
+        {
+            return GetSimpleSubsequence(source, subsequence);
+        }
+        else
+        {
+            return GetJoinedSubsequence(source, subsequence);
+        }
+    }
+
+    /// <summary>
+    /// Extracts .net bio <see cref="Sequence"/> from database.
+    /// </summary>
+    /// <param name="sequenceId">
+    /// Id of the sequence to be retrieved from database.
+    /// </param>
+    /// <returns>
+    /// Subsequence as .net bio <see cref="Sequence"/>.
+    /// </returns>
+    private Sequence GetDotNetBioSequence(long sequenceId)
+    {
+        string parentChain = commonSequenceRepository.GetString(sequenceId);
+        return new Sequence(Alphabets.DNA, parentChain);
+    }
+
+    /// <summary>
+    /// Checks if subsequence attribute passes filters.
+    /// </summary>
+    /// <param name="subsequence">
+    /// The subsequence.
+    /// </param>
+    /// <param name="attribute">
+    /// The attribute.
+    /// </param>
+    /// <param name="filters">
+    /// The filters.
+    /// </param>
+    /// <returns>
+    /// The <see cref="bool"/>.
+    /// </returns>
+    private bool IsSubsequenceAttributePassesFilters(Subsequence subsequence, Attribute attribute, string[] filters)
+    {
+        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == attribute))
+        {
+            string value = subsequence.SequenceAttribute.Single(sa => sa.Attribute == attribute).Value.ToLowerInvariant();
+            return filters.Any(f => value.Contains(f));
         }
 
-        /// <summary>
-        /// Extracts subsequence without joins (additional positions).
-        /// </summary>
-        /// <param name="sourceSequence">
-        /// The complete sequence.
-        /// </param>
-        /// <param name="subsequence">
-        /// The subsequence.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Chain"/>.
-        /// </returns>
-        private Chain GetSimpleSubsequence(Sequence sourceSequence, Subsequence subsequence)
+        return false;
+    }
+
+    /// <summary>
+    /// Extracts subsequence without joins (additional positions).
+    /// </summary>
+    /// <param name="sourceSequence">
+    /// The complete sequence.
+    /// </param>
+    /// <param name="subsequence">
+    /// The subsequence.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Chain"/>.
+    /// </returns>
+    private Chain GetSimpleSubsequence(Sequence sourceSequence, Subsequence subsequence)
+    {
+        ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
+
+        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Complement))
         {
-            ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
-
-            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Complement))
-            {
-                bioSequence = bioSequence.GetReverseComplementedSequence();
-            }
-
-            return new Chain(bioSequence.ConvertToString());
+            bioSequence = bioSequence.GetReverseComplementedSequence();
         }
 
-        /// <summary>
-        /// Extracts joined subsequence.
-        /// </summary>
-        /// <param name="sourceSequence">
-        /// The complete sequence.
-        /// </param>
-        /// <param name="subsequence">
-        /// The subsequence.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Chain"/>.
-        /// </returns>
-        private Chain GetJoinedSubsequence(Sequence sourceSequence, Subsequence subsequence)
+        return new Chain(bioSequence.ConvertToString());
+    }
+
+    /// <summary>
+    /// Extracts joined subsequence.
+    /// </summary>
+    /// <param name="sourceSequence">
+    /// The complete sequence.
+    /// </param>
+    /// <param name="subsequence">
+    /// The subsequence.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Chain"/>.
+    /// </returns>
+    private Chain GetJoinedSubsequence(Sequence sourceSequence, Subsequence subsequence)
+    {
+        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Complement))
         {
-            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Complement))
-            {
-                return GetJoinedSubsequenceWithComplement(sourceSequence, subsequence);
-            }
-            else
-            {
-                return GetJoinedSubsequenceWithoutComplement(sourceSequence, subsequence);
-            }
+            return GetJoinedSubsequenceWithComplement(sourceSequence, subsequence);
+        }
+        else
+        {
+            return GetJoinedSubsequenceWithoutComplement(sourceSequence, subsequence);
+        }
+    }
+
+    /// <summary>
+    /// Extracts joined subsequence without complement flag.
+    /// </summary>
+    /// <param name="sourceSequence">
+    /// The complete sequence.
+    /// </param>
+    /// <param name="subsequence">
+    /// The subsequence.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Chain"/>.
+    /// </returns>
+    private Chain GetJoinedSubsequenceWithoutComplement(Sequence sourceSequence, Subsequence subsequence)
+    {
+        string joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ConvertToString();
+
+        Position[] positions = subsequence.Position.ToArray();
+
+        foreach (Position position in positions)
+        {
+            joinedSequence += sourceSequence.GetSubSequence(position.Start, position.Length).ConvertToString();
         }
 
-        /// <summary>
-        /// Extracts joined subsequence without complement flag.
-        /// </summary>
-        /// <param name="sourceSequence">
-        /// The complete sequence.
-        /// </param>
-        /// <param name="subsequence">
-        /// The subsequence.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Chain"/>.
-        /// </returns>
-        private Chain GetJoinedSubsequenceWithoutComplement(Sequence sourceSequence, Subsequence subsequence)
-        {
-            string joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ConvertToString();
+        return new Chain(joinedSequence);
+    }
 
-            Position[] positions = subsequence.Position.ToArray();
+    /// <summary>
+    /// Extracts joined subsequence with complement flag.
+    /// </summary>
+    /// <param name="sourceSequence">
+    /// The complete sequence.
+    /// </param>
+    /// <param name="subsequence">
+    /// The subsequence.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Chain"/>.
+    /// </returns>
+    private Chain GetJoinedSubsequenceWithComplement(Sequence sourceSequence, Subsequence subsequence)
+    {
+        ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
+        Position[] positions = subsequence.Position.ToArray();
+        string resultSequence;
+
+        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.ComplementJoin))
+        {
+            string joinedSequence = bioSequence.ConvertToString();
 
             foreach (Position position in positions)
             {
                 joinedSequence += sourceSequence.GetSubSequence(position.Start, position.Length).ConvertToString();
             }
 
-            return new Chain(joinedSequence);
+            resultSequence = new Sequence(Alphabets.DNA, joinedSequence).GetReverseComplementedSequence().ConvertToString();
         }
-
-        /// <summary>
-        /// Extracts joined subsequence with complement flag.
-        /// </summary>
-        /// <param name="sourceSequence">
-        /// The complete sequence.
-        /// </param>
-        /// <param name="subsequence">
-        /// The subsequence.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Chain"/>.
-        /// </returns>
-        private Chain GetJoinedSubsequenceWithComplement(Sequence sourceSequence, Subsequence subsequence)
+        else
         {
-            ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
-            Position[] positions = subsequence.Position.ToArray();
-            string resultSequence;
+            resultSequence = bioSequence.GetReverseComplementedSequence().ConvertToString();
 
-            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.ComplementJoin))
+            foreach (Position position in positions)
             {
-                string joinedSequence = bioSequence.ConvertToString();
-
-                foreach (Position position in positions)
-                {
-                    joinedSequence += sourceSequence.GetSubSequence(position.Start, position.Length).ConvertToString();
-                }
-
-                resultSequence = new Sequence(Alphabets.DNA, joinedSequence).GetReverseComplementedSequence().ConvertToString();
+                resultSequence += sourceSequence.GetSubSequence(position.Start, position.Length).GetReverseComplementedSequence().ConvertToString();
             }
-            else
-            {
-                resultSequence = bioSequence.GetReverseComplementedSequence().ConvertToString();
-
-                foreach (Position position in positions)
-                {
-                    resultSequence += sourceSequence.GetSubSequence(position.Start, position.Length).GetReverseComplementedSequence().ConvertToString();
-                }
-            }
-
-            return new Chain(resultSequence);
         }
+
+        return new Chain(resultSequence);
     }
 }

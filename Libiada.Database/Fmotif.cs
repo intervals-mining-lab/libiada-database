@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LibiadaCore.Core.SimpleTypes;
+using Libiada.Core.Core.SimpleTypes;
 
 
 namespace Libiada.Database;

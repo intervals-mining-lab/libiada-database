@@ -1,32 +1,31 @@
-﻿namespace Libiada.Database.Attributes
+﻿namespace Libiada.Database.Attributes;
+
+using System;
+
+/// <summary>
+/// The nature attribute.
+/// </summary>
+[AttributeUsage(AttributeTargets.Field)]
+public sealed class NatureAttribute : Attribute
 {
-    using System;
+    /// <summary>
+    /// Nature attribute value.
+    /// </summary>
+    public readonly Nature Value;
 
     /// <summary>
-    /// The nature attribute.
+    /// Initializes a new instance of the <see cref="NatureAttribute"/> class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public sealed class NatureAttribute : Attribute
+    /// <param name="value">
+    /// The Nature value.
+    /// </param>
+    public NatureAttribute(Nature value)
     {
-        /// <summary>
-        /// Nature attribute value.
-        /// </summary>
-        public readonly Nature Value;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NatureAttribute"/> class.
-        /// </summary>
-        /// <param name="value">
-        /// The Nature value.
-        /// </param>
-        public NatureAttribute(Nature value)
+        if (!Enum.IsDefined(typeof(Nature), value))
         {
-            if (!Enum.IsDefined(typeof(Nature), value))
-            {
-                throw new ArgumentException("Nature attribute value is not valid nature", nameof(value));
-            }
-
-            Value = value;
+            throw new ArgumentException("Nature attribute value is not valid nature", nameof(value));
         }
+
+        Value = value;
     }
 }

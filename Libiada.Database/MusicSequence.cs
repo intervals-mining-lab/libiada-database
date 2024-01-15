@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LibiadaCore.Music;
+using Libiada.Core.Music;
 using Microsoft.EntityFrameworkCore;
 
 

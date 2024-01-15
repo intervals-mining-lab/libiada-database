@@ -1,32 +1,31 @@
-﻿namespace Libiada.Database
+﻿namespace Libiada.Database;
+
+/// <summary>
+/// Custom cache for storing matter table data.
+/// </summary>
+public class Cache
 {
+    private readonly LibiadaDatabaseEntities db;
+
     /// <summary>
-    /// Custom cache for storing matter table data.
+    /// The list of matters.
     /// </summary>
-    public class Cache
+    public List<Matter> Matters { get; set; }
+
+    /// <summary>
+    /// Initializes list of matters.
+    /// </summary>
+    public Cache(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
     {
-        private readonly LibiadaDatabaseEntities db;
+        this.db = libiadaDatabaseEntitiesFactory.CreateDbContext();
+        Matters = db.Matters.ToList();
+    }
 
-        /// <summary>
-        /// The list of matters.
-        /// </summary>
-        public List<Matter> Matters { get; set; }
-
-        /// <summary>
-        /// Initializes list of matters.
-        /// </summary>
-        public Cache(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
-        {
-            this.db = libiadaDatabaseEntitiesFactory.CreateDbContext();
-            Matters = db.Matters.ToList();
-        }
-
-        /// <summary>
-        /// Clears the instance.
-        /// </summary>
-        public void Clear()
-        {
-            Matters = db.Matters.ToList();
-        }
+    /// <summary>
+    /// Clears the instance.
+    /// </summary>
+    public void Clear()
+    {
+        Matters = db.Matters.ToList();
     }
 }

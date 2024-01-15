@@ -1,17 +1,16 @@
-﻿namespace Libiada.Database.Models.NcbiSequencesData
+﻿namespace Libiada.Database.Models.NcbiSequencesData;
+
+using System;
+
+public class ESummaryResult
 {
-    using System;
+    public string Title;
 
-    public class ESummaryResult
-    {
-        public string Title;
+    public DateTimeOffset UpdateDate;
 
-        public DateTimeOffset UpdateDate;
+    public string AccessionVersion;
 
-        public string AccessionVersion;
+    public string Completeness;
 
-        public string Completeness;
-
-        public string Organism;
-    }
+    public string Organism;
 }

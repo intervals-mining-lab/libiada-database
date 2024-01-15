@@ -1,94 +1,93 @@
-﻿namespace Libiada.Database.Models.Calculators
+﻿namespace Libiada.Database.Models.Calculators;
+
+using Libiada.Core.Core;
+using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
+using Libiada.Core.Iterators;
+using Libiada.Database.Models.Repositories.Catalogs;
+
+using System.Collections.Generic;
+using System.Linq;
+using Libiada.Database.Models.Repositories.Sequences;
+
+public class LocalCharacteristicsCalculator
 {
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-    using LibiadaCore.Iterators;
-    using Libiada.Database.Models.Repositories.Catalogs;
+    private readonly LibiadaDatabaseEntities db;
+    private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
+    private readonly ICommonSequenceRepository commonSequenceRepository;
 
-    using System.Collections.Generic;
-    using System.Linq;
-    using Libiada.Database.Models.Repositories.Sequences;
-
-    public class LocalCharacteristicsCalculator
+    public LocalCharacteristicsCalculator(LibiadaDatabaseEntities db, IFullCharacteristicRepository characteristicTypeLinkRepository, ICommonSequenceRepository commonSequenceRepository)
     {
-        private readonly LibiadaDatabaseEntities db;
-        private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-        private readonly ICommonSequenceRepository commonSequenceRepository;
+        this.db = db;
+        this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
+        this.commonSequenceRepository = commonSequenceRepository;
+    }
 
-        public LocalCharacteristicsCalculator(LibiadaDatabaseEntities db, IFullCharacteristicRepository characteristicTypeLinkRepository, ICommonSequenceRepository commonSequenceRepository)
+    /// <summary>
+    /// The get subsequence characteristic.
+    /// </summary>
+    /// <param name="subsequenceId">
+    /// The subsequence id.
+    /// </param>
+    /// <param name="characteristicLinkId">
+    /// The characteristic type link id.
+    /// </param>
+    /// <param name="windowSize">
+    /// The window size.
+    /// </param>
+    /// <param name="step">
+    /// The step.
+    /// </param>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    public double[] GetSubsequenceCharacteristic(
+        long subsequenceId,
+        short characteristicLinkId,
+        int windowSize,
+        int step)
+    {
+        Chain chain;
+        IFullCalculator calculator;
+        Link link;
+
+        FullCharacteristic characteristic =
+            characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+        calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
+        link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
+
+        var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
+
+        Subsequence subsequence = db.Subsequences.Single(s => s.Id == subsequenceId);
+        chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
+
+
+        CutRule cutRule = new SimpleCutRule(chain.Length, step, windowSize);
+
+        CutRuleIterator iterator = cutRule.GetIterator();
+
+        var fragments = new List<Chain>();
+
+        while (iterator.Next())
         {
-            this.db = db;
-            this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-            this.commonSequenceRepository = commonSequenceRepository;
-        }
+            int start = iterator.GetStartPosition();
+            int end = iterator.GetEndPosition();
 
-        /// <summary>
-        /// The get subsequence characteristic.
-        /// </summary>
-        /// <param name="subsequenceId">
-        /// The subsequence id.
-        /// </param>
-        /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
-        /// </param>
-        /// <param name="windowSize">
-        /// The window size.
-        /// </param>
-        /// <param name="step">
-        /// The step.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public double[] GetSubsequenceCharacteristic(
-            long subsequenceId,
-            short characteristicLinkId,
-            int windowSize,
-            int step)
-        {
-            Chain chain;
-            IFullCalculator calculator;
-            Link link;
-
-            FullCharacteristic characteristic =
-                characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-            calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-            link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
-
-            var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
-
-            Subsequence subsequence = db.Subsequences.Single(s => s.Id == subsequenceId);
-            chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
-
-
-            CutRule cutRule = new SimpleCutRule(chain.Length, step, windowSize);
-
-            CutRuleIterator iterator = cutRule.GetIterator();
-
-            var fragments = new List<Chain>();
-
-            while (iterator.Next())
+            var fragment = new List<IBaseObject>();
+            for (int k = 0; start + k < end; k++)
             {
-                int start = iterator.GetStartPosition();
-                int end = iterator.GetEndPosition();
-
-                var fragment = new List<IBaseObject>();
-                for (int k = 0; start + k < end; k++)
-                {
-                    fragment.Add(chain[start + k]);
-                }
-
-                fragments.Add(new Chain(fragment));
+                fragment.Add(chain[start + k]);
             }
 
-            var characteristics = new double[fragments.Count];
-
-            for (int k = 0; k < fragments.Count; k++)
-            {
-                characteristics[k] = calculator.Calculate(fragments[k], link);
-            }
-
-            return characteristics;
+            fragments.Add(new Chain(fragment));
         }
+
+        var characteristics = new double[fragments.Count];
+
+        for (int k = 0; k < fragments.Count; k++)
+        {
+            characteristics[k] = calculator.Calculate(fragments[k], link);
+        }
+
+        return characteristics;
     }
 }

@@ -1,28 +1,27 @@
-﻿namespace Libiada.Database
+﻿namespace Libiada.Database;
+
+/// <summary>
+/// Characteristic category enum.
+/// </summary>
+public enum CharacteristicCategory : byte
 {
     /// <summary>
-    /// Characteristic category enum.
+    /// Full sequence characteristics.
     /// </summary>
-    public enum CharacteristicCategory : byte
-    {
-        /// <summary>
-        /// Full sequence characteristics.
-        /// </summary>
-        Full,
+    Full,
 
-        /// <summary>
-        /// Congeneric sequence characteristics.
-        /// </summary>
-        Congeneric,
+    /// <summary>
+    /// Congeneric sequence characteristics.
+    /// </summary>
+    Congeneric,
 
-        /// <summary>
-        /// Accordance sequence characteristics.
-        /// </summary>
-        Accordance,
+    /// <summary>
+    /// Accordance sequence characteristics.
+    /// </summary>
+    Accordance,
 
-        /// <summary>
-        /// Binary sequence characteristics.
-        /// </summary>
-        Binary
-    }
+    /// <summary>
+    /// Binary sequence characteristics.
+    /// </summary>
+    Binary
 }

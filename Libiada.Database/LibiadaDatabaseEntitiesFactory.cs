@@ -1,22 +1,21 @@
-﻿namespace Libiada.Database
+﻿namespace Libiada.Database;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
+public class LibiadaDatabaseEntitiesFactory : ILibiadaDatabaseEntitiesFactory
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
+    private readonly IConfiguration configuration;
 
-    public class LibiadaDatabaseEntitiesFactory : ILibiadaDatabaseEntitiesFactory
+    public LibiadaDatabaseEntitiesFactory(IConfiguration configuration)
     {
-        private readonly IConfiguration configuration;
-
-        public LibiadaDatabaseEntitiesFactory(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
-
-        public LibiadaDatabaseEntities CreateDbContext()
-        {
-            DbContextOptions<LibiadaDatabaseEntities> options = new DbContextOptions<LibiadaDatabaseEntities>();
-            return new LibiadaDatabaseEntities(options, configuration);
-        }
-
+        this.configuration = configuration;
     }
+
+    public LibiadaDatabaseEntities CreateDbContext()
+    {
+        DbContextOptions<LibiadaDatabaseEntities> options = new DbContextOptions<LibiadaDatabaseEntities>();
+        return new LibiadaDatabaseEntities(options, configuration);
+    }
+
 }

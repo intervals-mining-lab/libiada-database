@@ -1,36 +1,35 @@
-﻿namespace Libiada.Database.Attributes
-{
-    using System;
+﻿namespace Libiada.Database.Attributes;
 
-    using LibiadaCore.Images;
+using System;
+
+using Libiada.Core.Images;
+
+/// <summary>
+/// The image transformer type attribute.
+/// </summary>
+[AttributeUsage(AttributeTargets.Field)]
+public class ImageTransformerTypeAttribute : Attribute
+{
+    /// <summary>
+    /// The image processor type.
+    /// </summary>
+    public readonly Type Value;
 
     /// <summary>
-    /// The image transformer type attribute.
+    /// Initializes a new instance of the <see cref="ImageTransformerTypeAttribute"/> class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public class ImageTransformerTypeAttribute : Attribute
+    /// <param name="imageProcessorType">
+    /// The image processor type.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// </exception>
+    public ImageTransformerTypeAttribute(Type imageProcessorType)
     {
-        /// <summary>
-        /// The image processor type.
-        /// </summary>
-        public readonly Type Value;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImageTransformerTypeAttribute"/> class.
-        /// </summary>
-        /// <param name="imageProcessorType">
-        /// The image processor type.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// </exception>
-        public ImageTransformerTypeAttribute(Type imageProcessorType)
+        if (!imageProcessorType.IsSubclassOf(typeof(IImageTransformer)))
         {
-            if (!imageProcessorType.IsSubclassOf(typeof(IImageTransformer)))
-            {
-                throw new ArgumentException($"Task class attribute value is invalid, it can only be subtype of {nameof(IImageTransformer)}", nameof(imageProcessorType));
-            }
-
-            Value = imageProcessorType;
+            throw new ArgumentException($"Task class attribute value is invalid, it can only be subtype of {nameof(IImageTransformer)}", nameof(imageProcessorType));
         }
+
+        Value = imageProcessorType;
     }
 }

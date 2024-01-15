@@ -1,6 +1,5 @@
-﻿namespace Libiada.Database
+﻿namespace Libiada.Database;
+
+public enum ImageMatrixTransformer : byte
 {
-    public enum ImageMatrixTransformer : byte
-    {
-    }
 }

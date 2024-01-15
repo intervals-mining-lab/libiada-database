@@ -1,16 +1,14 @@
-﻿using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
-using System.Collections.Generic;
+﻿namespace Libiada.Database.Models.Repositories.Catalogs;
 
-namespace Libiada.Database.Models.Repositories.Catalogs
+using Libiada.Core.Core;
+using Libiada.Core.Core.Characteristics.Calculators.CongenericCalculators;
+
+public interface ICongenericCharacteristicRepository
 {
-    public interface ICongenericCharacteristicRepository
-    {
-        IEnumerable<CongenericCharacteristicLink> CharacteristicLinks { get; }
+    IEnumerable<CongenericCharacteristicLink> CharacteristicLinks { get; }
 
-        CongenericCharacteristic GetCharacteristic(int characteristicLinkId);
-        string GetCharacteristicName(int characteristicLinkId);
-        string GetCharacteristicName(int characteristicLinkId, Notation notation);
-        Link GetLinkForCharacteristic(int characteristicLinkId);
-    }
+    CongenericCharacteristic GetCharacteristic(int characteristicLinkId);
+    string GetCharacteristicName(int characteristicLinkId);
+    string GetCharacteristicName(int characteristicLinkId, Notation notation);
+    Link GetLinkForCharacteristic(int characteristicLinkId);
 }

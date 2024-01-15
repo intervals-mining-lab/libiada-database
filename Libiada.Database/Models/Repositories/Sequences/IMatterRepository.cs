@@ -1,11 +1,10 @@
-namespace Libiada.Database.Models.Repositories.Sequences
-{
-    using System;
+namespace Libiada.Database.Models.Repositories.Sequences;
 
-    /// <summary>
-    /// The MatterRepository interface.
-    /// </summary>
-    public interface IMatterRepository : IDisposable
-    {
-    }
+using System;
+
+/// <summary>
+/// The MatterRepository interface.
+/// </summary>
+public interface IMatterRepository : IDisposable
+{
 }

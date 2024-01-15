@@ -1,14 +1,13 @@
-﻿namespace Libiada.Database.Models.NcbiSequencesData
+﻿namespace Libiada.Database.Models.NcbiSequencesData;
+
+using Newtonsoft.Json;
+
+public class ESearchResult
 {
-    using Newtonsoft.Json;
+    [JsonProperty(PropertyName = "webenv")]
+    public string NcbiWebEnvironment { get; set; }
 
-    public class ESearchResult
-    {
-        [JsonProperty(PropertyName = "webenv")]
-        public string NcbiWebEnvironment { get; set; }
+    public string QueryKey { get; set; }
 
-        public string QueryKey { get; set; }
-
-        public int Count { get; set; }
-    }
+    public int Count { get; set; }
 }

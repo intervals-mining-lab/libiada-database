@@ -1,11 +1,10 @@
-namespace Libiada.Database.Models.Repositories.Sequences
-{
-    using System;
+namespace Libiada.Database.Models.Repositories.Sequences;
 
-    /// <summary>
-    /// The ElementRepository interface.
-    /// </summary>
-    public interface IElementRepository : IDisposable
-    {
-    }
+using System;
+
+/// <summary>
+/// The ElementRepository interface.
+/// </summary>
+public interface IElementRepository : IDisposable
+{
 }

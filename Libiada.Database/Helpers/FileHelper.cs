@@ -1,29 +1,28 @@
-﻿namespace Libiada.Database.Helpers
+﻿namespace Libiada.Database.Helpers;
+
+using System.IO;
+using System.Text;
+
+/// <summary>
+/// The file helper.
+/// </summary>
+public static class FileHelper
 {
-    using System.IO;
-    using System.Text;
 
     /// <summary>
-    /// The file helper.
+    /// The read sequence from stream.
     /// </summary>
-    public static class FileHelper
+    /// <param name="stream">
+    /// The stream.
+    /// </param>
+    /// <returns>
+    /// The <see cref="string"/>.
+    /// </returns>
+    public static string ReadSequenceFromStream(Stream stream)
     {
-
-        /// <summary>
-        /// The read sequence from stream.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string ReadSequenceFromStream(Stream stream)
-        {
-            var input = new byte[stream.Length];
-            stream.Read(input, 0, (int)stream.Length);
-            stream.Dispose();
-            return Encoding.UTF8.GetString(input);
-        }
+        var input = new byte[stream.Length];
+        stream.Read(input, 0, (int)stream.Length);
+        stream.Dispose();
+        return Encoding.UTF8.GetString(input);
     }
 }

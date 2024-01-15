@@ -1,36 +1,35 @@
-﻿namespace Libiada.Database.Attributes
+﻿namespace Libiada.Database.Attributes;
+
+using System;
+
+/// <summary>
+/// The group type attribute.
+/// Used to specify group types hierarchy.
+/// </summary>
+[AttributeUsage(AttributeTargets.Field)]
+public class SequenceGroupTypeAttribute : Attribute
 {
-    using System;
+    /// <summary>
+    /// The group type value.
+    /// </summary>
+    public readonly SequenceGroupType Value;
 
     /// <summary>
-    /// The group type attribute.
-    /// Used to specify group types hierarchy.
+    /// Initializes a new instance of the <see cref="SequenceGroupTypeAttribute"/> class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public class SequenceGroupTypeAttribute : Attribute
+    /// <param name="value">
+    /// The group type.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if value is not a valid <see cref="SequenceGroupType"/>.
+    /// </exception>
+    public SequenceGroupTypeAttribute(SequenceGroupType value)
     {
-        /// <summary>
-        /// The group type value.
-        /// </summary>
-        public readonly SequenceGroupType Value;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SequenceGroupTypeAttribute"/> class.
-        /// </summary>
-        /// <param name="value">
-        /// The group type.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// Thrown if value is not a valid <see cref="SequenceGroupType"/>.
-        /// </exception>
-        public SequenceGroupTypeAttribute(SequenceGroupType value)
+        if (!Enum.IsDefined(typeof(SequenceGroupType), value))
         {
-            if (!Enum.IsDefined(typeof(SequenceGroupType), value))
-            {
-                throw new ArgumentException("GroupType attribute value is not valid group type", nameof(value));
-            }
-
-            Value = value;
+            throw new ArgumentException("GroupType attribute value is not valid group type", nameof(value));
         }
+
+        Value = value;
     }
 }

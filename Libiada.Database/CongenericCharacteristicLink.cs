@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LibiadaCore.Core;
-using LibiadaCore.Core.ArrangementManagers;
-using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
+using Libiada.Core.Core;
+using Libiada.Core.Core.ArrangementManagers;
+using Libiada.Core.Core.Characteristics.Calculators.CongenericCalculators;
 using Microsoft.EntityFrameworkCore;
 
 

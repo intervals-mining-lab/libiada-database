@@ -1,11 +1,10 @@
-namespace Libiada.Database.Models.Repositories.Sequences
-{
-    using System;
+namespace Libiada.Database.Models.Repositories.Sequences;
 
-    /// <summary>
-    /// The LiteratureSequenceRepository interface.
-    /// </summary>
-    public interface ILiteratureSequenceRepository : IDisposable
-    {
-    }
+using System;
+
+/// <summary>
+/// The LiteratureSequenceRepository interface.
+/// </summary>
+public interface ILiteratureSequenceRepository : IDisposable
+{
 }

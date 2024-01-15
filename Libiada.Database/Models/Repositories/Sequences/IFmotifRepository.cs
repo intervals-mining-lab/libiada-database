@@ -1,11 +1,10 @@
-﻿namespace Libiada.Database.Models.Repositories.Sequences
-{
-    using System;
+﻿namespace Libiada.Database.Models.Repositories.Sequences;
 
-    /// <summary>
-    /// The FmotifRepository interface.
-    /// </summary>
-    interface IFmotifRepository : IDisposable
-    {
-    }
+using System;
+
+/// <summary>
+/// The FmotifRepository interface.
+/// </summary>
+interface IFmotifRepository : IDisposable
+{
 }

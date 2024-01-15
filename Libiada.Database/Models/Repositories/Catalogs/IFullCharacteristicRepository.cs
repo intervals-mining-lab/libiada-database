@@ -1,16 +1,14 @@
-﻿using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-using System.Collections.Generic;
+﻿namespace Libiada.Database.Models.Repositories.Catalogs;
 
-namespace Libiada.Database.Models.Repositories.Catalogs
+using Libiada.Core.Core;
+using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
+
+public interface IFullCharacteristicRepository
 {
-    public interface IFullCharacteristicRepository
-    {
-        IEnumerable<FullCharacteristicLink> CharacteristicLinks { get; }
+    IEnumerable<FullCharacteristicLink> CharacteristicLinks { get; }
 
-        FullCharacteristic GetCharacteristic(int characteristicLinkId);
-        string GetCharacteristicName(int characteristicLinkId);
-        string GetCharacteristicName(int characteristicLinkId, Notation notation);
-        Link GetLinkForCharacteristic(int characteristicLinkId);
-    }
+    FullCharacteristic GetCharacteristic(int characteristicLinkId);
+    string GetCharacteristicName(int characteristicLinkId);
+    string GetCharacteristicName(int characteristicLinkId, Notation notation);
+    Link GetLinkForCharacteristic(int characteristicLinkId);
 }

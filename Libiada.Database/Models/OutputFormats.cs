@@ -1,23 +1,22 @@
-﻿namespace Libiada.Database.Models
+﻿namespace Libiada.Database.Models;
+
+/// <summary>
+/// The output formats.
+/// </summary>
+public static class OutputFormats
 {
     /// <summary>
-    /// The output formats.
+    /// The date time output format.
     /// </summary>
-    public static class OutputFormats
-    {
-        /// <summary>
-        /// The date time output format.
-        /// </summary>
-        public const string DateTimeFormat = "dd.MM.yyyy HH':'mm':'ss";
+    public const string DateTimeFormat = "dd.MM.yyyy HH':'mm':'ss";
 
-        /// <summary>
-        /// The time output format.
-        /// </summary>
-        public const string TimeFormat = @"hh\:mm\:ss\.FF";
+    /// <summary>
+    /// The time output format.
+    /// </summary>
+    public const string TimeFormat = @"hh\:mm\:ss\.FF";
 
-        /// <summary>
-        /// The date time output format.
-        /// </summary>
-        public const string DateFormat = "dd.MM.yyyy";
-    }
+    /// <summary>
+    /// The date time output format.
+    /// </summary>
+    public const string DateFormat = "dd.MM.yyyy";
 }

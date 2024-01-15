@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using LibiadaCore.Core.SimpleTypes;
+using Libiada.Core.Core.SimpleTypes;
 using Microsoft.EntityFrameworkCore;
 
 

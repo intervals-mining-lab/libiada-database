@@ -1,10 +1,9 @@
-﻿namespace Libiada.Database.Models.Calculators
+﻿namespace Libiada.Database.Models.Calculators;
+
+public class CongenericSequencesCharacteristicsCalculator
 {
-    public class CongenericSequencesCharacteristicsCalculator
+    public static double[][][] Calculate(long[][] sequenceIds, short[] characteristicLinkIds)
     {
-        public static double[][][] Calculate(long[][] sequenceIds, short[] characteristicLinkIds)
-        {
-            throw new System.NotImplementedException();
-        }
+        throw new System.NotImplementedException();
     }
 }

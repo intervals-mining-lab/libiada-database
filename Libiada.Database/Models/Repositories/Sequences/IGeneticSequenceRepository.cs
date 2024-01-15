@@ -1,11 +1,10 @@
-namespace Libiada.Database.Models.Repositories.Sequences
-{
-    using System;
+namespace Libiada.Database.Models.Repositories.Sequences;
 
-    /// <summary>
-    /// The GeneticSequenceRepository interface.
-    /// </summary>
-    public interface IGeneticSequenceRepository : IDisposable
-    {
-    }
+using System;
+
+/// <summary>
+/// The GeneticSequenceRepository interface.
+/// </summary>
+public interface IGeneticSequenceRepository : IDisposable
+{
 }

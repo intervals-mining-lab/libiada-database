@@ -25,12 +25,12 @@
             {
               "Name": "accordance_characteristic",
               "PropertyName": "AccordanceCharacteristic",
-              "NewType": "LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators.AccordanceCharacteristic"
+              "NewType": "Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators.AccordanceCharacteristic"
             },
             {
               "Name": "link",
               "PropertyName": "Link",
-              "NewType": "LibiadaCore.Core.Link"
+              "NewType": "Libiada.Core.Core.Link"
             }
           ]
         },
@@ -122,12 +122,12 @@
             {
               "Name": "binary_characteristic",
               "PropertyName": "BinaryCharacteristic",
-              "NewType": "LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators.BinaryCharacteristic"
+              "NewType": "Libiada.Core.Core.Characteristics.Calculators.BinaryCalculators.BinaryCharacteristic"
             },
             {
               "Name": "link",
               "PropertyName": "Link",
-              "NewType": "LibiadaCore.Core.Link"
+              "NewType": "Libiada.Core.Core.Link"
             }
           ]
         },
@@ -374,17 +374,17 @@
             {
               "Name": "congeneric_characteristic",
               "PropertyName": "CongenericCharacteristic",
-              "NewType": "LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators.CongenericCharacteristic"
+              "NewType": "Libiada.Core.Core.Characteristics.Calculators.CongenericCalculators.CongenericCharacteristic"
             },
             {
               "Name": "link",
               "PropertyName": "Link",
-              "NewType": "LibiadaCore.Core.Link"
+              "NewType": "Libiada.Core.Core.Link"
             },
             {
               "Name": "arrangement_type",
               "PropertyName": "ArrangementType",
-              "NewType": "LibiadaCore.Core.ArrangementManagers.ArrangementType"
+              "NewType": "Libiada.Core.Core.ArrangementManagers.ArrangementType"
             }
           ]
         },
@@ -712,7 +712,7 @@
             {
               "Name": "fmotif_type",
               "PropertyName": "FmotifType",
-              "NewType": "LibiadaCore.Core.SimpleTypes.FmotifType"
+              "NewType": "Libiada.Core.Core.SimpleTypes.FmotifType"
             }
           ],
           "Navigations": [
@@ -755,17 +755,17 @@
             {
               "Name": "full_characteristic",
               "PropertyName": "FullCharacteristic",
-              "NewType": "LibiadaCore.Core.Characteristics.Calculators.FullCalculators.FullCharacteristic"
+              "NewType": "Libiada.Core.Core.Characteristics.Calculators.FullCalculators.FullCharacteristic"
             },
             {
               "Name": "link",
               "PropertyName": "Link",
-              "NewType": "LibiadaCore.Core.Link"
+              "NewType": "Libiada.Core.Core.Link"
             },
             {
               "Name": "arrangement_type",
               "PropertyName": "ArrangementType",
-              "NewType": "LibiadaCore.Core.ArrangementManagers.ArrangementType"
+              "NewType": "Libiada.Core.Core.ArrangementManagers.ArrangementType"
             }
           ]
         },
@@ -1195,7 +1195,7 @@
             {
               "Name": "pause_treatment",
               "PropertyName": "PauseTreatment",
-              "NewType": "LibiadaCore.Music.PauseTreatment"
+              "NewType": "Libiada.Core.Music.PauseTreatment"
             },
             {
               "Name": "sequential_transfer",
@@ -1282,7 +1282,7 @@
             {
               "Name": "tie",
               "PropertyName": "Tie",
-              "NewType": "LibiadaCore.Core.SimpleTypes.Tie"
+              "NewType": "Libiada.Core.Core.SimpleTypes.Tie"
             },
             {
               "Name": "modified",
@@ -1321,17 +1321,17 @@
             {
               "Name": "instrument",
               "PropertyName": "Instrument",
-              "NewType": "LibiadaCore.Core.SimpleTypes.Instrument"
+              "NewType": "Libiada.Core.Core.SimpleTypes.Instrument"
             },
             {
               "Name": "accidental",
               "PropertyName": "Accidental",
-              "NewType": "LibiadaCore.Core.SimpleTypes.Accidental"
+              "NewType": "Libiada.Core.Core.SimpleTypes.Accidental"
             },
             {
               "Name": "note_symbol",
               "PropertyName": "NoteSymbol",
-              "NewType": "LibiadaCore.Core.SimpleTypes.NoteSymbol"
+              "NewType": "Libiada.Core.Core.SimpleTypes.NoteSymbol"
             }
           ],
           "Navigations": [

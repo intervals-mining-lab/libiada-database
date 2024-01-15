@@ -1,72 +1,71 @@
-﻿namespace Libiada.Database.Models.Repositories.Calculators
+﻿namespace Libiada.Database.Models.Repositories.Calculators;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+/// <summary>
+/// The characteristic repository.
+/// </summary>
+public class CharacteristicRepository : ICharacteristicRepository
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+    /// <summary>
+    /// The db.
+    /// </summary>
+    private readonly LibiadaDatabaseEntities db;
 
     /// <summary>
-    /// The characteristic repository.
+    /// Initializes a new instance of the <see cref="CharacteristicRepository"/> class.
     /// </summary>
-    public class CharacteristicRepository : ICharacteristicRepository
+    /// <param name="db">
+    /// The db.
+    /// </param>
+    public CharacteristicRepository(LibiadaDatabaseEntities db)
     {
-        /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaDatabaseEntities db;
+        this.db = db;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CharacteristicRepository"/> class.
-        /// </summary>
-        /// <param name="db">
-        /// The db.
-        /// </param>
-        public CharacteristicRepository(LibiadaDatabaseEntities db)
+    /// <summary>
+    /// The try save characteristics to database.
+    /// </summary>
+    /// <param name="characteristics">
+    /// The characteristics.
+    /// </param>
+    public void TrySaveCharacteristicsToDatabase(List<CharacteristicValue> characteristics)
+    {
+        if (characteristics.Count > 0)
         {
-            this.db = db;
-        }
-
-        /// <summary>
-        /// The try save characteristics to database.
-        /// </summary>
-        /// <param name="characteristics">
-        /// The characteristics.
-        /// </param>
-        public void TrySaveCharacteristicsToDatabase(List<CharacteristicValue> characteristics)
-        {
-            if (characteristics.Count > 0)
+            try
             {
+                db.CharacteristicValues.AddRange(characteristics);
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                // todo: refactor and optimize all this
+                var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
+                var characteristicsTypes = characteristics.Select(c => c.CharacteristicLinkId).Distinct().ToArray();
+                var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicLinkId }).ToArray();
+                var wasteCharacteristics = db.CharacteristicValues.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicLinkId))
+                        .ToArray().Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicLinkId })).Select(c => new { c.SequenceId, c.CharacteristicLinkId });
+                var wasteNewCharacteristics = characteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicLinkId }));
+
+                db.CharacteristicValues.RemoveRange(wasteNewCharacteristics);
                 try
                 {
-                    db.CharacteristicValues.AddRange(characteristics);
                     db.SaveChanges();
                 }
                 catch (Exception)
                 {
-                    // todo: refactor and optimize all this
-                    var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
-                    var characteristicsTypes = characteristics.Select(c => c.CharacteristicLinkId).Distinct().ToArray();
-                    var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicLinkId }).ToArray();
-                    var wasteCharacteristics = db.CharacteristicValues.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicLinkId))
-                            .ToArray().Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicLinkId })).Select(c => new { c.SequenceId, c.CharacteristicLinkId });
-                    var wasteNewCharacteristics = characteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicLinkId }));
-
-                    db.CharacteristicValues.RemoveRange(wasteNewCharacteristics);
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception)
-                    {
-                    }
                 }
             }
         }
+    }
 
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        public void Dispose()
-        {
-        }
+    /// <summary>
+    /// The dispose.
+    /// </summary>
+    public void Dispose()
+    {
     }
 }

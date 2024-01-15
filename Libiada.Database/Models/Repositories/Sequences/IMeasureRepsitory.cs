@@ -1,11 +1,10 @@
-﻿namespace Libiada.Database.Models.Repositories.Sequences
-{
-    using System;
+﻿namespace Libiada.Database.Models.Repositories.Sequences;
 
-    /// <summary>
-    /// The MeasureRepository interface.
-    /// </summary>
-    interface IMeasureRepsitory : IDisposable
-    {
-    }
+using System;
+
+/// <summary>
+/// The MeasureRepository interface.
+/// </summary>
+interface IMeasureRepsitory : IDisposable
+{
 }

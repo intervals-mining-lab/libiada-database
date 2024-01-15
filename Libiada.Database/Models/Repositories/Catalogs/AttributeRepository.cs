@@ -1,54 +1,53 @@
-﻿namespace Libiada.Database.Models.Repositories.Catalogs
+﻿namespace Libiada.Database.Models.Repositories.Catalogs;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Libiada.Core.Extensions;
+
+using Attribute = Libiada.Database.Attribute;
+
+/// <summary>
+/// The attribute repository.
+/// </summary>
+public class AttributeRepository
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using LibiadaCore.Extensions;
-
-    using Attribute = Libiada.Database.Attribute;
+    /// <summary>
+    /// The attributes dictionary.
+    /// </summary>
+    private readonly Dictionary<string, Attribute> attributesDictionary;
 
     /// <summary>
-    /// The attribute repository.
+    /// Initializes a new instance of the <see cref="AttributeRepository"/> class.
     /// </summary>
-    public class AttributeRepository
+    public AttributeRepository()
     {
-        /// <summary>
-        /// The attributes dictionary.
-        /// </summary>
-        private readonly Dictionary<string, Attribute> attributesDictionary;
+        Attribute[] attributes = EnumExtensions.ToArray<Attribute>();
+        attributesDictionary = attributes.ToDictionary(a => a.GetDisplayValue());
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AttributeRepository"/> class.
-        /// </summary>
-        public AttributeRepository()
+    /// <summary>
+    /// Gets attribute by name.
+    /// </summary>
+    /// <param name="name">
+    /// The name.
+    /// </param>
+    /// <returns>
+    /// The <see cref="Attribute"/>.
+    /// </returns>
+    /// <exception cref="Exception">
+    /// Thrown if attribute with given name is not found.
+    /// </exception>
+    public Attribute GetAttributeByName(string name)
+    {
+        if (attributesDictionary.TryGetValue(name, out Attribute value))
         {
-            Attribute[] attributes = EnumExtensions.ToArray<Attribute>();
-            attributesDictionary = attributes.ToDictionary(a => a.GetDisplayValue());
+            return value;
         }
-
-        /// <summary>
-        /// Gets attribute by name.
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attribute"/>.
-        /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if attribute with given name is not found.
-        /// </exception>
-        public Attribute GetAttributeByName(string name)
+        else
         {
-            if (attributesDictionary.TryGetValue(name, out Attribute value))
-            {
-                return value;
-            }
-            else
-            {
-                throw new Exception($"Unknown attribute: {name}");
-            }
+            throw new Exception($"Unknown attribute: {name}");
         }
     }
 }

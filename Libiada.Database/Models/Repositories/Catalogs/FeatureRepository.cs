@@ -1,46 +1,45 @@
-namespace Libiada.Database.Models.Repositories.Catalogs
+namespace Libiada.Database.Models.Repositories.Catalogs;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using Libiada.Core.Extensions;
+
+using FeatureExtensions = Libiada.Database.Extensions.FeatureExtensions;
+
+/// <summary>
+/// The feature repository.
+/// </summary>
+public static class FeatureRepository
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using LibiadaCore.Extensions;
-
-    using FeatureExtensions = Libiada.Database.Extensions.FeatureExtensions;
+    private static readonly Dictionary<string, Feature> featuresDictionary = EnumExtensions.ToArray<Feature>()
+                                                                                           .ToDictionary(FeatureExtensions.GetGenBankName);
 
     /// <summary>
-    /// The feature repository.
+    /// Gets feature by name.
     /// </summary>
-    public static class FeatureRepository
+    /// <param name="genBankName">
+    /// The feature name in GenBank.
+    /// </param>
+    /// <returns>
+    /// The <see cref="int"/>.
+    /// </returns>
+    public static Feature GetFeatureByName(string genBankName)
     {
-        private static readonly Dictionary<string, Feature> featuresDictionary = EnumExtensions.ToArray<Feature>()
-                                                                                               .ToDictionary(FeatureExtensions.GetGenBankName);
+        return featuresDictionary[genBankName];
+    }
 
-        /// <summary>
-        /// Gets feature by name.
-        /// </summary>
-        /// <param name="genBankName">
-        /// The feature name in GenBank.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        public static Feature GetFeatureByName(string genBankName)
-        {
-            return featuresDictionary[genBankName];
-        }
-
-        /// <summary>
-        /// Checks if feature exists.
-        /// </summary>
-        /// <param name="genBankName">
-        /// The feature name in GenBank.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public static bool FeatureExists(string genBankName)
-        {
-            return featuresDictionary.ContainsKey(genBankName);
-        }
+    /// <summary>
+    /// Checks if feature exists.
+    /// </summary>
+    /// <param name="genBankName">
+    /// The feature name in GenBank.
+    /// </param>
+    /// <returns>
+    /// The <see cref="bool"/>.
+    /// </returns>
+    public static bool FeatureExists(string genBankName)
+    {
+        return featuresDictionary.ContainsKey(genBankName);
     }
 }

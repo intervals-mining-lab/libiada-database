@@ -1,41 +1,40 @@
-﻿namespace Libiada.Database.Tests.Attributes
+﻿namespace Libiada.Database.Tests.Attributes;
+
+using System;
+
+using Libiada.Core.Extensions;
+
+using Libiada.Database.Attributes;
+
+using NUnit.Framework;
+
+/// <summary>
+/// The nature attribute tests.
+/// </summary>
+[TestFixture(TestOf = typeof(NatureAttribute))]
+public class NatureAttributeTests
 {
-    using System;
-
-    using LibiadaCore.Extensions;
-
-    using Libiada.Database.Attributes;
-
-    using NUnit.Framework;
+    /// <summary>
+    /// Invalid nature value test.
+    /// </summary>
+    [Test]
+    public void InvalidNatureValueTest()
+    {
+        Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)10));
+        Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)0));
+    }
 
     /// <summary>
-    /// The nature attribute tests.
+    /// Nature attribute value test.
     /// </summary>
-    [TestFixture(TestOf = typeof(NatureAttribute))]
-    public class NatureAttributeTests
+    /// <param name="value">
+    /// The value.
+    /// </param>
+    [Test]
+    public void NatureAttributeValueTest([Values] Nature value)
     {
-        /// <summary>
-        /// Invalid nature value test.
-        /// </summary>
-        [Test]
-        public void InvalidNatureValueTest()
-        {
-            Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)10));
-            Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)0));
-        }
-
-        /// <summary>
-        /// Nature attribute value test.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        [Test]
-        public void NatureAttributeValueTest([Values] Nature value)
-        {
-            var attribute = new NatureAttribute(value);
-            Assert.That(attribute.Value, Is.EqualTo(value));
-            Assert.That(attribute.Value.GetDisplayValue(), Is.EqualTo(value.GetDisplayValue()));
-        }
+        var attribute = new NatureAttribute(value);
+        Assert.That(attribute.Value, Is.EqualTo(value));
+        Assert.That(attribute.Value.GetDisplayValue(), Is.EqualTo(value.GetDisplayValue()));
     }
 }
