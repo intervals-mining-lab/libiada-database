@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj" />
-    <ProjectReference Include="..\..\libiada-core\SequenceGenerator\SequenceGenerator.csproj" />
+    <ProjectReference Include="..\..\libiada-core\Libiada.Core\Libiada.Core.csproj" />
+    <ProjectReference Include="..\..\libiada-core\Libiada.SequenceGenerator\Libiada.SequenceGenerator.csproj" />
   </ItemGroup>
 
   <ItemGroup>
