@@ -254,8 +254,8 @@ public class SubsequenceImporter
                 subsequenceFeature = FeatureRepository.GetFeatureByName(feature.Key);
             }
 
-            if (feature.Qualifiers.ContainsKey(Libiada.Database.AnnotationAttribute.Pseudo.GetDisplayValue())
-             || feature.Qualifiers.ContainsKey(Libiada.Database.AnnotationAttribute.Pseudogene.GetDisplayValue()))
+            if (feature.Qualifiers.ContainsKey(AnnotationAttribute.Pseudo.GetDisplayValue())
+             || feature.Qualifiers.ContainsKey(AnnotationAttribute.Pseudogene.GetDisplayValue()))
             {
                 subsequenceFeature = Feature.PseudoGen;
             }

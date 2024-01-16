@@ -10,8 +10,6 @@ using Libiada.Database.Models.Repositories.Sequences;
 
 using Microsoft.EntityFrameworkCore;
 
-using AnnotationAttribute = AnnotationAttribute;
-
 
 /// <summary>
 /// The subsequence extractor.

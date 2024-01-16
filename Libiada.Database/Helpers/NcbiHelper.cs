@@ -13,7 +13,9 @@ using Bio.IO.GenBank;
 using Newtonsoft.Json;
 
 using Libiada.Database.Models.NcbiSequencesData;
+
 using Newtonsoft.Json.Linq;
+
 using Microsoft.Extensions.Configuration;
 
 

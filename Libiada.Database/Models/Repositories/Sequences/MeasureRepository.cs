@@ -3,6 +3,7 @@
 using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
 using Libiada.Database.Extensions;
+
 using Npgsql;
 using NpgsqlTypes;
 

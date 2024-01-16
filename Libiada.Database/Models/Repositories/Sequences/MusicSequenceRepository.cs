@@ -8,8 +8,8 @@ using Libiada.Core.Music;
 using Libiada.Core.Music.MusicXml;
 
 using Libiada.Database.Extensions;
+using Libiada.Database.Helpers;
 
-using Helpers;
 using Npgsql;
 using NpgsqlTypes;
 

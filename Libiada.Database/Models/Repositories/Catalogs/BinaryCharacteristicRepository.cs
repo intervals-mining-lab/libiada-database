@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Models.Repositories.Catalogs;
 
-using Libiada.Database;
-
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.BinaryCalculators;
 using Libiada.Core.Extensions;

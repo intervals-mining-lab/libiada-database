@@ -7,6 +7,7 @@ using System.Globalization;
 using Bio.IO.GenBank;
 
 using Libiada.Core.Extensions;
+
 using Libiada.Database.Models.Repositories.Catalogs;
 
 /// <summary>

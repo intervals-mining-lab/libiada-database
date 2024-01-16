@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Database.Models;
 
-using SequenceGenerator;
+using Libiada.SequenceGenerator;
 
 using Libiada.Database.Models.CalculatorsData;
 

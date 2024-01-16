@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="Libiada.Database.Models" />
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 

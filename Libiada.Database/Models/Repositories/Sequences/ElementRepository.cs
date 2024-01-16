@@ -211,10 +211,10 @@ public class ElementRepository : IElementRepository
     /// </returns>
     private int[] GetOrCreatePitchesInDb(List<Pitch> pitches)
     {
-        var newPitches = new List<Database.Pitch>();
-        var result = new Database.Pitch[pitches.Count];
+        var newPitches = new List<Models.Pitch>();
+        var result = new Models.Pitch[pitches.Count];
         int[] midiNumbers = pitches.Select(p => p.MidiNumber).ToArray();
-        Dictionary<int, Database.Pitch> existingPitches = db.Pitches.Where(p => midiNumbers.Contains(p.Midinumber))
+        Dictionary<int, Models.Pitch> existingPitches = db.Pitches.Where(p => midiNumbers.Contains(p.Midinumber))
                                                                     .ToDictionary(p => p.Midinumber);
         for (int i = 0; i < pitches.Count; i++)
         {
@@ -233,7 +233,7 @@ public class ElementRepository : IElementRepository
             }
             else
             {
-                result[i] = new Database.Pitch
+                result[i] = new Database.Models.Pitch
                 {
                     Accidental = pitch.Alter,
                     NoteSymbol = pitch.Step,
