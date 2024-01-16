@@ -1,5 +1,4 @@
-﻿
-namespace Libiada.Database.Models.Repositories.Catalogs;
+﻿namespace Libiada.Database.Models.Repositories.Catalogs;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;

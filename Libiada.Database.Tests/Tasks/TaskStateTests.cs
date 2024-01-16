@@ -1,12 +1,8 @@
 ﻿namespace Libiada.Database.Tests.Tasks;
 
-using System.Linq;
-
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Tasks;
-
-using NUnit.Framework;
 
 /// <summary>
 /// TaskState enum tests.

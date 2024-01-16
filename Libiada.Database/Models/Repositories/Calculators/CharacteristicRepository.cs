@@ -1,9 +1,5 @@
 ﻿namespace Libiada.Database.Models.Repositories.Calculators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 /// <summary>
 /// The characteristic repository.
 /// </summary>

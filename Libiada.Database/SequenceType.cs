@@ -2,6 +2,7 @@
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+
 using Libiada.Database.Attributes;
 
 /// <summary>

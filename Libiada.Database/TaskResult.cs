@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Libiada.Database;
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Microsoft.EntityFrameworkCore;
-
-
-namespace Libiada.Database;
 
 /// <summary>
 /// Contains JSON results of tasks calculation. Results are stored as key/value pairs.

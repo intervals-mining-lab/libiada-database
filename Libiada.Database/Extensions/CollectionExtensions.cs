@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Database.Extensions;
 
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 public static class CollectionExtensions

@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Libiada.Database\Libiada.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
 </Project>

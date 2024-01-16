@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Attributes;
 
-using System;
-
 /// <summary>
 /// The group type attribute.
 /// Used to specify group types hierarchy.

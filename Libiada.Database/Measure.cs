@@ -1,10 +1,10 @@
-﻿using System.ComponentModel;
+﻿namespace Libiada.Database;
+
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Microsoft.EntityFrameworkCore;
-
-
-namespace Libiada.Database;
 
 /// <summary>
 /// Contains elements that represent note sequences in form of measures (bars) that are used as elements of segmented music sequences.

@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Attributes;
 
-using System;
-
 /// <summary>
 /// The nature attribute.
 /// </summary>

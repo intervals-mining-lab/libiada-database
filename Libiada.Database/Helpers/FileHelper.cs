@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Database.Helpers;
 
-using System.IO;
 using System.Text;
 
 /// <summary>

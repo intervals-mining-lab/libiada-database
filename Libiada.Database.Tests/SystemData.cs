@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Tests;
 
-using NUnit.Framework;
-
 /// <summary>
 /// The system data.
 /// </summary>

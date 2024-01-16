@@ -1,8 +1,5 @@
 ﻿namespace Libiada.Database.Models.CalculatorsData;
 
-using System;
-using System.Linq;
-
 /// <summary>
 /// The genes data.
 /// </summary>

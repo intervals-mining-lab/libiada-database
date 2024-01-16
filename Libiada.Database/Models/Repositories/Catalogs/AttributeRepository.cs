@@ -1,12 +1,6 @@
 ﻿namespace Libiada.Database.Models.Repositories.Catalogs;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Libiada.Core.Extensions;
-
-using Attribute = Libiada.Database.Attribute;
 
 /// <summary>
 /// The attribute repository.
@@ -16,14 +10,14 @@ public class AttributeRepository
     /// <summary>
     /// The attributes dictionary.
     /// </summary>
-    private readonly Dictionary<string, Attribute> attributesDictionary;
+    private readonly Dictionary<string, AnnotationAttribute> attributesDictionary;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AttributeRepository"/> class.
     /// </summary>
     public AttributeRepository()
     {
-        Attribute[] attributes = EnumExtensions.ToArray<Attribute>();
+        AnnotationAttribute[] attributes = EnumExtensions.ToArray<AnnotationAttribute>();
         attributesDictionary = attributes.ToDictionary(a => a.GetDisplayValue());
     }
 
@@ -34,14 +28,14 @@ public class AttributeRepository
     /// The name.
     /// </param>
     /// <returns>
-    /// The <see cref="Attribute"/>.
+    /// The <see cref="AnnotationAttribute"/>.
     /// </returns>
     /// <exception cref="Exception">
     /// Thrown if attribute with given name is not found.
     /// </exception>
-    public Attribute GetAttributeByName(string name)
+    public AnnotationAttribute GetAttributeByName(string name)
     {
-        if (attributesDictionary.TryGetValue(name, out Attribute value))
+        if (attributesDictionary.TryGetValue(name, out AnnotationAttribute value))
         {
             return value;
         }

@@ -1,7 +1,7 @@
 ﻿namespace Libiada.Database;
 
-using Libiada.Core.Attributes;
 using Libiada.Core.Core;
+
 using System.ComponentModel.DataAnnotations;
 
 public enum OrderTransformation: byte

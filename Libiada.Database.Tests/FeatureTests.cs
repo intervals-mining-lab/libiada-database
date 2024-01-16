@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Tests;
 
-using System.Linq;
-
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Extensions;

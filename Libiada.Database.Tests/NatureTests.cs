@@ -1,12 +1,8 @@
 ﻿namespace Libiada.Database.Tests;
 
-using System.Linq;
-
 using Libiada.Core.Extensions;
 
 using Libiada.Database;
-
-using NUnit.Framework;
 
 /// <summary>
 /// Nature enum tests.

@@ -1,10 +1,8 @@
 namespace Libiada.Database.Models.Repositories.Sequences;
 
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 
 using Bio.IO.GenBank;
 

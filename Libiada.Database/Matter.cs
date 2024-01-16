@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Libiada.Database;
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Microsoft.EntityFrameworkCore;
-
-
-namespace Libiada.Database;
 
 /// <summary>
 /// Contains research objects, samples, texts, etc (one research object may be represented by several sequences).

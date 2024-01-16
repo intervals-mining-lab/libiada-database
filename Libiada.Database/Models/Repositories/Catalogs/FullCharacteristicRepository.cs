@@ -1,8 +1,7 @@
 ﻿namespace Libiada.Database.Models.Repositories.Catalogs;
 
-using System.Collections.Generic;
-using System.Linq;
 using Libiada.Database;
+
 using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Core.Extensions;

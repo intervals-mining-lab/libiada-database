@@ -2,8 +2,6 @@
 
 using Npgsql;
 
-using System.Linq;
-using System;
 using Microsoft.EntityFrameworkCore;
 
 public static class LibiadaDatabaseEntitiesExtensions

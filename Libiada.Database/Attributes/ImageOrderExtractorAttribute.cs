@@ -2,8 +2,6 @@
 
 using Libiada.Core.Images;
 
-using System;
-
 [AttributeUsage(AttributeTargets.Field)]
 public class ImageOrderExtractorAttribute : Attribute
 {

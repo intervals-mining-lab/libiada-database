@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Libiada.Database;
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Microsoft.EntityFrameworkCore;
-
-
-namespace Libiada.Database;
 
 /// <summary>
 /// Contains information on groups of related research objects (such as series of books, chromosomes of the same organism, etc) and their order in these groups.

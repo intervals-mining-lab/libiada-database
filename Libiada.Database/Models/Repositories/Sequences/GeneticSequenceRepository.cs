@@ -1,9 +1,5 @@
 namespace Libiada.Database.Models.Repositories.Sequences;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Bio;
 using Bio.Extensions;
 
@@ -42,11 +38,11 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     public (string[], string[]) SplitAccessionsIntoExistingAndNotImported(string[] accessions)
     {
         var allExistingAccessions = Db.DnaSequences
-                                           .Where(d => d.RemoteId != null)
-                                           .Select(d => d.RemoteId)
-                                           .ToArray()
-                                           .Select(r => r.Split('.')[0])
-                                           .Distinct();
+                                      .Where(d => d.RemoteId != null)
+                                      .Select(d => d.RemoteId)
+                                      .ToArray()
+                                      .Select(r => r.Split('.')[0])
+                                      .Distinct();
         var existing = accessions.Intersect(allExistingAccessions);
         var notExisting = accessions.Except(allExistingAccessions);
 

@@ -1,14 +1,8 @@
 ﻿namespace Libiada.Database.Models.Repositories.Catalogs;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Bio.IO.GenBank;
-using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.CalculatorsData;
-
-using Attribute = Attribute;
 
 /// <summary>
 /// The sequence attribute.
@@ -186,7 +180,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// </returns>
     private SequenceAttribute Create(string attributeName, string attributeValue, long sequenceId)
     {
-        Attribute attribute = attributeRepository.GetAttributeByName(attributeName);
+        AnnotationAttribute attribute = attributeRepository.GetAttributeByName(attributeName);
         return Create(attribute, attributeValue, sequenceId);
     }
 
@@ -205,7 +199,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// <returns>
     /// The <see cref="SequenceAttribute"/>.
     /// </returns>
-    private SequenceAttribute Create(Attribute attribute, string attributeValue, long sequenceId)
+    private SequenceAttribute Create(AnnotationAttribute attribute, string attributeValue, long sequenceId)
     {
         return new SequenceAttribute
         {
@@ -227,7 +221,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// <returns>
     /// The <see cref="SequenceAttribute"/>.
     /// </returns>
-    private SequenceAttribute CreateSequenceAttribute(Attribute attribute, long sequenceId)
+    private SequenceAttribute CreateSequenceAttribute(AnnotationAttribute attribute, long sequenceId)
     {
         return Create(attribute, string.Empty, sequenceId);
     }
@@ -252,17 +246,17 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
         var result = new List<SequenceAttribute>(3);
         if (complement)
         {
-            result.Add(CreateSequenceAttribute(Attribute.Complement, subsequence.Id));
+            result.Add(CreateSequenceAttribute(AnnotationAttribute.Complement, subsequence.Id));
 
             if (complementJoin)
             {
-                result.Add(CreateSequenceAttribute(Attribute.ComplementJoin, subsequence.Id));
+                result.Add(CreateSequenceAttribute(AnnotationAttribute.ComplementJoin, subsequence.Id));
             }
         }
 
         if (subsequence.Partial)
         {
-            result.Add(CreateSequenceAttribute(Attribute.Partial, subsequence.Id));
+            result.Add(CreateSequenceAttribute(AnnotationAttribute.Partial, subsequence.Id));
         }
 
         return result;

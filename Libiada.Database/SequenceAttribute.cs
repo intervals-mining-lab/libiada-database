@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Libiada.Database;
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Microsoft.EntityFrameworkCore;
 
-
-namespace Libiada.Database;
 
 /// <summary>
 /// Contains chains&apos; attributes and their values.
@@ -29,7 +30,7 @@ public partial class SequenceAttribute
     /// Attribute enum numeric value.
     /// </summary>
     [Column("attribute")]
-    public Attribute Attribute { get; set; }
+    public AnnotationAttribute Attribute { get; set; }
 
     /// <summary>
     /// Text of the attribute.

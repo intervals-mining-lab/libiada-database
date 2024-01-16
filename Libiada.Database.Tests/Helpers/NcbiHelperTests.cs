@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Web.Tests.Helpers;
 
-using System.IO;
 using Libiada.Database.Helpers;
 using Libiada.Database.Tests;
 

@@ -1,8 +1,5 @@
 namespace Libiada.Database.Models.Repositories.Catalogs;
 
-using System.Collections.Generic;
-using System.Linq;
-
 using Libiada.Core.Extensions;
 
 using FeatureExtensions = Libiada.Database.Extensions.FeatureExtensions;

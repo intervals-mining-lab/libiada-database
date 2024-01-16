@@ -5,9 +5,6 @@ using Libiada.Database.Extensions;
 using Npgsql;
 using NpgsqlTypes;
 
-using System;
-using System.Collections.Generic;
-
 public class ImageSequenceRepository
 {
     public void Create(ImageSequence sequence, LibiadaDatabaseEntities db)

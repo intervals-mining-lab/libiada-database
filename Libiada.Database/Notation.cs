@@ -1,6 +1,7 @@
 ﻿namespace Libiada.Database;
 
 using Libiada.Database.Attributes;
+
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

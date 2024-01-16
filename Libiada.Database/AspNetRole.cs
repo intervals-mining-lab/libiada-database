@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿namespace Libiada.Database;
 
-
-namespace Libiada.Database;
+using Microsoft.AspNetCore.Identity;
 
 public class AspNetRole : IdentityRole<int> 
 {

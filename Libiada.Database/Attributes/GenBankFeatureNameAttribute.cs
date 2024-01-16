@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Attributes;
 
-using System;
-
 /// <summary>
 /// GenBank feature name attribute.
 /// Used to specify name of feature in geneBank standard.

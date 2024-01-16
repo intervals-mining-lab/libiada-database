@@ -1,13 +1,8 @@
 ﻿namespace Libiada.Web.Tests.Tasks;
 
-using System.Linq;
-
 using Libiada.Core.Extensions;
 
-using Libiada.Database.Extensions;
 using Libiada.Database.Tasks;
-
-using NUnit.Framework;
 
 using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
 

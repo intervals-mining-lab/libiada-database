@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Models.NcbiSequencesData;
 
-using System;
-
 /// <summary>
 /// Contans search search results for one sequence from GenBank.
 /// </summary>

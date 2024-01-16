@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Database.Models.CalculatorsData;
 
-
 public class OrderTransformationResult
 {
     public string Transformation { get; set; }

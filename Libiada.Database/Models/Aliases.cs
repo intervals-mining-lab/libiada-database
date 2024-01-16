@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Database.Models;
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using Libiada.Core.Core;

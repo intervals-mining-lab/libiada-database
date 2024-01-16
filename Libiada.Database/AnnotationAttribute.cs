@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 /// <summary>
 /// The attribute.
 /// </summary>
-public enum Attribute : byte
+public enum AnnotationAttribute : byte
 {
     /// <summary>
     /// GenBank id.

@@ -1,10 +1,6 @@
 ﻿namespace Libiada.Database.Tests;
 
-using System.Linq;
-
 using Libiada.Core.Extensions;
-
-using NUnit.Framework;
 
 /// <summary>
 /// Translator enum tests.

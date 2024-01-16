@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿namespace Libiada.Database;
+
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Libiada.Core.Core.SimpleTypes;
+
 using Microsoft.EntityFrameworkCore;
-
-
-namespace Libiada.Database;
 
 /// <summary>
 /// Note&apos;s pitch.

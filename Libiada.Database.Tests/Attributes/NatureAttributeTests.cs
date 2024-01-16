@@ -1,12 +1,8 @@
 ﻿namespace Libiada.Database.Tests.Attributes;
 
-using System;
-
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Attributes;
-
-using NUnit.Framework;
 
 /// <summary>
 /// The nature attribute tests.

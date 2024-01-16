@@ -1,8 +1,5 @@
 ﻿namespace Libiada.Database.Models.CalculatorsData;
 
-using System.Collections.Generic;
-using System.Linq;
-
 using Libiada.Database.Models.Repositories.Catalogs;
 
 public class AttributeValueCacheManager

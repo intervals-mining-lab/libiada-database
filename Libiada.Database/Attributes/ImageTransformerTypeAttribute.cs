@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Attributes;
 
-using System;
-
 using Libiada.Core.Images;
 
 /// <summary>

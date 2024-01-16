@@ -1,9 +1,5 @@
 ﻿namespace Libiada.Database.Models;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Bio;
 using Bio.Extensions;
 
@@ -12,8 +8,10 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.Repositories.Sequences;
 
-using Attribute = Attribute;
 using Microsoft.EntityFrameworkCore;
+
+using AnnotationAttribute = AnnotationAttribute;
+
 
 /// <summary>
 /// The subsequence extractor.
@@ -147,9 +145,9 @@ public class SubsequenceExtractor
 
         foreach (Subsequence subsequence in allSubsequences)
         {
-            if (IsSubsequenceAttributePassesFilters(subsequence, Attribute.Product, filters)
-             || IsSubsequenceAttributePassesFilters(subsequence, Attribute.Gene, filters)
-             || IsSubsequenceAttributePassesFilters(subsequence, Attribute.LocusTag, filters))
+            if (IsSubsequenceAttributePassesFilters(subsequence, AnnotationAttribute.Product, filters)
+             || IsSubsequenceAttributePassesFilters(subsequence, AnnotationAttribute.Gene, filters)
+             || IsSubsequenceAttributePassesFilters(subsequence, AnnotationAttribute.LocusTag, filters))
             {
                 result.Add(subsequence);
             }
@@ -250,7 +248,7 @@ public class SubsequenceExtractor
     /// <returns>
     /// The <see cref="bool"/>.
     /// </returns>
-    private bool IsSubsequenceAttributePassesFilters(Subsequence subsequence, Attribute attribute, string[] filters)
+    private bool IsSubsequenceAttributePassesFilters(Subsequence subsequence, AnnotationAttribute attribute, string[] filters)
     {
         if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == attribute))
         {
@@ -277,7 +275,7 @@ public class SubsequenceExtractor
     {
         ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
 
-        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Complement))
+        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == AnnotationAttribute.Complement))
         {
             bioSequence = bioSequence.GetReverseComplementedSequence();
         }
@@ -299,7 +297,7 @@ public class SubsequenceExtractor
     /// </returns>
     private Chain GetJoinedSubsequence(Sequence sourceSequence, Subsequence subsequence)
     {
-        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Complement))
+        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == AnnotationAttribute.Complement))
         {
             return GetJoinedSubsequenceWithComplement(sourceSequence, subsequence);
         }
@@ -353,7 +351,7 @@ public class SubsequenceExtractor
         Position[] positions = subsequence.Position.ToArray();
         string resultSequence;
 
-        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.ComplementJoin))
+        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == AnnotationAttribute.ComplementJoin))
         {
             string joinedSequence = bioSequence.ConvertToString();
 

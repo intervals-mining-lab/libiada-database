@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Models.CalculatorsData;
 
-using System;
-
 /// <summary>
 /// The attribute value.
 /// </summary>

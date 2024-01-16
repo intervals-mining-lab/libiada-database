@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Libiada.Database;
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using Libiada.Core.Core.SimpleTypes;
-
-
-namespace Libiada.Database;
 
 /// <summary>
 /// Contains elements that represent note sequences in form of formal motifs that are used as elements of segmented music sequences.

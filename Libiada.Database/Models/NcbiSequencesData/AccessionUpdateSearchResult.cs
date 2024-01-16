@@ -1,7 +1,5 @@
 ﻿namespace Libiada.Database.Models.NcbiSequencesData;
 
-using System;
-
 public class AccessionUpdateSearchResult
 {
     public string LocalAccession;
