@@ -66,7 +66,7 @@ public class DataSequenceRepository : SequenceImporter
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
         long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
-        Create(sequence, alphabet, chain.Building);
+        Create(sequence, alphabet, chain.Order);
     }
 
     /// <summary>
@@ -76,14 +76,14 @@ public class DataSequenceRepository : SequenceImporter
     /// The sequence.
     /// </param>
     /// <param name="alphabet">
-    /// The alphabet.
+    /// The sequence's alphabet.
     /// </param>
-    /// <param name="building">
-    /// The building.
+    /// <param name="order">
+    /// The sequence's order.
     /// </param>
-    public void Create(CommonSequence sequence, long[] alphabet, int[] building)
+    public void Create(CommonSequence sequence, long[] alphabet, int[] order)
     {
-        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, building);
+        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, order);
 
         const string Query = @"INSERT INTO data_chain (
                                         id,

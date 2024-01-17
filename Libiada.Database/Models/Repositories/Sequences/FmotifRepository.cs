@@ -72,8 +72,8 @@ public class FmotifRepository : IFmotifRepository
                 long[] dbAlphabet = dbFmotif.Alphabet.ToArray();
                 if (notes.SequenceEqual(dbAlphabet))
                 {
-                    int[] dbBuilding = dbFmotif.Building.ToArray();
-                    if (fmotifChain.Building.SequenceEqual(dbBuilding))
+                    int[] dbOrder = dbFmotif.Order.ToArray();
+                    if (fmotifChain.Order.SequenceEqual(dbOrder))
                     {
                         if (fmotif.Type != dbFmotif.FmotifType)
                         {
@@ -86,7 +86,7 @@ public class FmotifRepository : IFmotifRepository
             }
         }
 
-        return Create(fmotif, notes, fmotifChain.Building);
+        return Create(fmotif, notes, fmotifChain.Order);
     }
 
     /// <summary>
@@ -98,15 +98,15 @@ public class FmotifRepository : IFmotifRepository
     /// <param name="alphabet">
     /// The alphabet.
     /// </param>
-    /// <param name="building">
-    /// The building.
+    /// <param name="order">
+    /// The order.
     /// </param>
     /// <returns>
     /// The <see cref="long"/>.
     /// </returns>
-    public long Create(Fmotif fmotif, long[] alphabet, int[] building)
+    public long Create(Fmotif fmotif, long[] alphabet, int[] order)
     {
-        List<NpgsqlParameter> parameters = FillParams(fmotif, alphabet, building);
+        List<NpgsqlParameter> parameters = FillParams(fmotif, alphabet, order);
 
         const string Query = @"INSERT INTO fmotif (
                                         id,
@@ -136,13 +136,13 @@ public class FmotifRepository : IFmotifRepository
     /// <param name="alphabet">
     /// The alphabet.
     /// </param>
-    /// <param name="building">
-    /// The building.
+    /// <param name="order">
+    /// The order.
     /// </param>
     /// <returns>
     /// The <see cref="List{Object}"/>.
     /// </returns>
-    protected List<NpgsqlParameter> FillParams(Fmotif fmotif, long[] alphabet, int[] building)
+    protected List<NpgsqlParameter> FillParams(Fmotif fmotif, long[] alphabet, int[] order)
     {
         fmotif.Id = db.GetNewElementId();
         var fmotivValue = fmotif.GetHashCode().ToString();
@@ -152,7 +152,7 @@ public class FmotifRepository : IFmotifRepository
             new NpgsqlParameter<string>("value", NpgsqlDbType.Varchar) { TypedValue = fmotivValue },
             new NpgsqlParameter<byte>("notation", NpgsqlDbType.Smallint) { TypedValue = (byte)Notation.FormalMotifs },
             new NpgsqlParameter<long[]>("alphabet", NpgsqlDbType.Array | NpgsqlDbType.Bigint) { TypedValue = alphabet },
-            new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue = building },
+            new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue = order },
             new NpgsqlParameter<byte>("fmotif_type", NpgsqlDbType.Smallint) { TypedValue = (byte)fmotif.Type }
         };
         return parameters;

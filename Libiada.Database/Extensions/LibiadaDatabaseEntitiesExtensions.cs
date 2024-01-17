@@ -38,7 +38,7 @@ public static class LibiadaDatabaseEntitiesExtensions
     }
 
     /// <summary>
-    /// Gets building of sequence by id.
+    /// Gets order of sequence by id.
     /// </summary>
     /// <param name="db">
     /// Database connection.
@@ -49,9 +49,9 @@ public static class LibiadaDatabaseEntitiesExtensions
     /// <returns>
     /// The <see cref="T:int[]"/>.
     /// </returns>
-    public static int[] GetSequenceBuilding(this LibiadaDatabaseEntities db, long sequenceId)
+    public static int[] GetSequenceOrder(this LibiadaDatabaseEntities db, long sequenceId)
     {
-        return db.CommonSequences.Single(cs => cs.Id == sequenceId).Building.ToArray();
+        return db.CommonSequences.Single(cs => cs.Id == sequenceId).Order.ToArray();
     }
 
     /// <summary>

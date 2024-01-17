@@ -84,7 +84,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
         long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
-        Create(sequence, partial, alphabet, chain.Building);
+        Create(sequence, partial, alphabet, chain.Order);
     }
 
     /// <summary>
@@ -97,14 +97,14 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// The partial.
     /// </param>
     /// <param name="alphabet">
-    /// The alphabet.
+    /// The sequence's alphabet.
     /// </param>
-    /// <param name="building">
-    /// The building.
+    /// <param name="order">
+    /// The sequence's order.
     /// </param>
-    public void Create(CommonSequence sequence, bool partial, long[] alphabet, int[] building)
+    public void Create(CommonSequence sequence, bool partial, long[] alphabet, int[] order)
     {
-        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, building);
+        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, order);
         parameters.Add(new NpgsqlParameter<bool>("partial", NpgsqlDbType.Boolean) { TypedValue = partial });
 
         const string Query = @"INSERT INTO dna_chain (
@@ -139,12 +139,12 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// <param name="alphabet">
     /// The alphabet.
     /// </param>
-    /// <param name="building">
-    /// The building.
+    /// <param name="order">
+    /// The order.
     /// </param>
-    public void Insert(DnaSequence sequence, long[] alphabet, int[] building)
+    public void Insert(DnaSequence sequence, long[] alphabet, int[] order)
     {
-        Create(ToCommonSequence(sequence), false, alphabet, building);
+        Create(ToCommonSequence(sequence), false, alphabet, order);
     }
 
     /// <summary>

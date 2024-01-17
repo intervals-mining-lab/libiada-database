@@ -229,7 +229,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
                 .HasComment("Unique internal identifier of the sequence.");
             entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
-            entity.Property(e => e.Building).HasComment("Sequence's order.");
+            entity.Property(e => e.Order).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
                 .HasComment("Sequence creation date and time (filled trough trigger).");
@@ -300,7 +300,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
                 .HasComment("Unique internal identifier of the sequence.");
             entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
-            entity.Property(e => e.Building).HasComment("Sequence's order.");
+            entity.Property(e => e.Order).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
                 .HasComment("Sequence creation date and time (filled trough trigger).");
@@ -330,7 +330,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
                 .HasComment("Unique internal identifier of the sequence.");
             entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
-            entity.Property(e => e.Building).HasComment("Sequence's order.");
+            entity.Property(e => e.Order).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
                 .HasComment("Sequence creation date and time (filled trough trigger).");
@@ -384,7 +384,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
                 .HasComment("Unique internal identifier of the fmotif.");
             entity.Property(e => e.Alphabet).HasComment("Fmotif's alphabet (array of notes ids).");
-            entity.Property(e => e.Building).HasComment("Fmotif's order.");
+            entity.Property(e => e.Order).HasComment("Fmotif's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
                 .HasComment("Fmotif creation date and time (filled trough trigger).");
@@ -452,7 +452,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
                 .HasComment("Unique internal identifier of the sequence.");
             entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
-            entity.Property(e => e.Building).HasComment("Sequence's order.");
+            entity.Property(e => e.Order).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
                 .HasComment("Sequence creation date and time (filled trough trigger).");
@@ -542,7 +542,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Alphabet).HasComment("Measure alphabet (array of notes ids).");
             entity.Property(e => e.Beatbase).HasComment("Time signature lower numeral (Beat denominator).");
             entity.Property(e => e.Beats).HasComment("Time signature upper numeral (Beat numerator).");
-            entity.Property(e => e.Building).HasComment("Measure order.");
+            entity.Property(e => e.Order).HasComment("Measure order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
                 .HasComment("Measure creation date and time (filled trough trigger).");
@@ -582,7 +582,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasDefaultValueSql("nextval('elements_id_seq'::regclass)")
                 .HasComment("Unique internal identifier.");
             entity.Property(e => e.Alphabet).HasComment("Sequence's alphabet (array of elements ids).");
-            entity.Property(e => e.Building).HasComment("Sequence's order.");
+            entity.Property(e => e.Order).HasComment("Sequence's order.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
                 .HasComment("Sequence creation date and time (filled trough trigger).");

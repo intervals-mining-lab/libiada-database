@@ -68,7 +68,7 @@ public partial class Measure
     /// Measure order.
     /// </summary>
     [Column("building")]
-    public List<int> Building { get; set; } = null!;
+    public List<int> Order { get; set; } = null!;
 
     /// <summary>
     /// Time signature upper numeral (Beat numerator).

@@ -5,7 +5,7 @@ using Libiada.Core.Music;
 
 public interface ICommonSequenceRepository : IDisposable
 {
-    void Create(CommonSequence sequence, long[] alphabet, int[] building);
+    void Create(CommonSequence sequence, long[] alphabet, int[] order);
     void Dispose();
     List<Element> GetElements(long sequenceId);
     BaseChain GetLibiadaBaseChain(long sequenceId);

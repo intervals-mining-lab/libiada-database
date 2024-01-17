@@ -66,7 +66,7 @@ public partial class Fmotif
     /// Fmotif&apos;s order.
     /// </summary>
     [Column("building")]
-    public List<int> Building { get; set; } = null!;
+    public List<int> Order { get; set; } = null!;
 
     /// <summary>
     /// Fmotif type enum numeric value.

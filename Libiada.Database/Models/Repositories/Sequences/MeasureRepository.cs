@@ -69,8 +69,8 @@ public class MeasureRepository : IMeasureRepsitory
                 long[] dbAlphabet = dbMeasure.Alphabet.ToArray();
                 if (notes.SequenceEqual(dbAlphabet))
                 {
-                    int[] dbBuilding = dbMeasure.Building.ToArray();
-                    if (measureChain.Building.SequenceEqual(dbBuilding))
+                    int[] dbOrder = dbMeasure.Order.ToArray();
+                    if (measureChain.Order.SequenceEqual(dbOrder))
                     {
                         if (measure.Attributes.Key.Fifths != dbMeasure.Fifths
                             || measure.Attributes.Size.BeatBase != dbMeasure.Beatbase
@@ -85,7 +85,7 @@ public class MeasureRepository : IMeasureRepsitory
             }
         }
 
-        return Create(measure, notes, measureChain.Building);
+        return Create(measure, notes, measureChain.Order);
     }
 
     /// <summary>
@@ -97,16 +97,15 @@ public class MeasureRepository : IMeasureRepsitory
     /// <param name="alphabet">
     /// The alphabet.
     /// </param>
-    /// <param name="building">
-    /// The building.
+    /// <param name="order">
+    /// The order.
     /// </param>
     /// <returns>
     /// The <see cref="long"/>.
     /// </returns>
-    public long Create(Measure measure, long[] alphabet, int[] building)
+    public long Create(Measure measure, long[] alphabet, int[] order)
     {
-        List<NpgsqlParameter> parameters = FillParams(measure, alphabet, building);
-
+        List<NpgsqlParameter> parameters = FillParams(measure, alphabet, order);
         const string Query = @"INSERT INTO measure (
                                         id,
                                         value,
@@ -141,13 +140,13 @@ public class MeasureRepository : IMeasureRepsitory
     /// <param name="alphabet">
     /// The alphabet.
     /// </param>
-    /// <param name="building">
+    /// <param name="order">
     /// The building.
     /// </param>
     /// <returns>
     /// The <see cref="List{Object}"/>.
     /// </returns>
-    protected List<NpgsqlParameter> FillParams(Measure measure, long[] alphabet, int[] building)
+    protected List<NpgsqlParameter> FillParams(Measure measure, long[] alphabet, int[] order)
     {
         measure.Id = db.GetNewElementId();
         var measureValue = measure.GetHashCode().ToString();
@@ -159,7 +158,7 @@ public class MeasureRepository : IMeasureRepsitory
             new NpgsqlParameter<string>("value", NpgsqlDbType.Varchar) { TypedValue =  measureValue },
             new NpgsqlParameter<byte>("notation", NpgsqlDbType.Smallint) { TypedValue =  (byte)Notation.Measures },
             new NpgsqlParameter<long[]>("alphabet", NpgsqlDbType.Array | NpgsqlDbType.Bigint) { TypedValue =  alphabet },
-            new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue =  building },
+            new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue =  order },
             new NpgsqlParameter<int>("beats", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.Beats },
             new NpgsqlParameter<int>("beatbase", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.BeatBase },
             new NpgsqlParameter<int>("fifths", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Key.Fifths },

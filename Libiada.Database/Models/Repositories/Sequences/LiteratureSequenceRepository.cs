@@ -70,7 +70,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
         MatterRepository.CreateOrExtractExistingMatterForSequence(commonSequence);
 
         long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
-        Create(commonSequence, original, language, translator, alphabet, chain.Building);
+        Create(commonSequence, original, language, translator, alphabet, chain.Order);
     }
 
     /// <summary>
@@ -91,12 +91,12 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// <param name="alphabet">
     /// The alphabet.
     /// </param>
-    /// <param name="building">
-    /// The building.
+    /// <param name="order">
+    /// The order.
     /// </param>
-    public void Create(CommonSequence sequence, bool original, Language language, Translator translator, long[] alphabet, int[] building)
+    public void Create(CommonSequence sequence, bool original, Language language, Translator translator, long[] alphabet, int[] order)
     {
-        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, building);
+        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, order);
         parameters.Add(new NpgsqlParameter<bool>("original", NpgsqlDbType.Boolean) { TypedValue = original });
         parameters.Add(new NpgsqlParameter<byte>("language", NpgsqlDbType.Smallint) { TypedValue = (byte)language });
         parameters.Add(new NpgsqlParameter<byte>("translator", NpgsqlDbType.Smallint) { TypedValue = (byte)translator });

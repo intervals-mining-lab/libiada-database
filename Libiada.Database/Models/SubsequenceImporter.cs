@@ -82,7 +82,7 @@ public class SubsequenceImporter
                                            .Select(f => f.Location.GetLeafLocations())
                                            .ToArray();
 
-        int parentLength = db.CommonSequences.Single(cs => cs.Id == sequenceId).Building.Count;
+        int parentLength = db.CommonSequences.Single(cs => cs.Id == sequenceId).Order.Count;
 
         int sourceLength = features[0].Location.LocationEnd;
         positionsMap = new bool[parentLength];

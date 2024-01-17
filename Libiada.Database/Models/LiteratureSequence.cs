@@ -52,7 +52,7 @@ public partial class LiteratureSequence
     /// Sequence&apos;s order.
     /// </summary>
     [Column("building")]
-    public List<int> Building { get; set; } = null!;
+    public List<int> Order { get; set; } = null!;
 
     /// <summary>
     /// Id of the sequence in remote database.

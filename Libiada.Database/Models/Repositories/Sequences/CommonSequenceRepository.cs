@@ -40,12 +40,12 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// <param name="alphabet">
     /// The alphabet.
     /// </param>
-    /// <param name="building">
-    /// The building.
+    /// <param name="order">
+    /// The order.
     /// </param>
-    public void Create(CommonSequence sequence, long[] alphabet, int[] building)
+    public void Create(CommonSequence sequence, long[] alphabet, int[] order)
     {
-        var parameters = FillParams(sequence, alphabet, building);
+        var parameters = FillParams(sequence, alphabet, order);
 
         const string Query = @"INSERT INTO chain (
                                         id,
@@ -94,7 +94,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     public BaseChain GetLibiadaBaseChain(long sequenceId)
     {
-        return new BaseChain(Db.GetSequenceBuilding(sequenceId), GetAlphabet(sequenceId), sequenceId);
+        return new BaseChain(Db.GetSequenceOrder(sequenceId), GetAlphabet(sequenceId), sequenceId);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
         {
             var DBSequence = Db.CommonSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
             var matter = DBSequence.Matter;
-            return new Chain(DBSequence.Building.ToArray(), GetAlphabet(sequenceId), sequenceId);
+            return new Chain(DBSequence.Order.ToArray(), GetAlphabet(sequenceId), sequenceId);
         }
 
         // if it is not "real" sequence , then it must be image "sequence" 
@@ -133,7 +133,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
             alphabet.Add(incompleteAlphabet[j]);
         }
 
-        return new Chain(sequence.Building, alphabet);
+        return new Chain(sequence.Order, alphabet);
     }
 
     /// <summary>
@@ -147,7 +147,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     public string GetString(long sequenceId)
     {
-        int[] order = Db.GetSequenceBuilding(sequenceId);
+        int[] order = Db.GetSequenceOrder(sequenceId);
         Alphabet alphabet = GetAlphabet(sequenceId);
         var stringBuilder = new StringBuilder(order.Length);
         foreach (int element in order)

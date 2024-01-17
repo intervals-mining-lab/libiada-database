@@ -198,8 +198,8 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
 
                 if (rotate)
                 {
-                    int[] building = sequence.Building.Rotate(rotationLength ?? 0);
-                    List<IBaseObject> newSequence = building.Select(t => new ValueInt(t)).ToList<IBaseObject>();
+                    int[] order = sequence.Order.Rotate(rotationLength ?? 0);
+                    List<IBaseObject> newSequence = order.Select(t => new ValueInt(t)).ToList<IBaseObject>();
                     sequence = new Chain(newSequence);
                 }
 
