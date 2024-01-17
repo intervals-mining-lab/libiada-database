@@ -32,43 +32,6 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     }
 
     /// <summary>
-    /// The insert.
-    /// </summary>
-    /// <param name="sequence">
-    /// The sequence.
-    /// </param>
-    /// <param name="alphabet">
-    /// The alphabet.
-    /// </param>
-    /// <param name="order">
-    /// The order.
-    /// </param>
-    public void Create(CommonSequence sequence, long[] alphabet, int[] order)
-    {
-        var parameters = FillParams(sequence, alphabet, order);
-
-        const string Query = @"INSERT INTO chain (
-                                        id,
-                                        notation,
-                                        matter_id,
-                                        alphabet,
-                                        building,
-                                        remote_id,
-                                        remote_db
-                                    ) VALUES (
-                                        @id,
-                                        @notation,
-                                        @matter_id,
-                                        @alphabet,
-                                        @building,
-                                        @remote_id,
-                                        @remote_db
-                                    );";
-
-        Db.ExecuteCommand(Query, parameters.ToArray());
-    }
-
-    /// <summary>
     /// The get elements.
     /// </summary>
     /// <param name="sequenceId">

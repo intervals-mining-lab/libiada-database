@@ -71,7 +71,7 @@ public class ElementRepository : IElementRepository
     /// <returns>
     /// The <see cref="T:long[]"/>.
     /// </returns>
-    public long[] GetOrCreateNotesInDb(Alphabet alphabet)
+    public List<long> GetOrCreateNotesInDb(Alphabet alphabet)
     {
         var newNotes = new List<Note>();
         var result = new Note[alphabet.Cardinality];
@@ -114,7 +114,7 @@ public class ElementRepository : IElementRepository
 
         db.Notes.AddRange(newNotes);
         db.SaveChanges();
-        return result.Select(n => n.Id).ToArray();
+        return result.Select(n => n.Id).ToList();
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class ElementRepository : IElementRepository
     /// <exception cref="Exception">
     /// Thrown if alphabet element is not found in db.
     /// </exception>
-    public long[] ToDbElements(Alphabet alphabet, Notation notation, bool createElements)
+    public List<long> ToDbElements(Alphabet alphabet, Notation notation, bool createElements)
     {
         if (!ElementsInDb(alphabet, notation))
         {
@@ -160,7 +160,7 @@ public class ElementRepository : IElementRepository
         return (from stringElement in stringElements
                 join element in elements
                 on stringElement equals element.Value
-                select element.Id).ToArray();
+                select element.Id).ToList();
     }
 
     /// <summary>

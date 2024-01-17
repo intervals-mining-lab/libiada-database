@@ -2,10 +2,6 @@
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
-using Libiada.Database.Extensions;
-
-using Npgsql;
-using NpgsqlTypes;
 
 /// <summary>
 /// The measure repository.
@@ -35,12 +31,12 @@ public class MeasureRepository : IMeasureRepsitory
     /// The alphabet.
     /// </param>
     /// <returns></returns>
-    public long[] GetOrCreateMeasuresInDb(Alphabet alphabet)
+    public List<long> GetOrCreateMeasuresInDb(Alphabet alphabet)
     {
-        var result = new long[alphabet.Cardinality];
+        var result = new List<long>(alphabet.Cardinality);
         for (int i = 0; i < alphabet.Cardinality; i++)
         {
-            result[i] = CreateMeasure((Measure)alphabet[i]);
+            result.Add(CreateMeasure((Measure)alphabet[i]));
         }
         db.SaveChanges();
         return result;
@@ -58,7 +54,7 @@ public class MeasureRepository : IMeasureRepsitory
     public long CreateMeasure(Measure measure)
     {
         var measureChain = new BaseChain(measure.NoteList.Cast<IBaseObject>().ToList());
-        long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
+        List<long> notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
 
         string localMeasureHash = measure.GetHashCode().ToString();
         var dbMeasures = db.Measures.Where(m => m.Value == localMeasureHash).ToList();
@@ -66,7 +62,7 @@ public class MeasureRepository : IMeasureRepsitory
         {
             foreach (var dbMeasure in dbMeasures)
             {
-                long[] dbAlphabet = dbMeasure.Alphabet.ToArray();
+                List<long> dbAlphabet = dbMeasure.Alphabet.ToList();
                 if (notes.SequenceEqual(dbAlphabet))
                 {
                     int[] dbOrder = dbMeasure.Order.ToArray();
@@ -85,86 +81,23 @@ public class MeasureRepository : IMeasureRepsitory
             }
         }
 
-        return Create(measure, notes, measureChain.Order);
-    }
-
-    /// <summary>
-    /// The insert.
-    /// </summary>
-    /// <param name="measure">
-    /// The measure.
-    /// </param>
-    /// <param name="alphabet">
-    /// The alphabet.
-    /// </param>
-    /// <param name="order">
-    /// The order.
-    /// </param>
-    /// <returns>
-    /// The <see cref="long"/>.
-    /// </returns>
-    public long Create(Measure measure, long[] alphabet, int[] order)
-    {
-        List<NpgsqlParameter> parameters = FillParams(measure, alphabet, order);
-        const string Query = @"INSERT INTO measure (
-                                        id,
-                                        value,
-                                        notation,
-                                        alphabet,
-                                        building,
-                                        beats,
-                                        beatbase,
-                                        fifths,
-                                        major
-                                    ) VALUES (
-                                        @id,
-                                        @value,
-                                        @notation,
-                                        @alphabet,
-                                        @building,
-                                        @beats,
-                                        @beatbase,
-                                        @fifths,
-                                        @major
-                                    );";
-        db.ExecuteCommand(Query, parameters.ToArray());
-        return measure.Id;
-    }
-
-    /// <summary>
-    /// The fill parameters.
-    /// </summary>
-    /// <param name="measure">
-    /// The measure.
-    /// </param>
-    /// <param name="alphabet">
-    /// The alphabet.
-    /// </param>
-    /// <param name="order">
-    /// The building.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List{Object}"/>.
-    /// </returns>
-    protected List<NpgsqlParameter> FillParams(Measure measure, long[] alphabet, int[] order)
-    {
-        measure.Id = db.GetNewElementId();
-        var measureValue = measure.GetHashCode().ToString();
         var mode = measure.Attributes.Key.Mode;
-
-        var parameters = new List<NpgsqlParameter>
+        var result = new Models.Measure
         {
-            new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue =  measure.Id },
-            new NpgsqlParameter<string>("value", NpgsqlDbType.Varchar) { TypedValue =  measureValue },
-            new NpgsqlParameter<byte>("notation", NpgsqlDbType.Smallint) { TypedValue =  (byte)Notation.Measures },
-            new NpgsqlParameter<long[]>("alphabet", NpgsqlDbType.Array | NpgsqlDbType.Bigint) { TypedValue =  alphabet },
-            new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue =  order },
-            new NpgsqlParameter<int>("beats", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.Beats },
-            new NpgsqlParameter<int>("beatbase", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Size.BeatBase },
-            new NpgsqlParameter<int>("fifths", NpgsqlDbType.Integer) { TypedValue =  measure.Attributes.Key.Fifths },
-            new NpgsqlParameter<bool>("major", NpgsqlDbType.Boolean) { TypedValue =  (mode.Equals("major") || mode.Equals(null)) }
+            //Id = db.GetNewElementId(),
+            Alphabet = notes,
+            Order = measureChain.Order.ToList(),
+            Value = measure.GetHashCode().ToString(),
+            Notation = Notation.Measures,
+            Beats = measure.Attributes.Size.Beats,
+            Beatbase = measure.Attributes.Size.BeatBase,
+            Fifths = measure.Attributes.Key.Fifths,
+            Major = mode.Equals("major") || mode.Equals(null)
         };
-        return parameters;
+
+        db.Measures.Add(result);
+        db.SaveChanges();
+        return measure.Id;
     }
 
     /// <summary>

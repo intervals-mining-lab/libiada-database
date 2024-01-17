@@ -5,12 +5,6 @@ using Bio.Extensions;
 
 using Libiada.Core.Core;
 
-using Libiada.Database.Extensions;
-
-using Npgsql;
-
-using NpgsqlTypes;
-
 /// <summary>
 /// The DNA sequence repository.
 /// </summary>
@@ -82,9 +76,10 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
         }
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
+        sequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
+        sequence.Order = chain.Order.ToList();
 
-        long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
-        Create(sequence, partial, alphabet, chain.Order);
+        Create(sequence, partial);
     }
 
     /// <summary>
@@ -93,58 +88,22 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// <param name="sequence">
     /// The sequence.
     /// </param>
-    /// <param name="partial">
-    /// The partial.
-    /// </param>
-    /// <param name="alphabet">
-    /// The sequence's alphabet.
-    /// </param>
-    /// <param name="order">
-    /// The sequence's order.
-    /// </param>
-    public void Create(CommonSequence sequence, bool partial, long[] alphabet, int[] order)
+    public void Create(CommonSequence sequence, bool partial)
     {
-        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, order);
-        parameters.Add(new NpgsqlParameter<bool>("partial", NpgsqlDbType.Boolean) { TypedValue = partial });
+        var dnaSequence = new DnaSequence
+        {
+            MatterId = sequence.MatterId,
+            Notation = sequence.Notation,
+            RemoteDb = sequence.RemoteDb,
+            RemoteId = sequence.RemoteId,
+            Description = sequence.Description,
+            Alphabet = sequence.Alphabet,
+            Order = sequence.Order,
+            Partial = partial
+        };
 
-        const string Query = @"INSERT INTO dna_chain (
-                                        id,
-                                        notation,
-                                        matter_id,
-                                        alphabet,
-                                        building,
-                                        remote_id,
-                                        remote_db,
-                                        partial
-                                    ) VALUES (
-                                        @id,
-                                        @notation,
-                                        @matter_id,
-                                        @alphabet,
-                                        @building,
-                                        @remote_id,
-                                        @remote_db,
-                                        @partial
-                                    );";
-
-        Db.ExecuteCommand(Query, parameters.ToArray());
-    }
-
-    /// <summary>
-    /// The insert.
-    /// </summary>
-    /// <param name="sequence">
-    /// The sequence.
-    /// </param>
-    /// <param name="alphabet">
-    /// The alphabet.
-    /// </param>
-    /// <param name="order">
-    /// The order.
-    /// </param>
-    public void Insert(DnaSequence sequence, long[] alphabet, int[] order)
-    {
-        Create(ToCommonSequence(sequence), false, alphabet, order);
+        Db.DnaSequences.Add(dnaSequence);
+        Db.SaveChanges();
     }
 
     /// <summary>
@@ -173,24 +132,5 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// </summary>
     public void Dispose()
     {
-    }
-
-    /// <summary>
-    /// The to sequence.
-    /// </summary>
-    /// <param name="source">
-    /// The source.
-    /// </param>
-    /// <returns>
-    /// The <see cref="CommonSequence"/>.
-    /// </returns>
-    private CommonSequence ToCommonSequence(DnaSequence source)
-    {
-        return new CommonSequence
-                   {
-                       Id = source.Id,
-                       Notation = source.Notation,
-                       MatterId = source.MatterId
-                   };
     }
 }

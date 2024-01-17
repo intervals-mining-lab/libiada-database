@@ -3,11 +3,6 @@
 using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
 
-using Libiada.Database.Extensions;
-
-using Npgsql;
-using NpgsqlTypes;
-
 /// <summary>
 /// The Fmotif repository.
 /// </summary>
@@ -38,14 +33,14 @@ public class FmotifRepository : IFmotifRepository
     /// <returns>
     /// The <see cref="T:long[]"/>.
     /// </returns>
-    public long[] GetOrCreateFmotifsInDb(Alphabet alphabet)
+    public List<long> GetOrCreateFmotifsInDb(Alphabet alphabet)
     {
-        var result = new long[alphabet.Cardinality];
+        var result = new List<long>(alphabet.Cardinality);
         for (int i = 0; i < alphabet.Cardinality; i++)
         {
-            result[i] = CreateFmotif((Fmotif)alphabet[i]);
+            result.Add(CreateFmotif((Fmotif)alphabet[i]));
         }
-        db.SaveChanges();
+
         return result;
     }
 
@@ -60,8 +55,8 @@ public class FmotifRepository : IFmotifRepository
     /// </returns>
     public long CreateFmotif(Fmotif fmotif)
     {
-        var fmotifChain = new BaseChain(fmotif.NoteList.Cast<IBaseObject>().ToList());
-        long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(fmotifChain.Alphabet);
+        var notesChain = new BaseChain(fmotif.NoteList.ToList());
+        List<long> notes = new ElementRepository(db).GetOrCreateNotesInDb(notesChain.Alphabet);
 
         var localFmotifHash = fmotif.GetHashCode().ToString();
         var dbFmotifs = db.Fmotifs.Where(f => f.Value == localFmotifHash).ToList();
@@ -73,11 +68,11 @@ public class FmotifRepository : IFmotifRepository
                 if (notes.SequenceEqual(dbAlphabet))
                 {
                     int[] dbOrder = dbFmotif.Order.ToArray();
-                    if (fmotifChain.Order.SequenceEqual(dbOrder))
+                    if (notesChain.Order.SequenceEqual(dbOrder))
                     {
                         if (fmotif.Type != dbFmotif.FmotifType)
                         {
-                            throw new Exception("Found in db fmotif is not equal to local fmotif.");
+                            throw new Exception("Fmotif found in db is not equal to the local fmotif.");
                         }
 
                         return dbFmotif.Id;
@@ -86,76 +81,19 @@ public class FmotifRepository : IFmotifRepository
             }
         }
 
-        return Create(fmotif, notes, fmotifChain.Order);
-    }
-
-    /// <summary>
-    /// The insert.
-    /// </summary>
-    /// <param name="fmotif">
-    /// The Fmotif.
-    /// </param>
-    /// <param name="alphabet">
-    /// The alphabet.
-    /// </param>
-    /// <param name="order">
-    /// The order.
-    /// </param>
-    /// <returns>
-    /// The <see cref="long"/>.
-    /// </returns>
-    public long Create(Fmotif fmotif, long[] alphabet, int[] order)
-    {
-        List<NpgsqlParameter> parameters = FillParams(fmotif, alphabet, order);
-
-        const string Query = @"INSERT INTO fmotif (
-                                        id,
-                                        value,
-                                        notation,
-                                        alphabet,
-                                        building,
-                                        fmotif_type
-                                    ) VALUES (
-                                        @id,
-                                        @value,
-                                        @notation,
-                                        @alphabet,
-                                        @building,
-                                        @fmotif_type
-                                    );";
-        db.ExecuteCommand(Query, parameters.ToArray());
-        return fmotif.Id;
-    }
-
-    /// <summary>
-    /// The fill parameters.
-    /// </summary>
-    /// <param name="fmotif">
-    /// The Fmotif.
-    /// </param>
-    /// <param name="alphabet">
-    /// The alphabet.
-    /// </param>
-    /// <param name="order">
-    /// The order.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List{Object}"/>.
-    /// </returns>
-    protected List<NpgsqlParameter> FillParams(Fmotif fmotif, long[] alphabet, int[] order)
-    {
-        fmotif.Id = db.GetNewElementId();
-        var fmotivValue = fmotif.GetHashCode().ToString();
-        var parameters = new List<NpgsqlParameter>
+        var result = new Models.Fmotif
         {
-            new NpgsqlParameter<long>("id", NpgsqlDbType.Bigint) { TypedValue = fmotif.Id },
-            new NpgsqlParameter<string>("value", NpgsqlDbType.Varchar) { TypedValue = fmotivValue },
-            new NpgsqlParameter<byte>("notation", NpgsqlDbType.Smallint) { TypedValue = (byte)Notation.FormalMotifs },
-            new NpgsqlParameter<long[]>("alphabet", NpgsqlDbType.Array | NpgsqlDbType.Bigint) { TypedValue = alphabet },
-            new NpgsqlParameter<int[]>("building", NpgsqlDbType.Array | NpgsqlDbType.Integer) { TypedValue = order },
-            new NpgsqlParameter<byte>("fmotif_type", NpgsqlDbType.Smallint) { TypedValue = (byte)fmotif.Type }
+            //Id = db.GetNewElementId(),
+            Value = fmotif.GetHashCode().ToString(),
+            Notation = Notation.FormalMotifs,
+            FmotifType = fmotif.Type,
+            Alphabet = notes,
+            Order = notesChain.Order.ToList()
         };
-        return parameters;
+
+        db.Fmotifs.Add(result);
+        db.SaveChanges();
+        return fmotif.Id;
     }
 
     /// <summary>

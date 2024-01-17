@@ -4,11 +4,6 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
 
 using Libiada.Database.Helpers;
-using Libiada.Database.Extensions;
-
-using Npgsql;
-
-using NpgsqlTypes;
 
 /// <summary>
 /// The literature sequence repository.
@@ -64,13 +59,15 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
             // file always contains empty string at the end
             // TODO: rewrite this, add empty string check at the end or write a normal trim
             string[] text = stringSequence.Split(new[] { '\n', '\r', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            chain = new BaseChain(text.Select(e => (ValueString)e).Cast<IBaseObject>().ToList());
+            chain = new BaseChain(text.Select(e => (ValueString)e).ToList());
         }
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(commonSequence);
 
-        long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
-        Create(commonSequence, original, language, translator, alphabet, chain.Order);
+        commonSequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
+        commonSequence.Order = chain.Order.ToList();
+
+        Create(commonSequence, original, language, translator);
     }
 
     /// <summary>
@@ -94,38 +91,24 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// <param name="order">
     /// The order.
     /// </param>
-    public void Create(CommonSequence sequence, bool original, Language language, Translator translator, long[] alphabet, int[] order)
+    public void Create(CommonSequence sequence, bool original, Language language, Translator translator)
     {
-        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, order);
-        parameters.Add(new NpgsqlParameter<bool>("original", NpgsqlDbType.Boolean) { TypedValue = original });
-        parameters.Add(new NpgsqlParameter<byte>("language", NpgsqlDbType.Smallint) { TypedValue = (byte)language });
-        parameters.Add(new NpgsqlParameter<byte>("translator", NpgsqlDbType.Smallint) { TypedValue = (byte)translator });
+        var literatureSequence = new LiteratureSequence
+        {
+            MatterId = sequence.MatterId,
+            Alphabet = sequence.Alphabet,
+            Order = sequence.Order,
+            Notation = sequence.Notation,
+            Description = sequence.Description,
+            RemoteDb = sequence.RemoteDb,
+            RemoteId = sequence.RemoteId,
+            Language = language,
+            Translator = translator,
+            Original = original
+        };
 
-        const string Query = @"INSERT INTO literature_chain (
-                                        id,
-                                        notation,
-                                        matter_id,
-                                        alphabet,
-                                        building,
-                                        remote_id,
-                                        remote_db,
-                                        original,
-                                        language,
-                                        translator
-                                    ) VALUES (
-                                        @id,
-                                        @notation,
-                                        @matter_id,
-                                        @alphabet,
-                                        @building,
-                                        @remote_id,
-                                        @remote_db,
-                                        @original,
-                                        @language,
-                                        @translator
-                                    );";
-
-        Db.ExecuteCommand(Query, parameters.ToArray());
+        Db.LiteratureSequences.Add(literatureSequence);
+        Db.SaveChanges();
     }
 
     /// <summary>

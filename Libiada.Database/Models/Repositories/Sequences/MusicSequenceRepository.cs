@@ -1,17 +1,15 @@
 namespace Libiada.Database.Models.Repositories.Sequences;
 
+using System.Collections.Generic;
 using System.Xml;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
+using Libiada.Core.Extensions;
 using Libiada.Core.Music;
 using Libiada.Core.Music.MusicXml;
 
-using Libiada.Database.Extensions;
 using Libiada.Database.Helpers;
-
-using Npgsql;
-using NpgsqlTypes;
 
 /// <summary>
 /// The music sequence repository.
@@ -70,29 +68,89 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
         BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
-        long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
-        sequence.Notation = Notation.Notes;
-        Create(sequence, notesAlphabet, notesSequence.Order);
+        List<long> notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
 
         BaseChain measuresSequence = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
-        long[] measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
-        sequence.Notation = Notation.Measures;
-        sequence.Id = default;
-        Create(sequence, measuresAlphabet, measuresSequence.Order);
+        List<long> measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
 
-        sequence.Notation = Notation.FormalMotifs;
-        var pauseTreatments = Libiada.Core.Extensions.EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable);
-        foreach (PauseTreatment pauseTreatment in pauseTreatments)
+        var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable).ToArray();
+        List<BaseChain> fmotifsSequences = new List<BaseChain>(pauseTreatments.Length);
+        List<List<long>> fmotifsAlphabets = new List<List<long>>(pauseTreatments.Length);
+        List<BaseChain> fmotifsSequencesWithSequentialTransfer = new List<BaseChain>(pauseTreatments.Length);
+        List<List<long>> fmotifsAlphabetsWithSequentialTransfer = new List<List<long>>(pauseTreatments.Length);
+
+        for (int i = 0; i < pauseTreatments.Length; i++)
         {
-            BaseChain fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false);
-            long[] fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequence.Alphabet);
-            sequence.Id = default;
-            Create(sequence, fmotifsAlphabet, fmotifsSequence.Order, pauseTreatment, false);
+            PauseTreatment pauseTreatment = pauseTreatments[i];
 
-            fmotifsSequence = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true);
-            fmotifsAlphabet = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequence.Alphabet);
-            sequence.Id = default;
-            Create(sequence, fmotifsAlphabet, fmotifsSequence.Order, pauseTreatment, true);
+            fmotifsSequences.Add(ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false));
+            fmotifsAlphabets.Add(FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequences[i].Alphabet));
+
+            fmotifsSequencesWithSequentialTransfer.Add(ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true));
+            fmotifsAlphabetsWithSequentialTransfer.Add(FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequencesWithSequentialTransfer[i].Alphabet));
+        }
+
+
+        var musicSequence = new MusicSequence
+        {
+            MatterId = sequence.MatterId,
+            RemoteDb = sequence.RemoteDb,
+            RemoteId = sequence.RemoteId,
+            Description = sequence.Description,
+            Order = notesSequence.Order.ToList(),
+            Alphabet = notesAlphabet,
+            Notation = Notation.Notes,
+            PauseTreatment = PauseTreatment.NotApplicable,
+            SequentialTransfer = false
+        };
+        Db.MusicSequences.Add(musicSequence);
+
+
+        musicSequence = new MusicSequence
+        {
+            MatterId = sequence.MatterId,
+            RemoteDb = sequence.RemoteDb,
+            RemoteId = sequence.RemoteId,
+            Description = sequence.Description,
+            Order = measuresSequence.Order.ToList(),
+            Alphabet = measuresAlphabet,
+            Notation = Notation.Measures,
+            PauseTreatment = PauseTreatment.NotApplicable,
+            SequentialTransfer = false
+        };
+        Db.MusicSequences.Add(musicSequence);
+
+        for (int i = 0; i < pauseTreatments.Length; i++)
+        {
+            PauseTreatment pauseTreatment = pauseTreatments[i];
+
+            musicSequence = new MusicSequence
+            {
+                MatterId = sequence.MatterId,
+                Description = sequence.Description,
+                RemoteDb = sequence.RemoteDb,
+                RemoteId = sequence.RemoteId,
+                Order = fmotifsSequences[i].Order.ToList(),
+                Alphabet = fmotifsAlphabets[i],
+                Notation = Notation.FormalMotifs,
+                PauseTreatment = pauseTreatment,
+                SequentialTransfer = false
+            };
+            Db.MusicSequences.Add(musicSequence);
+
+            musicSequence = new MusicSequence
+            {
+                MatterId = sequence.MatterId,
+                Description = sequence.Description,
+                RemoteDb = sequence.RemoteDb,
+                RemoteId = sequence.RemoteId,
+                Order = fmotifsSequencesWithSequentialTransfer[i].Order.ToList(),
+                Alphabet = fmotifsAlphabetsWithSequentialTransfer[i],
+                Notation = Notation.FormalMotifs,
+                PauseTreatment = pauseTreatment,
+                SequentialTransfer = true
+            };
+            Db.MusicSequences.Add(musicSequence);
         }
     }
 
@@ -108,57 +166,23 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// <param name="order">
     /// The order.
     /// </param>
-    public void Create(CommonSequence commonSequence, long[] alphabet, int[] order, PauseTreatment pauseTreatment = PauseTreatment.NotApplicable, bool sequentialTransfer = false)
+    public void Create(CommonSequence commonSequence, PauseTreatment pauseTreatment = PauseTreatment.NotApplicable, bool sequentialTransfer = false)
     {
-        List<NpgsqlParameter> parameters = FillParams(commonSequence, alphabet, order, pauseTreatment, sequentialTransfer);
+        var musicSequence = new MusicSequence
+        {
+            MatterId = commonSequence.MatterId,
+            Order = commonSequence.Order,
+            Alphabet = commonSequence.Alphabet,
+            Description = commonSequence.Description,
+            Notation = commonSequence.Notation,
+            RemoteDb = commonSequence.RemoteDb,
+            RemoteId = commonSequence.RemoteId,
+            PauseTreatment = pauseTreatment,
+            SequentialTransfer = sequentialTransfer
+        };
 
-        const string Query = @"INSERT INTO music_chain (
-                                        id,
-                                        notation,
-                                        matter_id,
-                                        alphabet,
-                                        building,
-                                        remote_id,
-                                        remote_db,
-                                        pause_treatment,
-                                        sequential_transfer
-                                    ) VALUES (
-                                        @id,
-                                        @notation,
-                                        @matter_id,
-                                        @alphabet,
-                                        @building,
-                                        @remote_id,
-                                        @remote_db,
-                                        @pause_treatment,
-                                        @sequential_transfer
-                                    );";
-        Db.ExecuteCommand(Query, parameters.ToArray());
-    }
-
-    /// <summary>
-    /// The fill parameters.
-    /// </summary>
-    /// <param name="commonSequence">
-    /// The sequence.
-    /// </param>
-    /// <param name="alphabet">
-    /// The alphabet.
-    /// </param>
-    /// <param name="order">
-    /// The order.
-    /// </param>
-    /// <returns>
-    /// The <see cref="List{Object}"/>.
-    /// </returns>
-    private List<NpgsqlParameter> FillParams(CommonSequence commonSequence, long[] alphabet, int[] order, PauseTreatment pauseTreatment, bool sequentialTransfer)
-    {
-        var parameters = FillParams(commonSequence, alphabet, order);
-
-        parameters.Add(new NpgsqlParameter<byte>("pause_treatment", NpgsqlDbType.Smallint) {  TypedValue = (byte)pauseTreatment });
-        parameters.Add(new NpgsqlParameter<bool>("sequential_transfer", NpgsqlDbType.Boolean) { TypedValue = sequentialTransfer });
-
-        return parameters;
+        Db.MusicSequences.Add(musicSequence);
+        Db.SaveChanges();
     }
 
     /// <summary>

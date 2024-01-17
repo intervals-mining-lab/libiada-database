@@ -4,9 +4,6 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
 
 using Libiada.Database.Helpers;
-using Libiada.Database.Extensions;
-
-using Npgsql;
 
 /// <summary>
 /// The data sequence repository.
@@ -65,8 +62,20 @@ public class DataSequenceRepository : SequenceImporter
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
-        long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
-        Create(sequence, alphabet, chain.Order);
+        List<long> alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
+        var dataSequence = new DataSequence()
+        {
+            Alphabet = alphabet,
+            Order = chain.Order.ToList(),
+            Notation = sequence.Notation,
+            Description = sequence.Description,
+            MatterId = sequence.MatterId,
+            RemoteDb = sequence.RemoteDb,
+            RemoteId = sequence.RemoteId
+        };
+
+        Db.DataSequences.Add(dataSequence);
+        Db.SaveChanges();
     }
 
     /// <summary>
@@ -81,28 +90,20 @@ public class DataSequenceRepository : SequenceImporter
     /// <param name="order">
     /// The sequence's order.
     /// </param>
-    public void Create(CommonSequence sequence, long[] alphabet, int[] order)
+    public void Create(CommonSequence sequence)
     {
-        List<NpgsqlParameter> parameters = FillParams(sequence, alphabet, order);
+        var dataSequence = new DataSequence()
+        {
+            Alphabet = sequence.Alphabet,
+            Order = sequence.Order,
+            Notation = sequence.Notation,
+            Description = sequence.Description,
+            MatterId = sequence.MatterId,
+            RemoteDb = sequence.RemoteDb,
+            RemoteId = sequence.RemoteId
+        };
 
-        const string Query = @"INSERT INTO data_chain (
-                                        id,
-                                        notation,
-                                        matter_id,
-                                        alphabet,
-                                        building,
-                                        remote_id,
-                                        remote_db
-                                    ) VALUES (
-                                        @id,
-                                        @notation,
-                                        @matter_id,
-                                        @alphabet,
-                                        @building,
-                                        @remote_id,
-                                        @remote_db
-                                    );";
-
-        Db.ExecuteCommand(Query, parameters.ToArray());
+        Db.DataSequences.Add(dataSequence);
+        Db.SaveChanges();
     }
 }
