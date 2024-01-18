@@ -21,40 +21,6 @@ public static class LibiadaDatabaseEntitiesExtensions
     }
 
     /// <summary>
-    /// TExtracts alphabet elements ids for given sequence.
-    /// </summary>
-    /// <param name="db">
-    /// Database connection.
-    /// </param>
-    /// <param name="sequenceId">
-    /// The sequence id.
-    /// </param>
-    /// <returns>
-    /// The <see cref="long[]"/>.
-    /// </returns>
-    public static long[] GetAlphabetElementIds(this LibiadaDatabaseEntities db, long sequenceId)
-    {
-        return db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet.ToArray();
-    }
-
-    /// <summary>
-    /// Gets order of sequence by id.
-    /// </summary>
-    /// <param name="db">
-    /// Database connection.
-    /// </param>
-    /// <param name="sequenceId">
-    /// The sequence id.
-    /// </param>
-    /// <returns>
-    /// The <see cref="T:int[]"/>.
-    /// </returns>
-    public static int[] GetSequenceOrder(this LibiadaDatabaseEntities db, long sequenceId)
-    {
-        return db.CommonSequences.Single(cs => cs.Id == sequenceId).Order.ToArray();
-    }
-
-    /// <summary>
     /// The execute custom sql command with parameters.
     /// </summary>
     /// <param name="db">
@@ -85,7 +51,7 @@ public static class LibiadaDatabaseEntitiesExtensions
         }
         catch (Exception e)
         {
-            return $"No connection to db. Reason: {e.Message}";
+            return $"No connection to the database. Reason: {e.Message}";
         }
     }
 

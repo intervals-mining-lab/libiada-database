@@ -172,7 +172,7 @@ public class ElementRepository : IElementRepository
     /// <returns>
     /// The <see cref="Alphabet"/>.
     /// </returns>
-    public Alphabet ToLibiadaAlphabet(long[] elementIds)
+    public Alphabet ToLibiadaAlphabet(List<long> elementIds)
     {
         var alphabet = new Alphabet { NullValue.Instance() };
         List<Element> elements = GetElements(elementIds);
@@ -194,10 +194,9 @@ public class ElementRepository : IElementRepository
     /// <returns>
     /// The <see cref="IReadOnlyList{Element}"/>.
     /// </returns>
-    public List<Element> GetElements(long[] elementIds) => db.Elements
+    public List<Element> GetElements(List<long> elementIds) => db.Elements
                                                              .Where(e => elementIds.Contains(e.Id))
-                                                             .ToList()
-                                                             .OrderBy(e => Array.IndexOf(elementIds, e.Id))
+                                                             .OrderBy(e => elementIds.IndexOf(e.Id))
                                                              .ToList();
 
     /// <summary>
