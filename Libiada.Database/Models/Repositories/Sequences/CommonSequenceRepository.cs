@@ -159,6 +159,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
 
         var sequenceIds = new long[matterIds.Length][];
         CreateMissingImageSequences(matterIds, notations, imageOrderExtractors);
+
         for (int i = 0; i < matterIds.Length; i++)
         {
             sequenceIds[i] = new long[notations.Length];
@@ -198,8 +199,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
                                   && l.Notation == notation
                                   && l.Language == language
                                   && l.Translator == translator)
-                         .ToArray()
-                         .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })
+                         .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
                          .Select(s => s.Id)
                          .ToArray();
             case Nature.Music:
@@ -208,8 +208,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
                                   && m.Notation == notation
                                   && m.PauseTreatment == pauseTreatment
                                   && m.SequentialTransfer == sequentialTransfer)
-                         .ToArray()
-                         .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })
+                         .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
                          .Select(s => s.Id)
                          .ToArray();
             case Nature.Image:
@@ -217,15 +216,13 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
                          .Where(c => matterIds.Contains(c.MatterId)
                                   && c.Notation == notation
                                   && c.OrderExtractor == imageOrderExtractor)
-                         .ToArray()
-                         .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })
+                         .OrderBy(s =>Array.IndexOf(matterIds, s.MatterId))
                          .Select(s => s.Id)
                          .ToArray();
             default:
                 return Db.CommonSequences
                          .Where(c => matterIds.Contains(c.MatterId) && c.Notation == notation)
-                         .ToArray()
-                         .OrderBy(s => { return Array.IndexOf(matterIds, s.MatterId); })
+                         .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
                          .Select(s => s.Id)
                          .ToArray();
         }
@@ -278,7 +275,6 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
                          && imageOrderExtractors.Contains(s.OrderExtractor))
                 .ToList();
 
-            ImageSequenceRepository imageSequenceRepository = new ImageSequenceRepository();
             for (int i = 0; i < matterIds.Length; i++)
             {
                 for (int j = 0; j < notations.Length; j++)
@@ -287,13 +283,14 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
                                                  && s.Notation == notations[j]
                                                  && s.OrderExtractor == imageOrderExtractors[j]))
                     {
-                        var newImageSequence = new ImageSequence()
+                        var newImageSequence = new ImageSequence
                         {
                             MatterId = matterIds[i],
                             Notation = notations[j],
                             OrderExtractor = imageOrderExtractors.IsNullOrEmpty() ? ImageOrderExtractor.LineLeftToRightTopToBottom : imageOrderExtractors[j]
                         };
-                        imageSequenceRepository.Create(newImageSequence, Db);
+
+                        Db.ImageSequences.Add(newImageSequence);
                         existingSequences.Add(newImageSequence);
                     }
                 }
