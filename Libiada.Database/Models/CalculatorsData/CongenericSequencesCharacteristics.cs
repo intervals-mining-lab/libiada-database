@@ -2,7 +2,7 @@
 
 using Libiada.Core.Core;
 
-public class CongenericSequencesCharacteristics
+public record struct CongenericSequencesCharacteristics
 {
     /// <summary>
     /// The matter name.
@@ -22,5 +22,5 @@ public class CongenericSequencesCharacteristics
     /// <summary>
     /// The sequence characteristics values.
     /// </summary>
-    public double[][] Characteristics;
+    public double[] Characteristics;
 }

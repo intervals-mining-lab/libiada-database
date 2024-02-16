@@ -3,7 +3,7 @@
 /// <summary>
 /// The sequence characteristics.
 /// </summary>
-public struct SequenceCharacteristics
+public record struct SequenceCharacteristics
 {
     /// <summary>
     /// The matter name.

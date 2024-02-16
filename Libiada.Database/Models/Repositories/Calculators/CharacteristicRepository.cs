@@ -22,7 +22,7 @@ public class CharacteristicRepository : ICharacteristicRepository
     }
 
     /// <summary>
-    /// The try save characteristics to database.
+    /// Tries to save characteristics to the database.
     /// </summary>
     /// <param name="characteristics">
     /// The characteristics.
@@ -47,6 +47,46 @@ public class CharacteristicRepository : ICharacteristicRepository
                 var wasteNewCharacteristics = characteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicLinkId }));
 
                 db.CharacteristicValues.RemoveRange(wasteNewCharacteristics);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Tries to save characteristics to the database.
+    /// </summary>
+    /// <param name="characteristics">
+    /// The characteristics.
+    /// </param>
+    public void TrySaveCharacteristicsToDatabase(List<CongenericCharacteristicValue> characteristics)
+    {
+        if (characteristics.Count > 0)
+        {
+            try
+            {
+                db.CongenericCharacteristicValues.AddRange(characteristics);
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                // todo: refactor and optimize all this
+                var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
+                var characteristicsTypes = characteristics.Select(c => c.CharacteristicLinkId).Distinct().ToArray();
+                var characteristicsElements = characteristics.Select(c => c.ElementId).Distinct().ToArray();
+                var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicLinkId, c.ElementId }).ToArray();
+                var wasteCharacteristics = db.CongenericCharacteristicValues.Where(c => characteristicsSequences.Contains(c.SequenceId) 
+                                                                                     && characteristicsTypes.Contains(c.CharacteristicLinkId)
+                                                                                     && characteristicsElements.Contains(c.ElementId))
+                        .ToArray().Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicLinkId, c.ElementId })).Select(c => new { c.SequenceId, c.CharacteristicLinkId, c.ElementId });
+                var wasteNewCharacteristics = characteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicLinkId, c.ElementId }));
+
+                db.CongenericCharacteristicValues.RemoveRange(wasteNewCharacteristics);
                 try
                 {
                     db.SaveChanges();

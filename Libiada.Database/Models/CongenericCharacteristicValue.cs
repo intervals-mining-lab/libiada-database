@@ -49,4 +49,7 @@ public partial class CongenericCharacteristicValue
     [ForeignKey("CharacteristicLinkId")]
     [InverseProperty("CongenericCharacteristicValues")]
     public virtual CongenericCharacteristicLink CongenericCharacteristicLink { get; set; } = null!;
+
+    [ForeignKey("ElementId")]
+    public virtual Element Element { get; set; } = null!;
 }

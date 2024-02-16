@@ -64,7 +64,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
         var newCharacteristics = new List<CharacteristicValue>();
         var allCharacteristics = new Dictionary<long, Dictionary<short, double>>();
 
-        short[] characteristicLinkIds = chainCharacteristicsIds.SelectMany(c => c.Value).Distinct().ToArray();
+        var characteristicLinkIds = chainCharacteristicsIds.SelectMany(c => c.Value).Distinct();
         var calculators = new Dictionary<short, LinkedFullCalculator>();
         foreach (short characteristicLinkId in characteristicLinkIds)
         {
@@ -73,7 +73,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
             calculators.Add(characteristicLinkId, new LinkedFullCalculator(characteristic, link));
         }
 
-        long[] sequenceIds = chainCharacteristicsIds.Keys.ToArray();
+        var sequenceIds = chainCharacteristicsIds.Keys;
         foreach (long sequenceId in sequenceIds)
         {
             short[] sequenceCharacteristicLinkIds = chainCharacteristicsIds[sequenceId];
@@ -166,12 +166,12 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
         var links = new Link[characteristicLinkIds.Length];
         var calculators = new IFullCalculator[characteristicLinkIds.Length];
         var characteristics = new double[chainIds.Length][];
-        long[] sequenceIds = chainIds.SelectMany(c => c).Distinct().ToArray();
+        var sequenceIds = chainIds.SelectMany(c => c).Distinct();
         var sequences = new Dictionary<long, Chain>();
 
-        for (int i = 0; i < sequenceIds.Length; i++)
+        foreach (long sequenceId in sequenceIds)
         {
-            sequences.Add(sequenceIds[i], commonSequenceRepository.GetLibiadaChain(sequenceIds[i]));
+            sequences.Add(sequenceId, commonSequenceRepository.GetLibiadaChain(sequenceId));
         }
 
         for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -228,11 +228,11 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
         Dictionary<long, List<short>> result = sequenceIds.SelectMany(s => s)
                                                           .Distinct()
                                                           .ToDictionary(s => s, s => new List<short>());
-        for (int i = 0; i < sequenceIds.Length; i++)
+        foreach (long[] sequenceId in sequenceIds)
         {
-            for (int j = 0; j < sequenceIds[i].Length; j++)
+            for (int j = 0; j < sequenceId.Length; j++)
             {
-                result[sequenceIds[i][j]].Add(characteristicLinkIds[j]);
+                result[sequenceId[j]].Add(characteristicLinkIds[j]);
             }
         }
 
