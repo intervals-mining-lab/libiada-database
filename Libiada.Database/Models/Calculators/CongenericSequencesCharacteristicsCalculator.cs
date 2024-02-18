@@ -54,8 +54,10 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
 
         long[] sequenceIds = chainCharacteristicsIds.Keys.ToArray();
         var dbAlphabets = db.CommonSequences.Where(cs => sequenceIds.Contains(cs.Id)).ToDictionary(cs => cs.Id, cs => cs.Alphabet);
+
         foreach (long sequenceId in sequenceIds)
         {
+            var dbAlphabet = dbAlphabets[sequenceId];
             short[] sequenceCharacteristicLinkIds = chainCharacteristicsIds[sequenceId];
             Dictionary<(short, long), double> characteristics = db.CongenericCharacteristicValues
                                                           .Where(c => sequenceId == c.SequenceId && sequenceCharacteristicLinkIds.Contains(c.CharacteristicLinkId))
@@ -63,19 +65,20 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
 
             allCharacteristics.Add(sequenceId, characteristics);
 
-            if (characteristics.Count < sequenceCharacteristicLinkIds.Length)
+            if (characteristics.Count < sequenceCharacteristicLinkIds.Length * dbAlphabet.Count)
             {
                 Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                // TODO: add ids to IBaseObject to avoid duplicate enumeration
+                var alphabet = sequence.Alphabet;
 
                 foreach (short sequenceCharacteristicLinkId in sequenceCharacteristicLinkIds)
                 {
                     LinkedCongenericCalculator calculator = calculators[sequenceCharacteristicLinkId];
-                    var alphabet = sequence.Alphabet;
-                    // TODO: add ids to IBaseObject to avoid duble enumeration
-                    var dbAlphabet = dbAlphabets[sequenceId];
+
                     for (int i = 0; i < alphabet.Cardinality; i++)
                     {
-                        if (!characteristics.ContainsKey((sequenceCharacteristicLinkId, dbAlphabet[i])))
+                        var elementId = dbAlphabet[i];
+                        if (!characteristics.ContainsKey((sequenceCharacteristicLinkId, elementId)))
                         {
 
                             double characteristicValue = calculator.Calculate(sequence.CongenericChain(i));
@@ -83,11 +86,11 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
                             {
                                 SequenceId = sequenceId,
                                 CharacteristicLinkId = sequenceCharacteristicLinkId,
-                                ElementId = dbAlphabet[i],
+                                ElementId = elementId,
                                 Value = characteristicValue
                             };
 
-                            characteristics.Add((sequenceCharacteristicLinkId, dbAlphabet[i]), characteristicValue);
+                            characteristics.Add((sequenceCharacteristicLinkId, elementId), characteristicValue);
                             newCharacteristics.Add(characteristic);
                         }
 
