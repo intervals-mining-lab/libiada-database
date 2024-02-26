@@ -20,9 +20,10 @@ public class AccordanceCharacteristicRepository : IAccordanceCharacteristicRepos
     /// <param name="db">
     /// The db.
     /// </param>
-    public AccordanceCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
+    public AccordanceCharacteristicRepository(ILibiadaDatabaseEntitiesFactory dbFactory)
     {
-        characteristicsLinks = libiadaDatabaseEntitiesFactory.CreateDbContext().AccordanceCharacteristicLinks.ToArray();
+        using var db = dbFactory.CreateDbContext();
+        characteristicsLinks = db.AccordanceCharacteristicLinks.ToArray();
     }
 
     /// <summary>

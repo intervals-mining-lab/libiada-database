@@ -17,15 +17,15 @@ using Libiada.Database.Models.Repositories.Sequences;
 /// </summary>
 public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalculator
 {
-    private readonly LibiadaDatabaseEntities db;
+    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
     private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
 
-    public SequencesCharacteristicsCalculator(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory,
+    public SequencesCharacteristicsCalculator(ILibiadaDatabaseEntitiesFactory dbFactory,
                                               ICommonSequenceRepository commonSequenceRepository,
                                               IFullCharacteristicRepository characteristicTypeLinkRepository)
     {
-        this.db = libiadaDatabaseEntitiesFactory.CreateDbContext();
+        this.dbFactory = dbFactory;
         this.commonSequenceRepository = commonSequenceRepository;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
@@ -72,7 +72,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
             FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
             calculators.Add(characteristicLinkId, new LinkedFullCalculator(characteristic, link));
         }
-
+        using var db = dbFactory.CreateDbContext();
         var sequenceIds = chainCharacteristicsIds.Keys;
         foreach (long sequenceId in sequenceIds)
         {

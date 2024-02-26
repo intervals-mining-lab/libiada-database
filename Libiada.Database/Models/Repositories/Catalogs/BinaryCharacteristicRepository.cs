@@ -20,9 +20,10 @@ public class BinaryCharacteristicRepository : IBinaryCharacteristicRepository
     /// <param name="db">
     /// The db.
     /// </param>
-    public BinaryCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
+    public BinaryCharacteristicRepository(ILibiadaDatabaseEntitiesFactory dbFactory)
     {
-        characteristicsLinks = libiadaDatabaseEntitiesFactory.CreateDbContext().BinaryCharacteristicLinks.ToArray();
+        using var db = dbFactory.CreateDbContext();
+        characteristicsLinks = db.BinaryCharacteristicLinks.ToArray();
     }
 
     /// <summary>

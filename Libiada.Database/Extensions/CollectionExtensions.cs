@@ -13,5 +13,5 @@ public static class CollectionExtensions
     /// <returns>
     /// True if the array parameter is null or has a length of zero; otherwise, false.
     /// </returns>
-    public static bool IsNullOrEmpty<T>([NotNullWhen(false)] this ICollection<T> collection) => collection == null || collection.Count == 0;
+    public static bool IsNullOrEmpty<T>([NotNullWhen(false)] this ICollection<T>? collection) => collection == null || collection.Count == 0;
 }

@@ -20,9 +20,10 @@ public class FullCharacteristicRepository : IFullCharacteristicRepository
     /// <param name="db">
     /// The db.
     /// </param>
-    public FullCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
+    public FullCharacteristicRepository(ILibiadaDatabaseEntitiesFactory dbFactory)
     {
-        characteristicsLinks = libiadaDatabaseEntitiesFactory.CreateDbContext().FullCharacteristicLinks.ToArray();
+        using var db = dbFactory.CreateDbContext();
+        characteristicsLinks = db.FullCharacteristicLinks.ToArray();
     }
 
     /// <summary>

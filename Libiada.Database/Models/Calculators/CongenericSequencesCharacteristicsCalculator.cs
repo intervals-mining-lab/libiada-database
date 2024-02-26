@@ -9,15 +9,15 @@ using Libiada.Database.Models.Repositories.Sequences;
 
 public class CongenericSequencesCharacteristicsCalculator : ICongenericSequencesCharacteristicsCalculator
 {
-    private readonly LibiadaDatabaseEntities db;
+    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
     private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly ICongenericCharacteristicRepository characteristicTypeLinkRepository;
 
-    public CongenericSequencesCharacteristicsCalculator(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory,
+    public CongenericSequencesCharacteristicsCalculator(ILibiadaDatabaseEntitiesFactory dbFactory,
                                               ICommonSequenceRepository commonSequenceRepository,
                                               ICongenericCharacteristicRepository characteristicTypeLinkRepository)
     {
-        this.db = libiadaDatabaseEntitiesFactory.CreateDbContext();
+        this.dbFactory = dbFactory;
         this.commonSequenceRepository = commonSequenceRepository;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
@@ -53,6 +53,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
         }
 
         long[] sequenceIds = chainCharacteristicsIds.Keys.ToArray();
+        using var db = dbFactory.CreateDbContext();
         var dbAlphabets = db.CommonSequences.Where(cs => sequenceIds.Contains(cs.Id)).ToDictionary(cs => cs.Id, cs => cs.Alphabet);
 
         foreach (long sequenceId in sequenceIds)

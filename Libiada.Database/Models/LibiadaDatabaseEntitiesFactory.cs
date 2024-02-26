@@ -1,21 +1,16 @@
 ﻿namespace Libiada.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 public class LibiadaDatabaseEntitiesFactory : ILibiadaDatabaseEntitiesFactory
 {
-    private readonly IConfiguration configuration;
+    private readonly DbContextOptions<LibiadaDatabaseEntities> options;
 
-    public LibiadaDatabaseEntitiesFactory(IConfiguration configuration)
+    public LibiadaDatabaseEntitiesFactory(DbContextOptions<LibiadaDatabaseEntities> options)
     {
-        this.configuration = configuration;
+        this.options = options;
     }
 
-    public LibiadaDatabaseEntities CreateDbContext()
-    {
-        DbContextOptions<LibiadaDatabaseEntities> options = new DbContextOptions<LibiadaDatabaseEntities>();
-        return new LibiadaDatabaseEntities(options, configuration);
-    }
+    public LibiadaDatabaseEntities CreateDbContext() => new LibiadaDatabaseEntities(options);
 
 }

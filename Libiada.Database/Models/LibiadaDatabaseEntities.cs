@@ -2,18 +2,14 @@
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, AspNetRole, int>
 {
-    private readonly IConfiguration configuration;
-
-    public LibiadaDatabaseEntities(DbContextOptions<LibiadaDatabaseEntities> options, IConfiguration configuration)
+    public LibiadaDatabaseEntities(DbContextOptions<LibiadaDatabaseEntities> options)
         : base(options)
     {
-        this.configuration = configuration;
     }
 
     public virtual DbSet<AccordanceCharacteristicLink> AccordanceCharacteristicLinks { get; set; }
@@ -71,12 +67,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
     public virtual DbSet<Subsequence> Subsequences { get; set; }
 
     public virtual DbSet<TaskResult> TaskResults { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        string connectionString = configuration.GetConnectionString($"LibiadaDatabaseEntities") ?? throw new Exception("Connection string 'LibiadaDatabaseEntities' is not found.");
-        optionsBuilder.UseNpgsql(connectionString);
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -20,9 +20,10 @@ public class CongenericCharacteristicRepository : ICongenericCharacteristicRepos
     /// <param name="db">
     /// The db.
     /// </param>
-    public CongenericCharacteristicRepository(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
+    public CongenericCharacteristicRepository(ILibiadaDatabaseEntitiesFactory dbFactory)
     {
-        characteristicsLinks = libiadaDatabaseEntitiesFactory.CreateDbContext().CongenericCharacteristicLinks.ToArray();
+        using var db = dbFactory.CreateDbContext();
+        characteristicsLinks = db.CongenericCharacteristicLinks.ToArray();
     }
 
     /// <summary>

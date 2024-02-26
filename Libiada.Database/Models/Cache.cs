@@ -5,20 +5,39 @@
 /// </summary>
 public class Cache
 {
-    private readonly LibiadaDatabaseEntities db;
+    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private List<Matter>? matters;
+    private readonly object syncRoot = new object();
 
     /// <summary>
     /// The list of matters.
     /// </summary>
-    public List<Matter> Matters { get; set; }
+    public List<Matter> Matters 
+    {
+        get
+        {
+            if(matters == null)
+            {
+                lock (syncRoot)
+                {
+                    if (matters == null)
+                    {
+                        using var db = dbFactory.CreateDbContext();
+                        matters = db.Matters.ToList();
+                    }
+                }
+            }
+            
+            return matters;
+        }
+    }
 
     /// <summary>
     /// Initializes list of matters.
     /// </summary>
-    public Cache(ILibiadaDatabaseEntitiesFactory libiadaDatabaseEntitiesFactory)
+    public Cache(ILibiadaDatabaseEntitiesFactory dbFactory)
     {
-        db = libiadaDatabaseEntitiesFactory.CreateDbContext();
-        Matters = db.Matters.ToList();
+        this.dbFactory = dbFactory;
     }
 
     /// <summary>
@@ -26,6 +45,9 @@ public class Cache
     /// </summary>
     public void Clear()
     {
-        Matters = db.Matters.ToList();
+        lock (syncRoot)
+        {
+            matters = null;
+        }
     }
 }
