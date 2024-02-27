@@ -496,26 +496,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_matter_multisequence");
 
-            entity.HasMany(d => d.Groups).WithMany(p => p.Matters)
-                .UsingEntity<Dictionary<string, object>>(
-                    "SequenceGroupMatter",
-                    r => r.HasOne<SequenceGroup>().WithMany()
-                        .HasForeignKey("GroupId")
-                        .HasConstraintName("fk_matter_sequence_group"),
-                    l => l.HasOne<Matter>().WithMany()
-                        .HasForeignKey("MatterId")
-                        .HasConstraintName("fk_sequence_group_matter"),
-                    j =>
-                    {
-                        j.HasKey("MatterId", "GroupId").HasName("sequence_group_matter_pkey");
-                        j.ToTable("sequence_group_matter", tb => tb.HasComment("Intermediate table for infromation on matters belonging to groups."));
-                        j.IndexerProperty<long>("MatterId")
-                            .HasComment("Research object id.")
-                            .HasColumnName("matter_id");
-                        j.IndexerProperty<int>("GroupId")
-                            .HasComment("Sequence group id.")
-                            .HasColumnName("group_id");
-                    });
+            entity.HasMany(d => d.Groups).WithMany(p => p.Matters);
         });
 
         modelBuilder.Entity<Measure>(entity =>
@@ -618,27 +599,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Triplet).HasComment("Flag indicating if note is a part of triplet (tuplet).");
             entity.Property(e => e.Value).HasComment("Note hash code.");
 
-            entity.HasMany(d => d.Pitches).WithMany(p => p.Notes)
-                .UsingEntity<Dictionary<string, object>>(
-                    "NotePitch",
-                    r => r.HasOne<Pitch>().WithMany()
-                        .HasForeignKey("PitchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_note_pitch_pitch"),
-                    l => l.HasOne<Note>().WithMany()
-                        .HasForeignKey("NoteId")
-                        .HasConstraintName("fk_note_pitch_note"),
-                    j =>
-                    {
-                        j.HasKey("NoteId", "PitchId").HasName("pk_note_pitch");
-                        j.ToTable("note_pitch", tb => tb.HasComment("Intermediate table representing M:M relationship between note and pitch."));
-                        j.IndexerProperty<long>("NoteId")
-                            .HasComment("Note id.")
-                            .HasColumnName("note_id");
-                        j.IndexerProperty<int>("PitchId")
-                            .HasComment("Pitch id.")
-                            .HasColumnName("pitch_id");
-                    });
+            entity.HasMany(d => d.Pitches).WithMany(p => p.Notes);
         });
 
         modelBuilder.Entity<Pitch>(entity =>
