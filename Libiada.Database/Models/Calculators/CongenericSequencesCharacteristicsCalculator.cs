@@ -7,13 +7,15 @@ using Libiada.Database.Models.Repositories.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 
+using Microsoft.EntityFrameworkCore;
+
 public class CongenericSequencesCharacteristicsCalculator : ICongenericSequencesCharacteristicsCalculator
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly ICongenericCharacteristicRepository characteristicTypeLinkRepository;
 
-    public CongenericSequencesCharacteristicsCalculator(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public CongenericSequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                               ICommonSequenceRepository commonSequenceRepository,
                                               ICongenericCharacteristicRepository characteristicTypeLinkRepository)
     {

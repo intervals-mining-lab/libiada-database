@@ -5,6 +5,8 @@ using Libiada.Core.Core.SimpleTypes;
 
 using Libiada.Database.Helpers;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The data sequence repository.
 /// </summary>
@@ -16,7 +18,7 @@ public class DataSequenceRepository : SequenceImporter
     /// <param name="db">
     /// The db.
     /// </param>
-    public DataSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
+    public DataSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {
     }
 

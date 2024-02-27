@@ -4,6 +4,8 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;
 using Libiada.Core.Extensions;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The accordance characteristic repository.
 /// </summary>
@@ -20,7 +22,7 @@ public class AccordanceCharacteristicRepository : IAccordanceCharacteristicRepos
     /// <param name="db">
     /// The db.
     /// </param>
-    public AccordanceCharacteristicRepository(ILibiadaDatabaseEntitiesFactory dbFactory)
+    public AccordanceCharacteristicRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {
         using var db = dbFactory.CreateDbContext();
         characteristicsLinks = db.AccordanceCharacteristicLinks.ToArray();

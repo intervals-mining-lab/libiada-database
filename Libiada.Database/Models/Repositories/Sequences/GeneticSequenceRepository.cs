@@ -5,6 +5,8 @@ using Bio.Extensions;
 
 using Libiada.Core.Core;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The DNA sequence repository.
 /// </summary>
@@ -16,7 +18,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// <param name="db">
     /// The db.
     /// </param>
-    public GeneticSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
+    public GeneticSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {
     }
 

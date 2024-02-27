@@ -4,6 +4,8 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.CongenericCalculators;
 using Libiada.Core.Extensions;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The congeneric characteristic repository.
 /// </summary>
@@ -20,7 +22,7 @@ public class CongenericCharacteristicRepository : ICongenericCharacteristicRepos
     /// <param name="db">
     /// The db.
     /// </param>
-    public CongenericCharacteristicRepository(ILibiadaDatabaseEntitiesFactory dbFactory)
+    public CongenericCharacteristicRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {
         using var db = dbFactory.CreateDbContext();
         characteristicsLinks = db.CongenericCharacteristicLinks.ToArray();

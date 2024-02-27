@@ -11,6 +11,8 @@ using Libiada.Core.Music.MusicXml;
 
 using Libiada.Database.Helpers;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The music sequence repository.
 /// </summary>
@@ -32,7 +34,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// <param name="db">
     /// The db.
     /// </param>
-    public MusicSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
+    public MusicSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {
         FmotifRepository = new FmotifRepository(Db);
         MeasureRepository = new MeasureRepository(Db);

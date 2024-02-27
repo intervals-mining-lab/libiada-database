@@ -1,5 +1,7 @@
 ﻿namespace Libiada.Database.Models.Repositories.Sequences;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The sequence importer.
 /// </summary>
@@ -26,7 +28,7 @@ public abstract class SequenceImporter
     /// <param name="db">
     /// The db.
     /// </param>
-    protected SequenceImporter(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache)
+    protected SequenceImporter(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache)
     {
         Db = dbFactory.CreateDbContext();
         MatterRepository = new MatterRepository(Db, cache);

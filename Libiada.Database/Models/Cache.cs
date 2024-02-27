@@ -1,11 +1,13 @@
 ﻿namespace Libiada.Database.Models;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// Custom cache for storing matter table data.
 /// </summary>
 public class Cache
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private List<Matter>? matters;
     private readonly object syncRoot = new object();
 
@@ -35,7 +37,7 @@ public class Cache
     /// <summary>
     /// Initializes list of matters.
     /// </summary>
-    public Cache(ILibiadaDatabaseEntitiesFactory dbFactory)
+    public Cache(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {
         this.dbFactory = dbFactory;
     }

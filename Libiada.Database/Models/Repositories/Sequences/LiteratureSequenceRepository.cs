@@ -5,6 +5,8 @@ using Libiada.Core.Core.SimpleTypes;
 
 using Libiada.Database.Helpers;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The literature sequence repository.
 /// </summary>
@@ -16,7 +18,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// <param name="db">
     /// The db.
     /// </param>
-    public LiteratureSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
+    public LiteratureSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {
     }
 

@@ -4,6 +4,8 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Core.Extensions;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The full characteristic repository.
 /// </summary>
@@ -20,7 +22,7 @@ public class FullCharacteristicRepository : IFullCharacteristicRepository
     /// <param name="db">
     /// The db.
     /// </param>
-    public FullCharacteristicRepository(ILibiadaDatabaseEntitiesFactory dbFactory)
+    public FullCharacteristicRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {
         using var db = dbFactory.CreateDbContext();
         characteristicsLinks = db.FullCharacteristicLinks.ToArray();

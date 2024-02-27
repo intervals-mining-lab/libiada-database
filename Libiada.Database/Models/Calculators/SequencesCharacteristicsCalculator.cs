@@ -12,16 +12,18 @@ using Libiada.Database.Models.Repositories.Calculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The sequences characteristics calculator.
 /// </summary>
 public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalculator
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly ICommonSequenceRepository commonSequenceRepository;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
 
-    public SequencesCharacteristicsCalculator(ILibiadaDatabaseEntitiesFactory dbFactory,
+    public SequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
                                               ICommonSequenceRepository commonSequenceRepository,
                                               IFullCharacteristicRepository characteristicTypeLinkRepository)
     {

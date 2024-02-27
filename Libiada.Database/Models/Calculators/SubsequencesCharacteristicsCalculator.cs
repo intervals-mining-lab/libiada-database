@@ -9,16 +9,18 @@ using Libiada.Database.Models.Repositories.Catalogs;
 using Libiada.Database.Models.Repositories.Sequences;
 using Libiada.Database.Extensions;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The subsequences characteristics calculator.
 /// </summary>
 public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristicsCalculator
 {
-    private readonly ILibiadaDatabaseEntitiesFactory dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ICommonSequenceRepository commonSequenceRepository;
 
-    public SubsequencesCharacteristicsCalculator(ILibiadaDatabaseEntitiesFactory dbFactory, 
+    public SubsequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                                  IFullCharacteristicRepository characteristicTypeLinkRepository, 
                                                  ICommonSequenceRepository commonSequenceRepository)
     {

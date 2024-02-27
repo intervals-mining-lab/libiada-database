@@ -27,7 +27,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// <param name="db">
     /// The db.
     /// </param>
-    public CommonSequenceRepository(ILibiadaDatabaseEntitiesFactory dbFactory, Cache cache) : base(dbFactory, cache)
+    public CommonSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {
     }
 

@@ -4,6 +4,8 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.BinaryCalculators;
 using Libiada.Core.Extensions;
 
+using Microsoft.EntityFrameworkCore;
+
 /// <summary>
 /// The binary characteristic repository.
 /// </summary>
@@ -20,7 +22,7 @@ public class BinaryCharacteristicRepository : IBinaryCharacteristicRepository
     /// <param name="db">
     /// The db.
     /// </param>
-    public BinaryCharacteristicRepository(ILibiadaDatabaseEntitiesFactory dbFactory)
+    public BinaryCharacteristicRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {
         using var db = dbFactory.CreateDbContext();
         characteristicsLinks = db.BinaryCharacteristicLinks.ToArray();
