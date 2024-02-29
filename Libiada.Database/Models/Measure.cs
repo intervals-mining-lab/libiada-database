@@ -44,7 +44,7 @@ public partial class Measure
     /// Measure notation enum numeric value (always 7).
     /// </summary>
     [Column("notation")]
-    public Notation Notation { get; set; }
+    public Notation Notation { get => Notation.Measures; private set { } }
 
     /// <summary>
     /// Measure creation date and time (filled trough trigger).

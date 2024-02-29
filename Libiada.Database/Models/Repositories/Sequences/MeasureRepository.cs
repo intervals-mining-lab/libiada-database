@@ -88,7 +88,6 @@ public class MeasureRepository : IMeasureRepsitory
             Alphabet = notes,
             Order = measureChain.Order.ToList(),
             Value = measure.GetHashCode().ToString(),
-            Notation = Notation.Measures,
             Beats = measure.Attributes.Size.Beats,
             Beatbase = measure.Attributes.Size.BeatBase,
             Fifths = measure.Attributes.Key.Fifths,

@@ -42,7 +42,7 @@ public partial class Fmotif
     /// Fmotif notation enum numeric value (always 6).
     /// </summary>
     [Column("notation")]
-    public Notation Notation { get; set; }
+    public Notation Notation { get => Notation.FormalMotifs; private set { } }
 
     /// <summary>
     /// Fmotif creation date and time (filled trough trigger).
@@ -57,13 +57,13 @@ public partial class Fmotif
     public DateTimeOffset Modified { get; set; }
 
     /// <summary>
-    /// Fmotif&apos;s alphabet (array of notes ids).
+    /// Fmotif's alphabet (array of notes ids).
     /// </summary>
     [Column("alphabet")]
     public List<long> Alphabet { get; set; } = null!;
 
     /// <summary>
-    /// Fmotif&apos;s order.
+    /// Fmotif's order.
     /// </summary>
     [Column("building")]
     public List<int> Order { get; set; } = null!;

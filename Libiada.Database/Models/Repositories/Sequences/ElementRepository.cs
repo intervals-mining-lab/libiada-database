@@ -105,8 +105,7 @@ public class ElementRepository : IElementRepository
                     Denominator = note.Duration.Denominator,
                     Numerator = note.Duration.Numerator,
                     Tie = note.Tie,
-                    Pitches = db.Pitches.Where(p => pitches.Contains(p.Id)).ToList(),
-                    Notation = Notation.Notes
+                    Pitches = db.Pitches.Where(p => pitches.Contains(p.Id)).ToList()
                 };
                 newNotes.Add(result[i]);
             }

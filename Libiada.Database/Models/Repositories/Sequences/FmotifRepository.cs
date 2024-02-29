@@ -85,7 +85,6 @@ public class FmotifRepository : IFmotifRepository
         {
             //Id = db.GetNewElementId(),
             Value = fmotif.GetHashCode().ToString(),
-            Notation = Notation.FormalMotifs,
             FmotifType = fmotif.Type,
             Alphabet = notes,
             Order = notesChain.Order.ToList()
