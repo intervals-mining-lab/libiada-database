@@ -32,7 +32,7 @@ public class ElementRepository : IElementRepository
     /// <summary>
     /// Gets the cached elements.
     /// </summary>
-    private Element[] CachedElements => lazyCache ?? (lazyCache = db.Elements.Where(e => Aliases.StaticNotations.Contains(e.Notation)).ToArray());
+    private Element[] CachedElements => lazyCache ?? (lazyCache = db.Elements.Where(e => StaticCollections.StaticNotations.Contains(e.Notation)).ToArray());
 
     /// <summary>
     /// The dispose.
@@ -149,7 +149,7 @@ public class ElementRepository : IElementRepository
             }
         }
 
-        bool staticNotation = Aliases.StaticNotations.Contains(notation);
+        bool staticNotation = StaticCollections.StaticNotations.Contains(notation);
 
         string[] stringElements = alphabet.Select(element => element.ToString()).ToArray();
 

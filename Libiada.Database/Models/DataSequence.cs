@@ -42,13 +42,13 @@ public partial class DataSequence
     public long MatterId { get; set; }
 
     /// <summary>
-    /// Sequence&apos;s alphabet (array of elements ids).
+    /// Sequence's alphabet (array of elements ids).
     /// </summary>
     [Column("alphabet")]
     public List<long> Alphabet { get; set; } = null!;
 
     /// <summary>
-    /// Sequence&apos;s order.
+    /// Sequence's order.
     /// </summary>
     [Column("building")]
     public List<int> Order { get; set; } = null!;

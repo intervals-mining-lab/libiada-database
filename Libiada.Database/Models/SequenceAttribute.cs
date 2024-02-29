@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 /// <summary>
-/// Contains chains&apos; attributes and their values.
+/// Contains chains' attributes and their values.
 /// </summary>
 [Table("chain_attribute")]
 [Index("SequenceId", "Attribute", "Value", Name = "uk_chain_attribute", IsUnique = true)]

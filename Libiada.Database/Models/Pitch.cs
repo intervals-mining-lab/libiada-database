@@ -9,7 +9,7 @@ using Libiada.Core.Core.SimpleTypes;
 using Microsoft.EntityFrameworkCore;
 
 /// <summary>
-/// Note&apos;s pitch.
+/// Note's pitch.
 /// </summary>
 [Table("pitch")]
 [Index("Octave", "Instrument", "Accidental", "NoteSymbol", Name = "uk_pitch", IsUnique = true)]
