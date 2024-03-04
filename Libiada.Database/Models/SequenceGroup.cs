@@ -29,7 +29,8 @@ public partial class SequenceGroup
     /// Sequence group creation date and time (filled trough trigger).
     /// </summary>
     [Column("created")]
-    public DateTimeOffset Created { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Created { get; private set; }
 
     /// <summary>
     /// Record creator user id.
@@ -42,7 +43,8 @@ public partial class SequenceGroup
     /// Record last change date and time (updated trough trigger).
     /// </summary>
     [Column("modified")]
-    public DateTimeOffset Modified { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Modified { get; private set; }
 
     /// <summary>
     /// Record editor user id.

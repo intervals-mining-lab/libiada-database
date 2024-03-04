@@ -126,6 +126,16 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasConstraintName("FK.AspNetPushNotificationSubscribers.AspNetUsers_UserId");
         });
 
+        modelBuilder.Entity<AspNetUser>(entity =>
+        {
+            entity.Property(e => e.Created)
+                .HasDefaultValueSql("now()")
+                .HasComment("User creation date and time (filled trough trigger).");
+            entity.Property(e => e.Modified)
+                .HasDefaultValueSql("now()")
+                .HasComment("User last change date and time (updated trough trigger).");
+        });
+
         modelBuilder.Entity<BinaryCharacteristicLink>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pk_binary_characteristic_link");
@@ -173,7 +183,9 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasComment("Unique internal identifier.")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
             entity.Property(e => e.Completed).HasComment("Task completion date and time.");
-            entity.Property(e => e.Created).HasComment("Task creation date and time (filled trough trigger).");
+            entity.Property(e => e.Created)
+                .HasDefaultValueSql("now()")
+                .HasComment("Task creation date and time (filled trough trigger).");
             entity.Property(e => e.Description).HasComment("Task description.");
             entity.Property(e => e.Started).HasComment("Task beginning of computation date and time.");
             entity.Property(e => e.Status).HasComment("Task status enum numeric value.");
@@ -586,7 +598,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasComment("Unique internal identifier.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Measure creation date and time (filled trough trigger).");
+                .HasComment("Note creation date and time (filled trough trigger).");
             entity.Property(e => e.Denominator).HasComment("Note duration fraction denominator.");
             entity.Property(e => e.Description).HasComment("Note description.");
             entity.Property(e => e.Modified)
@@ -668,7 +680,9 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasDefaultValueSql("now()")
                 .HasComment("Sequence group creation date and time (filled trough trigger).");
             entity.Property(e => e.CreatorId).HasComment("Record creator user id.");
-            entity.Property(e => e.Modified).HasComment("Record last change date and time (updated trough trigger).");
+            entity.Property(e => e.Modified)
+                .HasDefaultValueSql("now()")
+                .HasComment("Record last change date and time (updated trough trigger).");
             entity.Property(e => e.ModifierId).HasComment("Record editor user id.");
             entity.Property(e => e.Name).HasComment("Sequences group name.");
             entity.Property(e => e.Nature).HasComment("Sequences group nature enum numeric value.");
@@ -692,7 +706,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasComment("Unique internal identifier.");
             entity.Property(e => e.Created)
                 .HasDefaultValueSql("now()")
-                .HasComment("Sequence group creation date and time (filled trough trigger).");
+                .HasComment("Subsequence creation date and time (filled trough trigger).");
             entity.Property(e => e.Feature).HasComment("Subsequence feature enum numeric value.");
             entity.Property(e => e.Length).HasComment("Fragment length.");
             entity.Property(e => e.Modified)

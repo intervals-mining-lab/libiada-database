@@ -50,13 +50,15 @@ public partial class Measure
     /// Measure creation date and time (filled trough trigger).
     /// </summary>
     [Column("created")]
-    public DateTimeOffset Created { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Created { get; private set; }
 
     /// <summary>
     /// Record last change date and time (updated trough trigger).
     /// </summary>
     [Column("modified")]
-    public DateTimeOffset Modified { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Modified { get; private set; }
 
     /// <summary>
     /// Measure alphabet (array of notes ids).

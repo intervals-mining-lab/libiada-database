@@ -3817,4 +3817,22 @@ ALTER TABLE "AspNetPushNotificationSubscribers" ADD CONSTRAINT "uk_AspNetPushNot
 
 DROP SCHEMA IF EXISTS dbo CASCADE;
 
+-- 04.03.2024
+-- Add user creation and last modification dates columns.
+-- And some smal fixes in other tables.
+
+COMMENT ON COLUMN note.created IS 'Note creation date and time (filled trough trigger).';
+COMMENT ON COLUMN subsequence.created IS 'Subsequence creation date and time (filled trough trigger).';
+
+ALTER TABLE IF EXISTS sequence_group ALTER COLUMN modified SET DEFAULT now();
+ALTER TABLE IF EXISTS task ALTER COLUMN created SET DEFAULT now();
+
+ALTER TABLE IF EXISTS "AspNetUsers" ADD COLUMN created timestamp with time zone NOT NULL DEFAULT now();
+COMMENT ON COLUMN "AspNetUsers".created IS 'User creation date and time (filled trough trigger).';
+ALTER TABLE IF EXISTS "AspNetUsers" ADD COLUMN modified timestamp with time zone NOT NULL DEFAULT now();
+COMMENT ON COLUMN "AspNetUsers".modified IS 'User last change date and time (updated trough trigger).';
+
+CREATE TRIGGER "tgiu_AspNetUsers_modified" BEFORE INSERT OR UPDATE ON "AspNetUsers" FOR EACH ROW EXECUTE FUNCTION trigger_set_modified();
+COMMENT ON TRIGGER "tgiu_AspNetUsers_modified" ON "AspNetUsers" IS 'Trigger adding creation and modification dates.';
+
 COMMIT;

@@ -34,7 +34,8 @@ public partial class MusicSequence
     /// Sequence creation date and time (filled trough trigger).
     /// </summary>
     [Column("created")]
-    public DateTimeOffset Created { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Created { get; private set; }
 
     /// <summary>
     /// Id of the research object to which the sequence belongs.
@@ -74,7 +75,8 @@ public partial class MusicSequence
     /// Record last change date and time (updated trough trigger).
     /// </summary>
     [Column("modified")]
-    public DateTimeOffset Modified { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Modified { get; private set; }
 
     /// <summary>
     /// Sequence description.

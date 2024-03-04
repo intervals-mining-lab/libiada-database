@@ -46,7 +46,8 @@ public partial class CalculationTask
     /// Task creation date and time (filled trough trigger).
     /// </summary>
     [Column("created")]
-    public DateTimeOffset Created { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Created { get; private set; }
 
     /// <summary>
     /// Task beginning of computation date and time.

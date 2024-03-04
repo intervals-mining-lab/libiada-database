@@ -21,16 +21,18 @@ public partial class Subsequence
     public long Id { get; set; }
 
     /// <summary>
-    /// Sequence group creation date and time (filled trough trigger).
+    /// Subsequence creation date and time (filled trough trigger).
     /// </summary>
     [Column("created")]
-    public DateTimeOffset Created { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Created { get; private set; }
 
     /// <summary>
     /// Record last change date and time (updated trough trigger).
     /// </summary>
     [Column("modified")]
-    public DateTimeOffset Modified { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTimeOffset Modified { get; private set; }
 
     /// <summary>
     /// Parent sequence id.
