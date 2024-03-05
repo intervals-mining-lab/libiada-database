@@ -6,7 +6,7 @@
 public class CharacteristicRepository : ICharacteristicRepository
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
 
@@ -14,7 +14,7 @@ public class CharacteristicRepository : ICharacteristicRepository
     /// Initializes a new instance of the <see cref="CharacteristicRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public CharacteristicRepository(LibiadaDatabaseEntities db)
     {

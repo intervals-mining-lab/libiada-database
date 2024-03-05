@@ -19,8 +19,8 @@ public class CongenericCharacteristicRepository : ICongenericCharacteristicRepos
     /// <summary>
     /// Initializes a new instance of the <see cref="CongenericCharacteristicRepository"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public CongenericCharacteristicRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {

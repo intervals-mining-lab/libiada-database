@@ -21,7 +21,7 @@ public class MatterRepository : IMatterRepository
     private readonly string[] GenBankDateFormats = new[] { "dd-MMM-yyyy", "MMM-yyyy", "yyyy", "yyyy-MM-ddTHH:mmZ", "yyyy-MM-ddTHHZ", "yyyy-MM-dd", "yyyy-MM" };
 
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
     private readonly Cache cache;
@@ -30,7 +30,7 @@ public class MatterRepository : IMatterRepository
     /// Initializes a new instance of the <see cref="MatterRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public MatterRepository(LibiadaDatabaseEntities db, Cache cache)
     {

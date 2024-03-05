@@ -24,7 +24,7 @@ public static class LibiadaDatabaseEntitiesExtensions
     /// The execute custom sql command with parameters.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     /// <param name="query">
     /// The query.

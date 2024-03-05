@@ -9,7 +9,7 @@ using Libiada.Core.Core.SimpleTypes;
 public class ElementRepository : IElementRepository
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
 
@@ -22,7 +22,7 @@ public class ElementRepository : IElementRepository
     /// Initializes a new instance of the <see cref="ElementRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public ElementRepository(LibiadaDatabaseEntities db)
     {
@@ -42,7 +42,7 @@ public class ElementRepository : IElementRepository
     }
 
     /// <summary>
-    /// The elements in db.
+    /// Checks if daabase contains elements from given alphabet.
     /// </summary>
     /// <param name="alphabet">
     /// The alphabet.
@@ -132,7 +132,7 @@ public class ElementRepository : IElementRepository
     /// The <see cref="T:long[]"/>.
     /// </returns>
     /// <exception cref="Exception">
-    /// Thrown if alphabet element is not found in db.
+    /// Thrown if alphabet element is not found in database.
     /// </exception>
     public List<long> ToDbElements(Alphabet alphabet, Notation notation, bool createElements)
     {
@@ -248,7 +248,7 @@ public class ElementRepository : IElementRepository
     }
 
     /// <summary>
-    /// Saves lacking elements to db.
+    /// Saves lacking elements to database.
     /// </summary>
     /// <param name="libiadaAlphabet">
     /// The libiada alphabet.

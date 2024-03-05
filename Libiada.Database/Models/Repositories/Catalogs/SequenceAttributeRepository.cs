@@ -10,7 +10,7 @@ using Libiada.Database.Models.CalculatorsData;
 public class SequenceAttributeRepository : ISequenceAttributeRepository
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
 
@@ -23,7 +23,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// Initializes a new instance of the <see cref="SequenceAttributeRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public SequenceAttributeRepository(LibiadaDatabaseEntities db)
     {

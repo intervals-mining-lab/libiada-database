@@ -49,7 +49,7 @@ public class RemoteDbTests
     /// Tests names of remote dbs.
     /// </summary>
     /// <param name="remoteDb">
-    /// The remote db.
+    /// The remote database.
     /// </param>
     /// <param name="name">
     /// The name.
@@ -61,7 +61,7 @@ public class RemoteDbTests
     /// Tests that all remote dbs have display value.
     /// </summary>
     /// <param name="remoteDb">
-    /// The remote db.
+    /// The remote database.
     /// </param>
     [Test]
     public void RemoteDbHasDisplayValueTest([Values] RemoteDb remoteDb) => Assert.That(remoteDb.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
@@ -70,7 +70,7 @@ public class RemoteDbTests
     /// Tests that all remote dbs have description.
     /// </summary>
     /// <param name="remoteDb">
-    /// The remote db.
+    /// The remote database.
     /// </param>
     [Test]
     public void RemoteDbHasDescriptionTest([Values] RemoteDb remoteDb) => Assert.That(remoteDb.GetDescription(), Is.Not.Null.And.Not.Empty);
@@ -79,7 +79,7 @@ public class RemoteDbTests
     /// Tests that all remote dbs have valid nature attribute.
     /// </summary>
     /// <param name="remoteDb">
-    /// The remote db.
+    /// The remote database.
     /// </param>
     [Test]
     public void RemoteDbHasNatureTest([Values] RemoteDb remoteDb) => Assert.That(natures, Has.Member(remoteDb.GetNature()));

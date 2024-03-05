@@ -19,8 +19,8 @@ public class BinaryCharacteristicRepository : IBinaryCharacteristicRepository
     /// <summary>
     /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public BinaryCharacteristicRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {

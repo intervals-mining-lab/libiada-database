@@ -9,7 +9,7 @@ using Libiada.Core.Core.SimpleTypes;
 public class FmotifRepository : IFmotifRepository
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
 
@@ -17,7 +17,7 @@ public class FmotifRepository : IFmotifRepository
     /// Initializes a new instance of the <see cref="FmotifRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public FmotifRepository(LibiadaDatabaseEntities db)
     {

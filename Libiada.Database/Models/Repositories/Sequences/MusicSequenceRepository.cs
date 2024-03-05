@@ -31,8 +31,8 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// <summary>
     /// Initializes a new instance of the <see cref="MusicSequenceRepository"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public MusicSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {

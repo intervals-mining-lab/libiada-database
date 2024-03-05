@@ -15,8 +15,8 @@ public class DataSequenceRepository : SequenceImporter
     /// <summary>
     /// Initializes a new instance of the <see cref="DataSequenceRepository"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public DataSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {

@@ -15,8 +15,8 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// <summary>
     /// Initializes a new instance of the <see cref="GeneticSequenceRepository"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public GeneticSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {

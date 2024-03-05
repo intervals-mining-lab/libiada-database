@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 public class SubsequenceExtractor
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
 
@@ -30,7 +30,7 @@ public class SubsequenceExtractor
     /// Initializes a new instance of the <see cref="SubsequenceExtractor"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public SubsequenceExtractor(LibiadaDatabaseEntities db, ICommonSequenceRepository commonSequenceRepository)
     {

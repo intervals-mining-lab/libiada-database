@@ -19,8 +19,8 @@ public class AccordanceCharacteristicRepository : IAccordanceCharacteristicRepos
     /// <summary>
     /// Initializes a new instance of the <see cref="AccordanceCharacteristicRepository"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public AccordanceCharacteristicRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {

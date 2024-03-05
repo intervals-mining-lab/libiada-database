@@ -15,8 +15,8 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// <summary>
     /// Initializes a new instance of the <see cref="LiteratureSequenceRepository"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public LiteratureSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {

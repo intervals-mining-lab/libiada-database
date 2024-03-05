@@ -9,7 +9,7 @@ using Libiada.Core.Core.SimpleTypes;
 public class MeasureRepository : IMeasureRepsitory
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
 
@@ -17,7 +17,7 @@ public class MeasureRepository : IMeasureRepsitory
     /// Initializes a new instance of the <see cref="MeasureRepository"/> class.
     /// </summary>
     /// <param name="db">
-    /// The db.
+    /// Database context.
     /// </param>
     public MeasureRepository(LibiadaDatabaseEntities db)
     {
@@ -43,7 +43,7 @@ public class MeasureRepository : IMeasureRepsitory
     }
 
     /// <summary>
-    /// Saves measures to db.
+    /// Saves measures to database.
     /// </summary>
     /// <param name="measure">
     /// The measure.

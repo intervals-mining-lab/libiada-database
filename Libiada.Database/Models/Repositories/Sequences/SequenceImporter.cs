@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 /// <summary>
 /// The sequence importer.
 /// </summary>
-public abstract class SequenceImporter
+public abstract class SequenceImporter : IDisposable
 {
     /// <summary>
-    /// The db.
+    /// Database context.
     /// </summary>
     protected readonly LibiadaDatabaseEntities Db;
 
@@ -25,13 +25,18 @@ public abstract class SequenceImporter
     /// <summary>
     /// Initializes a new instance of the <see cref="SequenceImporter"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     protected SequenceImporter(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache)
     {
         Db = dbFactory.CreateDbContext();
         MatterRepository = new MatterRepository(Db, cache);
         ElementRepository = new ElementRepository(Db);
+    }
+
+    public void Dispose()
+    {
+        Db.Dispose();
     }
 }

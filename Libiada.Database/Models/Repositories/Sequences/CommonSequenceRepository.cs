@@ -24,8 +24,8 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// <summary>
     /// Initializes a new instance of the <see cref="CommonSequenceRepository"/> class.
     /// </summary>
-    /// <param name="db">
-    /// The db.
+    /// <param name="dbFactory">
+    /// Database context factory.
     /// </param>
     public CommonSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {
