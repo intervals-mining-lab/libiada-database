@@ -42,7 +42,7 @@ public partial class Fmotif
     /// Fmotif notation enum numeric value (always 6).
     /// </summary>
     [Column("notation")]
-    public Notation Notation { get => Notation.FormalMotifs; private set { } }
+    public Notation Notation { get; } = Notation.FormalMotifs;
 
     /// <summary>
     /// Fmotif creation date and time (filled trough trigger).

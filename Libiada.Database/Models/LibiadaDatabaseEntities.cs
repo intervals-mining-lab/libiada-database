@@ -508,7 +508,15 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_matter_multisequence");
 
-            entity.HasMany(d => d.Groups).WithMany(p => p.Matters);
+            entity.HasMany(d => d.Groups)
+                .WithMany(p => p.Matters)
+                .UsingEntity(
+                    "sequence_group_matter",
+                     j =>
+                     {
+                         j.Property("MatterId").HasColumnName("matter_id");
+                         j.Property("GroupId").HasColumnName("group_id");
+                     });
         });
 
         modelBuilder.Entity<Measure>(entity =>
@@ -611,7 +619,15 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Triplet).HasComment("Flag indicating if note is a part of triplet (tuplet).");
             entity.Property(e => e.Value).HasComment("Note hash code.");
 
-            entity.HasMany(d => d.Pitches).WithMany(p => p.Notes);
+            entity.HasMany(d => d.Pitches)
+                .WithMany(p => p.Notes)
+                .UsingEntity(
+                    "note_pitch",
+                     j =>
+                     {
+                         j.Property("NoteId").HasColumnName("note_id");
+                         j.Property("PitchId").HasColumnName("pitch_id");
+                     });
         });
 
         modelBuilder.Entity<Pitch>(entity =>
