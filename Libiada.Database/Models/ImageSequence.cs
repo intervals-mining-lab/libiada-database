@@ -76,6 +76,7 @@ public partial class ImageSequence
     public DateTimeOffset Modified { get; private set; }
 
     [ForeignKey("MatterId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("ImageSequence")]
     public virtual Matter Matter { get; set; } = null!;
 }

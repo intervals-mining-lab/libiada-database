@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Libiada.Database.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Contains information about computational tasks.
@@ -62,6 +63,7 @@ public partial class CalculationTask
     public DateTimeOffset? Completed { get; set; }
 
     [ForeignKey("UserId")]
+    [DeleteBehavior(DeleteBehavior.Cascade)]
     [InverseProperty("CalculationTasks")]
     public virtual AspNetUser AspNetUser { get; set; } = null!;
 

@@ -82,6 +82,7 @@ public partial class CommonSequence
     public string? Description { get; set; }
 
     [ForeignKey("MatterId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("Sequence")]
     public virtual Matter Matter { get; set; } = null!;
 }

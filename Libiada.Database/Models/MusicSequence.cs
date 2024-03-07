@@ -99,6 +99,7 @@ public partial class MusicSequence
     public bool SequentialTransfer { get; set; }
 
     [ForeignKey("MatterId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("MusicSequence")]
     public virtual Matter Matter { get; set; } = null!;
 }

@@ -54,6 +54,7 @@ public partial class BinaryCharacteristicValue
     public short CharacteristicLinkId { get; set; }
 
     [ForeignKey("CharacteristicLinkId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("BinaryCharacteristicValues")]
     public virtual BinaryCharacteristicLink BinaryCharacteristicLink { get; set; } = null!;
 }

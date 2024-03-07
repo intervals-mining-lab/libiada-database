@@ -90,6 +90,7 @@ public partial class DnaSequence
     public bool Partial { get; set; }
 
     [ForeignKey("MatterId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("DnaSequence")]
     public virtual Matter Matter { get; set; } = null!;
 }

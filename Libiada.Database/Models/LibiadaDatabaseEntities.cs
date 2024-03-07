@@ -114,7 +114,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Value).HasComment("Numerical value of the characteristic.");
 
             entity.HasOne(d => d.AccordanceCharacteristicLink).WithMany(p => p.AccordanceCharacteristicValues)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_accordance_characteristic_link");
         });
 
@@ -169,7 +168,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Value).HasComment("Numerical value of the characteristic.");
 
             entity.HasOne(d => d.BinaryCharacteristicLink).WithMany(p => p.BinaryCharacteristicValues)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_binary_characteristic_link");
         });
 
@@ -193,7 +191,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.UserId).HasComment("Creator user id.");
 
             entity.HasOne(d => d.AspNetUser).WithMany(p => p.CalculationTasks)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_task_user");
         });
 
@@ -215,7 +212,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Value).HasComment("Numerical value of the characteristic.");
 
             entity.HasOne(d => d.FullCharacteristicLink).WithMany(p => p.CharacteristicValues)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_full_characteristic_link");
         });
 
@@ -245,7 +241,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.Sequence)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_chain_matter");
         });
 
@@ -286,7 +281,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Value).HasComment("Numerical value of the characteristic.");
 
             entity.HasOne(d => d.CongenericCharacteristicLink).WithMany(p => p.CongenericCharacteristicValues)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_congeneric_characteristic_link");
         });
 
@@ -316,7 +310,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.DataSequence)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_data_chain_matter");
         });
 
@@ -349,7 +342,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.DnaSequence)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_dna_chain_matter");
         });
 
@@ -438,7 +430,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.RemoteId).HasComment("Id of the sequence in remote database.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.ImageSequence)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_image_sequence_matter");
         });
 
@@ -473,7 +464,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Translator).HasComment("Author of translation or automated translator.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.LiteratureSequence)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_literature_chain_matter");
         });
 
@@ -505,7 +495,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.Source).HasComment("Source of the genetic sequence.");
 
             entity.HasOne(d => d.Multisequence).WithMany(p => p.Matters)
-                .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_matter_multisequence");
 
             entity.HasMany(d => d.Groups)
@@ -591,7 +580,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
                 .HasComment("Flag indicating whether or not sequential transfer was used in sequence segmentation into fmotifs.");
 
             entity.HasOne(d => d.Matter).WithMany(p => p.MusicSequence)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_music_chain_matter");
         });
 
@@ -679,8 +667,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Asp
             entity.Property(e => e.SequenceId).HasComment("Id of the sequence to which attribute belongs.");
             entity.Property(e => e.Value).HasComment("Text of the attribute.");
 
-            entity.HasOne(d => d.Subsequence).WithMany(p => p.SequenceAttribute)
-                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(d => d.Subsequence).WithMany(p => p.SequenceAttribute);
         });
 
         modelBuilder.Entity<SequenceGroup>(entity =>

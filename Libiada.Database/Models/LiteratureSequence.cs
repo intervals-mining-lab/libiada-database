@@ -103,6 +103,7 @@ public partial class LiteratureSequence
     public Translator Translator { get; set; }
 
     [ForeignKey("MatterId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("LiteratureSequence")]
     public virtual Matter Matter { get; set; } = null!;
 }

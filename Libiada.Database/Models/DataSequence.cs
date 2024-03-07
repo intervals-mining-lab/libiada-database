@@ -83,6 +83,7 @@ public partial class DataSequence
     public string? Description { get; set; }
 
     [ForeignKey("MatterId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("DataSequence")]
     public virtual Matter Matter { get; set; } = null!;
 }

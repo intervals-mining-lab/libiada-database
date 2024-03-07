@@ -58,6 +58,7 @@ public partial class AccordanceCharacteristicValue
     public short CharacteristicLinkId { get; set; }
 
     [ForeignKey("CharacteristicLinkId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("AccordanceCharacteristicValues")]
     public virtual AccordanceCharacteristicLink AccordanceCharacteristicLink { get; set; } = null!;
 }

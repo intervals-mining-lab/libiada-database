@@ -47,6 +47,7 @@ public partial class CongenericCharacteristicValue
     public short CharacteristicLinkId { get; set; }
 
     [ForeignKey("CharacteristicLinkId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("CongenericCharacteristicValues")]
     public virtual CongenericCharacteristicLink CongenericCharacteristicLink { get; set; } = null!;
 
