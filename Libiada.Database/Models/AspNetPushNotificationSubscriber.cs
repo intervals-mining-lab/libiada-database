@@ -10,11 +10,20 @@ using Microsoft.EntityFrameworkCore;
 /// </summary>
 [Index("UserId", Name = "IX_AspNetPushNotificationSubscribers_UserId")]
 [Index("UserId", "Endpoint", Name = "uk_AspNetPushNotificationSubscribers", IsUnique = true)]
+[Comment("Table for storing data about devices that are subscribers to push notifications.")]
 public partial class AspNetPushNotificationSubscriber
 {
+    /// <summary>
+    /// Unique identifier.
+    /// </summary>
     [Key]
+    [Comment("Unique identifier.")]
     public int Id { get; set; }
 
+    /// <summary>
+    /// User id.
+    /// </summary>
+    [Comment("User id.")]
     public int UserId { get; set; }
 
     public string Endpoint { get; set; } = null!;

@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 [Table("binary_characteristic")]
 [Index("SequenceId", Name = "ix_binary_characteristic_chain_id")]
 [Index("SequenceId", "FirstElementId", "SecondElementId", "CharacteristicLinkId", Name = "uk_binary_characteristic", IsUnique = true)]
+[Comment("Contains numeric chracteristics of elements dependece based on their arrangement in sequence.")]
 public partial class BinaryCharacteristicValue
 {
     /// <summary>
@@ -19,18 +20,22 @@ public partial class BinaryCharacteristicValue
     /// </summary>
     [Key]
     [Column("id")]
+    [Comment("Unique identifier.")]
     public long Id { get; set; }
 
     /// <summary>
     /// Id of the sequence for which the characteristic is calculated.
     /// </summary>
     [Column("chain_id")]
+    [Display(Name = "Sequence")]
+    [Comment("Id of the sequence for which the characteristic is calculated.")]
     public long SequenceId { get; set; }
 
     /// <summary>
     /// Numerical value of the characteristic.
     /// </summary>
     [Column("value")]
+    [Comment("Numerical value of the characteristic.")]
     public double Value { get; set; }
 
     /// <summary>
@@ -38,6 +43,7 @@ public partial class BinaryCharacteristicValue
     /// </summary>
     [Column("first_element_id")]
     [Display(Name = "First element")]
+    [Comment("Id of the first element of the sequence for which the characteristic is calculated.")]
     public long FirstElementId { get; set; }
 
     /// <summary>
@@ -45,16 +51,26 @@ public partial class BinaryCharacteristicValue
     /// </summary>
     [Column("second_element_id")]
     [Display(Name = "Second element")]
+    [Comment("Id of the second element of the sequence for which the characteristic is calculated.")]
     public long SecondElementId { get; set; }
 
     /// <summary>
     /// Characteristic type id.
     /// </summary>
     [Column("characteristic_link_id")]
+    [Comment("Characteristic type id.")]
     public short CharacteristicLinkId { get; set; }
 
     [ForeignKey("CharacteristicLinkId")]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("BinaryCharacteristicValues")]
     public virtual BinaryCharacteristicLink BinaryCharacteristicLink { get; set; } = null!;
+
+    [ForeignKey("FirstElementId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
+    public virtual Element FirstElement { get; set; } = null!;
+
+    [ForeignKey("SecondElementId")]
+    [DeleteBehavior(DeleteBehavior.NoAction)]
+    public virtual Element SecondElement { get; set; } = null!;
 }

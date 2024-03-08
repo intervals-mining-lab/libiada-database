@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 [Table("note")]
 [Index("Notation", Name = "ix_note_notation_id")]
 [Index("Value", Name = "uk_note", IsUnique = true)]
+[Comment("Contains elements that represent notes that are used as elements of music sequences.")]
 public partial class Note
 {
     /// <summary>
@@ -20,6 +21,7 @@ public partial class Note
     /// </summary>
     [Key]
     [Column("id")]
+    [Comment("Unique identifier.")]
     public long Id { get; set; }
 
     /// <summary>
@@ -27,12 +29,14 @@ public partial class Note
     /// </summary>
     [Column("value")]
     [StringLength(255)]
+    [Comment("Note hash code.")]
     public string? Value { get; set; }
 
     /// <summary>
     /// Note description.
     /// </summary>
     [Column("description")]
+    [Comment("Note description.")]
     public string? Description { get; set; }
 
     /// <summary>
@@ -40,12 +44,14 @@ public partial class Note
     /// </summary>
     [Column("name")]
     [StringLength(255)]
+    [Comment("Note name.")]
     public string? Name { get; set; }
 
     /// <summary>
-    /// Measure notation enum numeric value (always 8).
+    /// Note notation enum numeric value (always 8).
     /// </summary>
     [Column("notation")]
+    [Comment("Note notation enum numeric value (always 8).")]
     public Notation Notation { get; } = Notation.Notes;
 
     /// <summary>
@@ -53,6 +59,7 @@ public partial class Note
     /// </summary>
     [Column("created")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    [Comment("Note creation date and time (filled trough trigger).")]
     public DateTimeOffset Created { get; private set; }
 
     /// <summary>
@@ -60,6 +67,7 @@ public partial class Note
     /// </summary>
     [Column("modified")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    [Comment("Record last change date and time (updated trough trigger).")]
     public DateTimeOffset Modified { get; private set; }
 
     /// <summary>
@@ -67,6 +75,7 @@ public partial class Note
     /// </summary>
     [Column("numerator")]
     [Display(Name = "Note duration fraction numerator")]
+    [Comment("Note duration fraction numerator.")]
     public int Numerator { get; set; }
 
     /// <summary>
@@ -74,6 +83,7 @@ public partial class Note
     /// </summary>
     [Column("denominator")]
     [Display(Name = "Note duration fraction denominator")]
+    [Comment("Note duration fraction denominator.")]
     public int Denominator { get; set; }
 
     /// <summary>
@@ -81,12 +91,14 @@ public partial class Note
     /// </summary>
     [Column("triplet")]
     [Display(Name = "Flag indicating if note is a part of triplet (tuplet)")]
+    [Comment("Flag indicating if note is a part of triplet (tuplet).")]
     public bool Triplet { get; set; }
 
     /// <summary>
     /// Note tie type enum numeric value.
     /// </summary>
     [Column("tie")]
+    [Comment("Note tie type enum numeric value.")]
     public Tie Tie { get; set; }
 
     [ForeignKey("NoteId")]

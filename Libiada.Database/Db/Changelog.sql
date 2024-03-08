@@ -3835,11 +3835,16 @@ COMMENT ON COLUMN "AspNetUsers".modified IS 'User last change date and time (upd
 CREATE TRIGGER "tgiu_AspNetUsers_modified" BEFORE INSERT OR UPDATE ON "AspNetUsers" FOR EACH ROW EXECUTE FUNCTION trigger_set_modified();
 COMMENT ON TRIGGER "tgiu_AspNetUsers_modified" ON "AspNetUsers" IS 'Trigger adding creation and modification dates.';
 
--- 07.04.2024
+-- 07.03.2024
 -- Add foreign key that links task and user tables. 
 
 ALTER TABLE IF EXISTS task ADD CONSTRAINT "fk_task_AspNetUsers" FOREIGN KEY (user_id)
     REFERENCES "AspNetUsers" ("Id") MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS ix_task_user_id ON task(user_id);
+
+-- 08.03.2024
+-- Fix note column comment.
+
+COMMENT ON COLUMN note.notation IS 'Note notation enum numeric value (always 8).';
 
 COMMIT;

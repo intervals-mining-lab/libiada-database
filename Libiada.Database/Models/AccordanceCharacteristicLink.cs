@@ -7,12 +7,14 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;
 
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 /// <summary>
 /// Contatins list of possible combinations of accordance characteristics parameters.
 /// </summary>
 [Table("accordance_characteristic_link")]
 [Index("AccordanceCharacteristic", "Link", Name = "uk_accordance_characteristic_link", IsUnique = true)]
+[Comment("Contatins list of possible combinations of accordance characteristics parameters.")]
 public partial class AccordanceCharacteristicLink
 {
     /// <summary>
@@ -20,18 +22,21 @@ public partial class AccordanceCharacteristicLink
     /// </summary>
     [Key]
     [Column("id")]
+    [Comment("Unique identifier.")]
     public short Id { get; set; }
 
     /// <summary>
     /// Characteristic enum numeric value.
     /// </summary>
     [Column("accordance_characteristic")]
+    [Comment("Characteristic enum numeric value.")]
     public AccordanceCharacteristic AccordanceCharacteristic { get; set; }
 
     /// <summary>
     /// Link enum numeric value.
     /// </summary>
     [Column("link")]
+    [Comment("Link enum numeric value.")]
     public Link Link { get; set; }
 
     [InverseProperty("AccordanceCharacteristicLink")]

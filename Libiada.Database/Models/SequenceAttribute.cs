@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 /// </summary>
 [Table("chain_attribute")]
 [Index("SequenceId", "Attribute", "Value", Name = "uk_chain_attribute", IsUnique = true)]
+[Comment("Contains chains' attributes and their values.")]
 public partial class SequenceAttribute
 {
     /// <summary>
@@ -18,24 +19,28 @@ public partial class SequenceAttribute
     /// </summary>
     [Key]
     [Column("id")]
+    [Comment("Unique identifier.")]
     public long Id { get; set; }
 
     /// <summary>
     /// Id of the sequence to which attribute belongs.
     /// </summary>
     [Column("chain_id")]
+    [Comment("Id of the sequence to which attribute belongs.")]
     public long SequenceId { get; set; }
 
     /// <summary>
     /// Attribute enum numeric value.
     /// </summary>
     [Column("attribute")]
+    [Comment("Attribute enum numeric value.")]
     public AnnotationAttribute Attribute { get; set; }
 
     /// <summary>
     /// Text of the attribute.
     /// </summary>
     [Column("value")]
+    [Comment("Text of the attribute.")]
     public string Value { get; set; } = null!;
 
     [ForeignKey("SequenceId")]

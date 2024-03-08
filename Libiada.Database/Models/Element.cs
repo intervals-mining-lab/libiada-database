@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 [Index("Notation", Name = "ix_element_notation_id")]
 [Index("Value", Name = "ix_element_value")]
 [Index("Value", "Notation", Name = "uk_element_value_notation", IsUnique = true)]
+[Comment("Base table for all elements that are stored in the database and used in alphabets of sequences.")]
 public partial class Element
 {
     /// <summary>
@@ -19,6 +20,7 @@ public partial class Element
     /// </summary>
     [Key]
     [Column("id")]
+    [Comment("Unique identifier of the element.")]
     public long Id { get; set; }
 
     /// <summary>
@@ -26,12 +28,14 @@ public partial class Element
     /// </summary>
     [Column("value")]
     [StringLength(255)]
+    [Comment("Content of the element.")]
     public string? Value { get; set; }
 
     /// <summary>
     /// Description of the element.
     /// </summary>
     [Column("description")]
+    [Comment("Description of the element.")]
     public string? Description { get; set; }
 
     /// <summary>
@@ -39,12 +43,14 @@ public partial class Element
     /// </summary>
     [Column("name")]
     [StringLength(255)]
+    [Comment("Name of the element.")]
     public string? Name { get; set; }
 
     /// <summary>
     /// Notation enum numeric value.
     /// </summary>
     [Column("notation")]
+    [Comment("Notation enum numeric value.")]
     public Notation Notation { get; set; }
 
     /// <summary>
@@ -52,6 +58,7 @@ public partial class Element
     /// </summary>
     [Column("created")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    [Comment("Element creation date and time (filled trough trigger).")]
     public DateTimeOffset Created { get; private set; }
 
     /// <summary>
@@ -59,5 +66,6 @@ public partial class Element
     /// </summary>
     [Column("modified")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    [Comment("Record last change date and time (updated trough trigger).")]
     public DateTimeOffset Modified { get; private set; }
 }
