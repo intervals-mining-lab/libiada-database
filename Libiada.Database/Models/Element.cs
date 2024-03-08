@@ -24,12 +24,12 @@ public partial class Element
     public long Id { get; set; }
 
     /// <summary>
-    /// Content of the element.
+    /// Content of the element or hash in case of complex elements.
     /// </summary>
     [Column("value")]
     [StringLength(255)]
-    [Comment("Content of the element.")]
-    public string? Value { get; set; }
+    [Comment("Content of the element or hash in case of complex elements.")]
+    public string Value { get; set; } = null!;
 
     /// <summary>
     /// Description of the element.

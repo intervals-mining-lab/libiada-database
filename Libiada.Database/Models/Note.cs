@@ -25,12 +25,12 @@ public partial class Note
     public long Id { get; set; }
 
     /// <summary>
-    /// Note hash code.
+    /// Note hash value.
     /// </summary>
     [Column("value")]
     [StringLength(255)]
-    [Comment("Note hash code.")]
-    public string? Value { get; set; }
+    [Comment("Note hash value.")]
+    public string Value { get; set; } = null!;
 
     /// <summary>
     /// Note description.

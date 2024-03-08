@@ -3843,8 +3843,10 @@ ALTER TABLE IF EXISTS task ADD CONSTRAINT "fk_task_AspNetUsers" FOREIGN KEY (use
 CREATE INDEX IF NOT EXISTS ix_task_user_id ON task(user_id);
 
 -- 08.03.2024
+-- Make element (and all inherited tables: note, measure, fmotif) value column not null.
 -- Fix note column comment.
 
 COMMENT ON COLUMN note.notation IS 'Note notation enum numeric value (always 8).';
+ALTER TABLE IF EXISTS element ALTER COLUMN value SET NOT NULL;
 
 COMMIT;

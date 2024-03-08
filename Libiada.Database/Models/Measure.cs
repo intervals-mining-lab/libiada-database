@@ -23,12 +23,12 @@ public partial class Measure
     public long Id { get; set; }
 
     /// <summary>
-    /// Measure hash code.
+    /// Measure hash value.
     /// </summary>
     [Column("value")]
     [StringLength(255)]
-    [Comment("Measure hash code.")]
-    public string? Value { get; set; }
+    [Comment("Measure hash value.")]
+    public string Value { get; set; } = null!;
 
     /// <summary>
     /// Description of the sequence.

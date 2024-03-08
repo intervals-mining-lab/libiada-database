@@ -27,7 +27,7 @@ public partial class Fmotif
     [Column("value")]
     [StringLength(255)]
     [Comment("Fmotif hash value.")]
-    public string? Value { get; set; }
+    public string Value { get; set; } = null!;
 
     /// <summary>
     /// Fmotif description.
