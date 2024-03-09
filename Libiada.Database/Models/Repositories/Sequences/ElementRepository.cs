@@ -71,7 +71,7 @@ public class ElementRepository : IElementRepository
     /// <returns>
     /// The <see cref="T:long[]"/>.
     /// </returns>
-    public List<long> GetOrCreateNotesInDb(Alphabet alphabet)
+    public long[] GetOrCreateNotesInDb(Alphabet alphabet)
     {
         var newNotes = new List<Note>();
         var result = new Note[alphabet.Cardinality];
@@ -113,7 +113,7 @@ public class ElementRepository : IElementRepository
 
         db.Notes.AddRange(newNotes);
         db.SaveChanges();
-        return result.Select(n => n.Id).ToList();
+        return result.Select(n => n.Id).ToArray();
     }
 
     /// <summary>
@@ -134,7 +134,7 @@ public class ElementRepository : IElementRepository
     /// <exception cref="Exception">
     /// Thrown if alphabet element is not found in database.
     /// </exception>
-    public List<long> ToDbElements(Alphabet alphabet, Notation notation, bool createElements)
+    public long[] ToDbElements(Alphabet alphabet, Notation notation, bool createElements)
     {
         if (!ElementsInDb(alphabet, notation))
         {
@@ -159,7 +159,7 @@ public class ElementRepository : IElementRepository
         return (from stringElement in stringElements
                 join element in elements
                 on stringElement equals element.Value
-                select element.Id).ToList();
+                select element.Id).ToArray();
     }
 
     /// <summary>
@@ -171,10 +171,10 @@ public class ElementRepository : IElementRepository
     /// <returns>
     /// The <see cref="Alphabet"/>.
     /// </returns>
-    public Alphabet ToLibiadaAlphabet(List<long> elementIds)
+    public Alphabet ToLibiadaAlphabet(long[] elementIds)
     {
         var alphabet = new Alphabet { NullValue.Instance() };
-        List<Element> elements = GetElements(elementIds);
+        Element[] elements = GetElements(elementIds);
         foreach (long elementId in elementIds)
         {
             Element el = elements.Single(e => e.Id == elementId);
@@ -191,12 +191,12 @@ public class ElementRepository : IElementRepository
     /// The element ids.
     /// </param>
     /// <returns>
-    /// The <see cref="IReadOnlyList{Element}"/>.
+    /// The <see cref="Element[]"/>.
     /// </returns>
-    public List<Element> GetElements(List<long> elementIds) => db.Elements
+    public Element[] GetElements(long[] elementIds) => db.Elements
                                                              .Where(e => elementIds.Contains(e.Id))
-                                                             .OrderBy(e => elementIds.IndexOf(e.Id))
-                                                             .ToList();
+                                                             .OrderBy(e => Array.IndexOf(elementIds, e.Id))
+                                                             .ToArray();
 
     /// <summary>
     /// The get or create pitches in db.

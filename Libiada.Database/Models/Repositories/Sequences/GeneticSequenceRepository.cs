@@ -79,7 +79,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
         sequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
-        sequence.Order = chain.Order.ToList();
+        sequence.Order = chain.Order;
 
         Create(sequence, partial);
     }

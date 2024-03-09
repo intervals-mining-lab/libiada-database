@@ -73,14 +73,14 @@ public partial class Measure
     /// </summary>
     [Column("alphabet")]
     [Comment("Measure alphabet (array of notes ids).")]
-    public List<long> Alphabet { get; set; } = null!;
+    public long[] Alphabet { get; set; } = null!;
 
     /// <summary>
     /// Measure order.
     /// </summary>
     [Column("building")]
     [Comment("Measure order.")]
-    public List<int> Order { get; set; } = null!;
+    public int[] Order { get; set; } = null!;
 
     /// <summary>
     /// Time signature upper numeral (Beat numerator).

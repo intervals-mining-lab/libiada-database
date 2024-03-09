@@ -33,12 +33,12 @@ public class FmotifRepository : IFmotifRepository
     /// <returns>
     /// The <see cref="T:long[]"/>.
     /// </returns>
-    public List<long> GetOrCreateFmotifsInDb(Alphabet alphabet)
+    public long[] GetOrCreateFmotifsInDb(Alphabet alphabet)
     {
-        var result = new List<long>(alphabet.Cardinality);
+        var result = new long[alphabet.Cardinality];
         for (int i = 0; i < alphabet.Cardinality; i++)
         {
-            result.Add(CreateFmotif((Fmotif)alphabet[i]));
+            result[i] = CreateFmotif((Fmotif)alphabet[i]);
         }
 
         return result;
@@ -56,7 +56,7 @@ public class FmotifRepository : IFmotifRepository
     public long CreateFmotif(Fmotif fmotif)
     {
         var notesChain = new BaseChain(fmotif.NoteList.ToList());
-        List<long> notes = new ElementRepository(db).GetOrCreateNotesInDb(notesChain.Alphabet);
+        long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(notesChain.Alphabet);
 
         var localFmotifHash = fmotif.GetHashCode().ToString();
         var dbFmotifs = db.Fmotifs.Where(f => f.Value == localFmotifHash).ToList();
@@ -64,15 +64,15 @@ public class FmotifRepository : IFmotifRepository
         {
             foreach (var dbFmotif in dbFmotifs)
             {
-                long[] dbAlphabet = dbFmotif.Alphabet.ToArray();
+                long[] dbAlphabet = dbFmotif.Alphabet;
                 if (notes.SequenceEqual(dbAlphabet))
                 {
-                    int[] dbOrder = dbFmotif.Order.ToArray();
+                    int[] dbOrder = dbFmotif.Order;
                     if (notesChain.Order.SequenceEqual(dbOrder))
                     {
                         if (fmotif.Type != dbFmotif.FmotifType)
                         {
-                            throw new Exception("Fmotif found in db is not equal to the local fmotif.");
+                            throw new Exception("Fmotif found in database is not equal to the local fmotif.");
                         }
 
                         return dbFmotif.Id;
@@ -87,7 +87,7 @@ public class FmotifRepository : IFmotifRepository
             Value = fmotif.GetHashCode().ToString(),
             FmotifType = fmotif.Type,
             Alphabet = notes,
-            Order = notesChain.Order.ToList()
+            Order = notesChain.Order
         };
 
         db.Fmotifs.Add(result);

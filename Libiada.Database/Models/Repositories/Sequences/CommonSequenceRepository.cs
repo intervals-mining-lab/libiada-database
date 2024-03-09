@@ -38,11 +38,11 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// The sequence id.
     /// </param>
     /// <returns>
-    /// The <see cref="List{element}"/>.
+    /// The <see cref="element[]"/>.
     /// </returns>
-    public List<Element> GetElements(long sequenceId)
+    public Element[] GetElements(long sequenceId)
     {
-        List<long> elementIds = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
+        long[] elementIds = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
         return ElementRepository.GetElements(elementIds);
     }
 
@@ -57,8 +57,8 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     public BaseChain GetLibiadaBaseChain(long sequenceId)
     {
-        List<int> order = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Order;
-        return new BaseChain(order.ToArray(), GetAlphabet(sequenceId), sequenceId);
+        int[] order = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Order;
+        return new BaseChain(order, GetAlphabet(sequenceId), sequenceId);
     }
 
     /// <summary>
@@ -111,9 +111,9 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     public string GetString(long sequenceId)
     {
-        List<int> order = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Order;
+        int[] order = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Order;
         Alphabet alphabet = GetAlphabet(sequenceId);
-        var stringBuilder = new StringBuilder(order.Count);
+        var stringBuilder = new StringBuilder(order.Length);
         foreach (int element in order)
         {
             stringBuilder.Append(alphabet[element]);
@@ -248,7 +248,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     private Alphabet GetAlphabet(long sequenceId)
     {
-        List<long> elements = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
+        long[] elements = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
         return ElementRepository.ToLibiadaAlphabet(elements);
     }
 

@@ -70,23 +70,23 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
         BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
-        List<long> notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
+        long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
 
         BaseChain measuresSequence = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
-        List<long> measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
+        long[] measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
 
         var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable).ToArray();
         List<BaseChain> fmotifsSequences = new List<BaseChain>(pauseTreatments.Length);
-        List<List<long>> fmotifsAlphabets = new List<List<long>>(pauseTreatments.Length);
+        List<long[]> fmotifsAlphabets = new List<long[]>(pauseTreatments.Length);
         List<BaseChain> fmotifsSequencesWithSequentialTransfer = new List<BaseChain>(pauseTreatments.Length);
-        List<List<long>> fmotifsAlphabetsWithSequentialTransfer = new List<List<long>>(pauseTreatments.Length);
+        List<long[]> fmotifsAlphabetsWithSequentialTransfer = new List<long[]>(pauseTreatments.Length);
 
         for (int i = 0; i < pauseTreatments.Length; i++)
         {
             PauseTreatment pauseTreatment = pauseTreatments[i];
 
             fmotifsSequences.Add(ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false));
-            fmotifsAlphabets.Add(FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequences[i].Alphabet));
+            fmotifsAlphabets[i] = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequences[i].Alphabet);
 
             fmotifsSequencesWithSequentialTransfer.Add(ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true));
             fmotifsAlphabetsWithSequentialTransfer.Add(FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequencesWithSequentialTransfer[i].Alphabet));
@@ -99,7 +99,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
             RemoteDb = sequence.RemoteDb,
             RemoteId = sequence.RemoteId,
             Description = sequence.Description,
-            Order = notesSequence.Order.ToList(),
+            Order = notesSequence.Order,
             Alphabet = notesAlphabet,
             Notation = Notation.Notes,
             PauseTreatment = PauseTreatment.NotApplicable,
@@ -114,7 +114,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
             RemoteDb = sequence.RemoteDb,
             RemoteId = sequence.RemoteId,
             Description = sequence.Description,
-            Order = measuresSequence.Order.ToList(),
+            Order = measuresSequence.Order,
             Alphabet = measuresAlphabet,
             Notation = Notation.Measures,
             PauseTreatment = PauseTreatment.NotApplicable,
@@ -132,7 +132,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
                 Description = sequence.Description,
                 RemoteDb = sequence.RemoteDb,
                 RemoteId = sequence.RemoteId,
-                Order = fmotifsSequences[i].Order.ToList(),
+                Order = fmotifsSequences[i].Order,
                 Alphabet = fmotifsAlphabets[i],
                 Notation = Notation.FormalMotifs,
                 PauseTreatment = pauseTreatment,
@@ -146,7 +146,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
                 Description = sequence.Description,
                 RemoteDb = sequence.RemoteDb,
                 RemoteId = sequence.RemoteId,
-                Order = fmotifsSequencesWithSequentialTransfer[i].Order.ToList(),
+                Order = fmotifsSequencesWithSequentialTransfer[i].Order,
                 Alphabet = fmotifsAlphabetsWithSequentialTransfer[i],
                 Notation = Notation.FormalMotifs,
                 PauseTreatment = pauseTreatment,

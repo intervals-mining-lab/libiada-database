@@ -68,7 +68,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
 
             allCharacteristics.Add(sequenceId, characteristics);
 
-            if (characteristics.Count < sequenceCharacteristicLinkIds.Length * dbAlphabet.Count)
+            if (characteristics.Count < sequenceCharacteristicLinkIds.Length * dbAlphabet.Length)
             {
                 Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 // TODO: add ids to IBaseObject to avoid duplicate enumeration

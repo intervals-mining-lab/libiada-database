@@ -64,11 +64,11 @@ public class DataSequenceRepository : SequenceImporter
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
-        List<long> alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
+        long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
         var dataSequence = new DataSequence()
         {
             Alphabet = alphabet,
-            Order = chain.Order.ToList(),
+            Order = chain.Order,
             Notation = sequence.Notation,
             Description = sequence.Description,
             MatterId = sequence.MatterId,

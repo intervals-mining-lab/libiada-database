@@ -72,14 +72,14 @@ public partial class Fmotif
     /// </summary>
     [Column("alphabet")]
     [Comment("Fmotif's alphabet (array of notes ids).")]
-    public List<long> Alphabet { get; set; } = null!;
+    public long[] Alphabet { get; set; } = null!;
 
     /// <summary>
     /// Fmotif's order.
     /// </summary>
     [Column("building")]
     [Comment("Fmotif's order.")]
-    public List<int> Order { get; set; } = null!;
+    public int[] Order { get; set; } = null!;
 
     /// <summary>
     /// Fmotif type enum numeric value.

@@ -51,14 +51,14 @@ public partial class CommonSequence
     /// </summary>
     [Column("alphabet")]
     [Comment("Sequence's alphabet (array of elements ids).")]
-    public List<long> Alphabet { get; set; } = null!;
+    public long[] Alphabet { get; set; } = null!;
 
     /// <summary>
     /// Sequence's order.
     /// </summary>
     [Column("building")]
     [Comment("Sequence's order.")]
-    public List<int> Order { get; set; } = null!;
+    public int[] Order { get; set; } = null!;
 
     /// <summary>
     /// Id of the sequence in remote database.

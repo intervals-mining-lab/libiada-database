@@ -7,7 +7,6 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;
 
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 /// <summary>
 /// Contatins list of possible combinations of accordance characteristics parameters.

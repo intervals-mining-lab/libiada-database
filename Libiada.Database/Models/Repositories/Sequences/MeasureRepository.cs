@@ -25,19 +25,22 @@ public class MeasureRepository : IMeasureRepsitory
     }
 
     /// <summary>
-    /// The get or create measure in db.
+    /// Gets (or creates if there are none) measure from database.
     /// </summary>
     /// <param name="alphabet">
     /// The alphabet.
     /// </param>
-    /// <returns></returns>
-    public List<long> GetOrCreateMeasuresInDb(Alphabet alphabet)
+    /// <returns>
+    /// Measures id in datadabe as <see cref="long[]"/>
+    /// </returns>
+    public long[] GetOrCreateMeasuresInDb(Alphabet alphabet)
     {
-        var result = new List<long>(alphabet.Cardinality);
+        var result = new long[alphabet.Cardinality];
         for (int i = 0; i < alphabet.Cardinality; i++)
         {
-            result.Add(CreateMeasure((Measure)alphabet[i]));
+            result[i] = CreateMeasure((Measure)alphabet[i]);
         }
+
         db.SaveChanges();
         return result;
     }
@@ -54,7 +57,7 @@ public class MeasureRepository : IMeasureRepsitory
     public long CreateMeasure(Measure measure)
     {
         var measureChain = new BaseChain(measure.NoteList.Cast<IBaseObject>().ToList());
-        List<long> notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
+        long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
 
         string localMeasureHash = measure.GetHashCode().ToString();
         var dbMeasures = db.Measures.Where(m => m.Value == localMeasureHash).ToList();
@@ -62,10 +65,10 @@ public class MeasureRepository : IMeasureRepsitory
         {
             foreach (var dbMeasure in dbMeasures)
             {
-                List<long> dbAlphabet = dbMeasure.Alphabet.ToList();
+                long[] dbAlphabet = dbMeasure.Alphabet;
                 if (notes.SequenceEqual(dbAlphabet))
                 {
-                    int[] dbOrder = dbMeasure.Order.ToArray();
+                    int[] dbOrder = dbMeasure.Order;
                     if (measureChain.Order.SequenceEqual(dbOrder))
                     {
                         if (measure.Attributes.Key.Fifths != dbMeasure.Fifths
@@ -86,7 +89,7 @@ public class MeasureRepository : IMeasureRepsitory
         {
             //Id = db.GetNewElementId(),
             Alphabet = notes,
-            Order = measureChain.Order.ToList(),
+            Order = measureChain.Order,
             Value = measure.GetHashCode().ToString(),
             Beats = measure.Attributes.Size.Beats,
             Beatbase = measure.Attributes.Size.BeatBase,

@@ -67,7 +67,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
         MatterRepository.CreateOrExtractExistingMatterForSequence(commonSequence);
 
         commonSequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
-        commonSequence.Order = chain.Order.ToList();
+        commonSequence.Order = chain.Order;
 
         Create(commonSequence, original, language, translator);
     }
