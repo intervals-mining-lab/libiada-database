@@ -128,11 +128,4 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
 
         return chains;
     }
-
-    /// <summary>
-    /// The dispose.
-    /// </summary>
-    public void Dispose()
-    {
-    }
 }

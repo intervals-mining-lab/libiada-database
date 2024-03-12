@@ -188,14 +188,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     }
 
     /// <summary>
-    /// The dispose.
-    /// </summary>
-    public void Dispose()
-    {
-    }
-
-    /// <summary>
-    /// The convert congeneric score track to base chain.
+    /// Converts congeneric score track to base chain with notes as elements.
     /// </summary>
     /// <param name="scoreTrack">
     /// The score track.

@@ -150,7 +150,7 @@ public class ElementRepository : IElementRepository
 
         bool staticNotation = StaticCollections.StaticNotations.Contains(notation);
 
-        string[] stringElements = alphabet.Select(element => element.ToString()).ToArray();
+        string[] stringElements = alphabet.Select(e => e.ToString()).ToArray();
 
         Element[] elements = staticNotation ?
                         CachedElements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToArray() :

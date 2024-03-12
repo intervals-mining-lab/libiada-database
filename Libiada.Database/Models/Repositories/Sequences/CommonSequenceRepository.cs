@@ -228,15 +228,6 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
         }
     }
 
-
-
-    /// <summary>
-    /// The dispose.
-    /// </summary>
-    public void Dispose()
-    {
-    }
-
     /// <summary>
     /// The get alphabet.
     /// </summary>

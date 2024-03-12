@@ -112,11 +112,4 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
         Db.LiteratureSequences.Add(literatureSequence);
         Db.SaveChanges();
     }
-
-    /// <summary>
-    /// The dispose.
-    /// </summary>
-    public void Dispose()
-    {
-    }
 }
