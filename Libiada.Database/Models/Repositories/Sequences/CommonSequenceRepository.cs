@@ -14,6 +14,7 @@ using Libiada.Database.Attributes;
 using Libiada.Database.Extensions;
 
 using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp.PixelFormats;
 
 
 /// <summary>
@@ -87,7 +88,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
             throw new Exception("Cannot find sequence to return");
         }
 
-        var image = Image.Load(imageSequence.Matter.Source);
+        var image = Image.Load<Rgba32>(imageSequence.Matter.Source);
         var orderExtractor = imageSequence.OrderExtractor.GetAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>().Value;
         var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], (IImageOrderExtractor)Activator.CreateInstance(orderExtractor));
         var alphabet = new Alphabet { NullValue.Instance() };
