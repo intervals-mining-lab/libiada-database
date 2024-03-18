@@ -13,7 +13,10 @@ public class LocalCharacteristicsCalculator
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
     private readonly ICommonSequenceRepository commonSequenceRepository;
 
-    public LocalCharacteristicsCalculator(LibiadaDatabaseEntities db, IFullCharacteristicRepository characteristicTypeLinkRepository, ICommonSequenceRepository commonSequenceRepository)
+    public LocalCharacteristicsCalculator(
+        LibiadaDatabaseEntities db,
+        IFullCharacteristicRepository characteristicTypeLinkRepository,
+        ICommonSequenceRepository commonSequenceRepository)
     {
         this.db = db;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;

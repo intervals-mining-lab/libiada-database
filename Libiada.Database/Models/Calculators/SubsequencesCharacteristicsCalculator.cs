@@ -18,15 +18,15 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
 
     public SubsequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                                  IFullCharacteristicRepository characteristicTypeLinkRepository, 
-                                                 ICommonSequenceRepository commonSequenceRepository)
+                                                 ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
     {
         this.dbFactory = dbFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -87,6 +87,7 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
 
         // creating local context to avoid memory overflow due to possibly big cache of characteristics
         using var db = dbFactory.CreateDbContext();
+        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
 
         Subsequence[] subsequences = filters.IsNullOrEmpty() ?

@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore;
 public class CongenericSequencesCharacteristicsCalculator : ICongenericSequencesCharacteristicsCalculator
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly ICongenericCharacteristicRepository characteristicTypeLinkRepository;
 
     public CongenericSequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                              ICommonSequenceRepository commonSequenceRepository,
+                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                               ICongenericCharacteristicRepository characteristicTypeLinkRepository)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
 
@@ -57,7 +57,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
         long[] sequenceIds = chainCharacteristicsIds.Keys.ToArray();
         using var db = dbFactory.CreateDbContext();
         var dbAlphabets = db.CommonSequences.Where(cs => sequenceIds.Contains(cs.Id)).ToDictionary(cs => cs.Id, cs => cs.Alphabet);
-
+        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
             var dbAlphabet = dbAlphabets[sequenceId];

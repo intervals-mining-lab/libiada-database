@@ -20,15 +20,15 @@ using Microsoft.EntityFrameworkCore;
 public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalculator
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
 
     public SequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                              ICommonSequenceRepository commonSequenceRepository,
+                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
                                               IFullCharacteristicRepository characteristicTypeLinkRepository)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
 
@@ -76,6 +76,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
         }
         using var db = dbFactory.CreateDbContext();
         var sequenceIds = chainCharacteristicsIds.Keys;
+        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
             short[] sequenceCharacteristicLinkIds = chainCharacteristicsIds[sequenceId];
@@ -170,7 +171,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
         var characteristics = new double[chainIds.Length][];
         var sequenceIds = chainIds.SelectMany(c => c).Distinct();
         var sequences = new Dictionary<long, Chain>();
-
+        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
             sequences.Add(sequenceId, commonSequenceRepository.GetLibiadaChain(sequenceId));
