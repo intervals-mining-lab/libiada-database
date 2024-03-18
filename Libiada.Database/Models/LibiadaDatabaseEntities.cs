@@ -1,11 +1,12 @@
 ﻿namespace Libiada.Database.Models;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, AspNetRole, int>
+public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, IdentityRole<int>, int>
 {
     public LibiadaDatabaseEntities(DbContextOptions<LibiadaDatabaseEntities> options)
         : base(options)
