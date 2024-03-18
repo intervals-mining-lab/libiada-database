@@ -60,7 +60,7 @@ public struct SubsequenceData
     public SubsequenceData(Subsequence subsequence, double[] characteristics, int[] attributes) : this(subsequence)
     {
         CharacteristicsValues = characteristics;
-        Attributes = attributes ?? Array.Empty<int>();
+        Attributes = attributes ?? [];
     }
 
     /// <summary>
@@ -71,8 +71,8 @@ public struct SubsequenceData
     /// </param>
     public SubsequenceData(Subsequence subsequence)
     {
-        Attributes = Array.Empty<int>();
-        CharacteristicsValues = Array.Empty<double>();
+        Attributes = [];
+        CharacteristicsValues = [];
         Id = subsequence.Id;
         FeatureId = (byte)subsequence.Feature;
         RemoteId = subsequence.RemoteId;
