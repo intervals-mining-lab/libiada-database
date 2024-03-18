@@ -1,9 +1,11 @@
 ﻿namespace Libiada.Database.Helpers;
 
 using System.Globalization;
-using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System;
+using System.Text;
 
 using Bio;
 using Bio.IO;
@@ -11,13 +13,11 @@ using Bio.IO.FastA;
 using Bio.IO.GenBank;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 using Libiada.Database.Models.NcbiSequencesData;
 
-using Newtonsoft.Json.Linq;
-
 using Microsoft.Extensions.Configuration;
-
 
 /// <summary>
 /// The ncbi helper.
@@ -27,25 +27,26 @@ public class NcbiHelper : INcbiHelper
     /// <summary>
     /// The base url for all eutils.
     /// </summary>
-    private const string BaseUrl = @"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+    private readonly Uri BaseAddress = new(@"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/");
 
     /// <summary>
     /// Synchronization object.
     /// </summary>
-    private static readonly object SyncRoot = new object();
+    private static readonly object SyncRoot = new();
 
-    private readonly string ApiKey = "";
+    private readonly string ApiKey;
 
     /// <summary>
     /// The last request date time.
     /// </summary>
-    private DateTimeOffset lastRequestDateTime = DateTimeOffset.MinValue;
+    private DateTimeOffset lastRequestDateTime = DateTimeOffset.Now;
 
-    private readonly HttpClient httpClient = new HttpClient();
+    private IHttpClientFactory HttpClientFactory { get; init; }
 
-    public NcbiHelper(IConfiguration config)
+    public NcbiHelper(IConfiguration config, IHttpClientFactory httpClientFactory)
     {
         ApiKey = config["NcbiApiKey"] ?? throw new Exception($"NcbiApiKey is not found in confiuguration.");
+        HttpClientFactory = httpClientFactory;
     }
 
     /// <summary>
@@ -77,7 +78,7 @@ public class NcbiHelper : INcbiHelper
     /// </exception>
     public static GenBankMetadata GetMetadata(ISequence sequence)
     {
-        if (!(sequence.Metadata["GenBank"] is GenBankMetadata metadata))
+        if (sequence.Metadata["GenBank"] is not GenBankMetadata metadata)
         {
             throw new Exception("GenBank file metadata is empty.");
         }
@@ -157,7 +158,7 @@ public class NcbiHelper : INcbiHelper
         int maxLength = int.MaxValue)
     {
         string[] searchResults = Regex.Split(data, @"^\r\n", RegexOptions.Multiline);
-        List<string> accessions = new List<string>();
+        List<string> accessions = [];
 
         foreach (string block in searchResults)
         {
@@ -203,10 +204,10 @@ public class NcbiHelper : INcbiHelper
 
     public List<NuccoreObject> ExecuteESummaryRequest(string ncbiWebEnvironment, string queryKey, bool includePartial)
     {
-        var nuccoreObjects = new List<NuccoreObject>();
+        List<NuccoreObject> nuccoreObjects = [];
         const short retmax = 500;
         int retstart = 0;
-        var eSummaryResults = new List<ESummaryResult>();
+        List<ESummaryResult> eSummaryResults = [];
 
         do
         {
@@ -221,22 +222,25 @@ public class NcbiHelper : INcbiHelper
             if (esummaryResultJObject != null)
             {
                 // removing array of uids because it breakes deserialization
-                eSummaryResults = esummaryResultJObject
-                                        .Children<JProperty>()
-                                        .Where(j => j.Name != "uids")
-                                        .Select(j => j.Value.ToObject<ESummaryResult>())
-                                        .ToList();
+                //eSummaryResults = esummaryResultJObject
+                //                        .Children<JProperty>()
+                //                        .Where(j => j.Name != "uids")
+                //                        .Select(j => j.Value.ToObject<ESummaryResult>())
+                //                        .ToList();
 
                 // alternative implementation
-                //((JObject)esummaryResultJObject).Remove("uids");
-                //var eSummaryResults = JsonConvert.DeserializeObject<Dictionary<string, ESummaryResult>>(esummaryResultJObject.ToString()).Values;
+                ((JObject)esummaryResultJObject).Remove("uids");
+                string esummaryResultSring = esummaryResultJObject.ToString();
+                Dictionary<string, ESummaryResult> eSummaryResultsDictionary = JsonConvert.DeserializeObject<Dictionary<string, ESummaryResult>>(esummaryResultSring) 
+                    ?? throw new Exception($"Invalid esummary responce: {esummaryResultSring}");
+                eSummaryResults = eSummaryResultsDictionary.Values.ToList();
 
                 foreach (ESummaryResult result in eSummaryResults)
                 {
                     bool isPartial = result.Title.Contains("partial") || string.IsNullOrEmpty(result.Completeness);
                     if (includePartial || !isPartial)
                     {
-                        NuccoreObject nuccoreObject = new NuccoreObject
+                        NuccoreObject nuccoreObject = new()
                         {
                             Title = result.Title,
                             Organism = result.Organism,
@@ -265,26 +269,21 @@ public class NcbiHelper : INcbiHelper
     public (string, string) ExecuteESearchRequest(string searchTerm)
     {
         var urlEsearch = $"esearch.fcgi?db=nuccore&term={searchTerm}&usehistory=y&retmode=json";
-        var esearchResponseString = GetResponceString(urlEsearch);
-        ESearchResult eSearchResult = JsonConvert.DeserializeObject<ESearchResponce>(esearchResponseString).ESearchResult;
+        string esearchResponseString = GetResponceString(urlEsearch);
+        ESearchResponce eSeqrchReasponce = JsonConvert.DeserializeObject<ESearchResponce>(esearchResponseString) 
+            ?? throw new Exception($"Invalid esearch responce: {esearchResponseString}");
+        ESearchResult eSearchResult = eSeqrchReasponce.ESearchResult;
         return (eSearchResult.NcbiWebEnvironment, eSearchResult.QueryKey);
     }
 
     /// <summary>
-    /// Execute
+    /// Executes EPost request and returns it's result.
     /// </summary>
     /// <param name="ids"></param>
     /// <returns></returns>
     public (string, string) ExecuteEPostRequest(string ids)
     {
-        const string urlEPost = $"epost.fcgi";
-        string requestResult;
-        using (var webClient = new WebClient())
-        {
-            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            Uri url = new Uri(BaseUrl + urlEPost);
-
-            string data = $"db=nuccore&id={ids}";
+        string data = $"db=nuccore&id={ids}";
 
             // adding api key to request if there is any
             if (!string.IsNullOrEmpty(ApiKey))
@@ -292,11 +291,20 @@ public class NcbiHelper : INcbiHelper
                 data += $"&api_key={ApiKey}";
             }
 
-            WaitForRequest();
-            requestResult = webClient.UploadString(url, data);
-        }
+        const string urlEPost = $"epost.fcgi";
+        var httpClient = HttpClientFactory.CreateClient();
+        httpClient.BaseAddress = BaseAddress;
+        StringContent postData = new(data, Encoding.UTF8, "application/x-www-form-urlencoded");
+        //using var req = new HttpRequestMessage(HttpMethod.Post, urlEPost) { Content = new FormUrlEncodedContent(dict) };
 
-        XmlDocument xmlReader = new XmlDocument();
+        WaitForRequest();
+
+        using HttpResponseMessage response = httpClient.PostAsync(urlEPost, postData)
+            .ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode()).Result;
+
+        string requestResult = response.Content.ReadAsStringAsync().Result;
+
+        XmlDocument xmlReader = new();
         xmlReader.LoadXml(requestResult);
         var result = xmlReader.LastChild;
         return (result["WebEnv"].FirstChild.Value, result["QueryKey"].FirstChild.Value);
@@ -357,8 +365,8 @@ public class NcbiHelper : INcbiHelper
     /// </returns>
     private string GetResponceString(string url)
     {
-        var response = GetResponseStream(url);
-        StreamReader reader = new StreamReader(response);
+        Stream response = GetResponseStream(url);
+        StreamReader reader = new(response);
         string responseText = reader.ReadToEnd();
 
         return responseText;
@@ -388,12 +396,12 @@ public class NcbiHelper : INcbiHelper
     /// The params url (without base url).
     /// </param>
     /// <returns>
-    /// The response as <see cref="Stream"/>.
+    /// The response as <see cref="MemoryStream"/>.
     /// </returns>
     /// <exception cref="Exception">
     /// Thrown if response stream is null.
     /// </exception>
-    private Stream GetResponseStream(string url)
+    private MemoryStream GetResponseStream(string url)
     {
         // adding api key to request if there is any
         if (!string.IsNullOrEmpty(ApiKey))
@@ -401,18 +409,14 @@ public class NcbiHelper : INcbiHelper
             url += $"&api_key={ApiKey}";
         }
 
-        string resultUrl = BaseUrl + url;
-
         var memoryStream = new MemoryStream();
 
         WaitForRequest();
-        using Stream stream = httpClient.GetStreamAsync(resultUrl).Result;
 
-        if (stream == null)
-        {
-            throw new Exception("Response stream was null.");
-        }
+        var httpClient = HttpClientFactory.CreateClient();
+        httpClient.BaseAddress = BaseAddress;
 
+        using Stream stream = httpClient.GetStreamAsync(url).Result ?? throw new Exception("Response stream was null.");
         stream.CopyTo(memoryStream);
 
         memoryStream.Position = 0;
@@ -429,9 +433,12 @@ public class NcbiHelper : INcbiHelper
         {
             int delay = string.IsNullOrEmpty(ApiKey) ? 334 : 100;
 
-            if (DateTimeOffset.UtcNow - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, delay))
+            // calculationg time to next request
+            var timeToRequest =  (lastRequestDateTime + TimeSpan.FromMilliseconds(delay)) - DateTimeOffset.UtcNow;
+
+            if (timeToRequest > TimeSpan.Zero)
             {
-                Thread.Sleep(delay);
+                Thread.Sleep(timeToRequest);
             }
 
             lastRequestDateTime = DateTimeOffset.UtcNow;

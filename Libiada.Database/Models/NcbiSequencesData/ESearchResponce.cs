@@ -1,6 +1,6 @@
 ﻿namespace Libiada.Database.Models.NcbiSequencesData;
 
-public class ESearchResponce
+public record class ESearchResponce
 {
-    public ESearchResult ESearchResult { get; set; }
+    public required ESearchResult ESearchResult { get; init; }
 }

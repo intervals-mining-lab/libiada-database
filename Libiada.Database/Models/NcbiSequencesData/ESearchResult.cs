@@ -2,12 +2,12 @@
 
 using Newtonsoft.Json;
 
-public class ESearchResult
+public record class ESearchResult
 {
     [JsonProperty(PropertyName = "webenv")]
-    public string NcbiWebEnvironment { get; set; }
+    public required string NcbiWebEnvironment { get; init; }
 
-    public string QueryKey { get; set; }
+    public required string QueryKey { get; init; }
 
-    public int Count { get; set; }
+    public required int Count { get; init; }
 }

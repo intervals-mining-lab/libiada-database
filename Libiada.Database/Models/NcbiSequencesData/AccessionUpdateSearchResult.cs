@@ -1,16 +1,17 @@
 ﻿namespace Libiada.Database.Models.NcbiSequencesData;
 
-public class AccessionUpdateSearchResult
+public record class AccessionUpdateSearchResult
 {
-    public string LocalAccession;
-    public string Name;
-    public string RemoteName;
-    public string RemoteOrganism;
-    public byte LocalVersion;
-    public byte RemoteVersion;
-    public string LocalUpdateDate;
-    public DateTimeOffset LocalUpdateDateTime;
-    public string RemoteUpdateDate;
-    public bool Updated;
-    public bool NameUpdated;
+
+    public required string LocalAccession { get; init; }
+    public string? RemoteName { get; set; }
+    public required string Name { get; init; }
+    public string? RemoteOrganism { get; set; }
+    public required byte LocalVersion { get; init; }
+    public byte RemoteVersion { get; set; }
+    public required string LocalUpdateDate { get; init; }
+    public required DateTimeOffset LocalUpdateDateTime { get; init; }
+    public string? RemoteUpdateDate { get; set; }
+    public bool Updated { get; set; }
+    public bool NameUpdated { get; set; }
 }
