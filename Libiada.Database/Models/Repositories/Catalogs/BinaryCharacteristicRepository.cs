@@ -56,7 +56,7 @@ public class BinaryCharacteristicRepository : IBinaryCharacteristicRepository
     /// </returns>
     public BinaryCharacteristicValue CreateCharacteristic(long sequenceId, short characteristicLinkId, long firstElementId, long secondElementId, double value)
     {
-        var characteristic = new BinaryCharacteristicValue
+        BinaryCharacteristicValue characteristic = new()
         {
             SequenceId = sequenceId,
             CharacteristicLinkId = characteristicLinkId,

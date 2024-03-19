@@ -21,8 +21,8 @@ public class CustomSequencesCharacterisitcsCalculator
 
     public IEnumerable<double[]> Calculate(IEnumerable<Chain> sequences)
     {
-        var result = new List<double[]>();
-        foreach(var sequence in sequences)
+        List<double[]> result = [];
+        foreach(Chain sequence in sequences)
         {
             result.Add(Calculate(sequence));
         }
@@ -32,7 +32,7 @@ public class CustomSequencesCharacterisitcsCalculator
 
     public double[] Calculate(Chain sequence)
     {
-        var characteristics = new double[calculators.Length];
+        double[] characteristics = new double[calculators.Length];
 
         for(int i = 0; i < calculators.Length; i++)
         {

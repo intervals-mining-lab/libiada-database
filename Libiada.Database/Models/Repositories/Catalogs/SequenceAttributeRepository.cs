@@ -131,7 +131,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// </returns>
     public List<SequenceAttribute> Create(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
     {
-        var result = new List<SequenceAttribute>(qualifiers.Count);
+        List<SequenceAttribute> result = new(qualifiers.Count);
 
         foreach ((string key, List<string> values) in qualifiers)
         {
@@ -243,7 +243,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// </returns>
     private List<SequenceAttribute> CreateComplementJoinPartialAttributes(bool complement, bool complementJoin, Subsequence subsequence)
     {
-        var result = new List<SequenceAttribute>(3);
+        List<SequenceAttribute> result = new(3);
         if (complement)
         {
             result.Add(CreateSequenceAttribute(AnnotationAttribute.Complement, subsequence.Id));

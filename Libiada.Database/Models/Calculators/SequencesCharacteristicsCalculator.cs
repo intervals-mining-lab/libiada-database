@@ -63,8 +63,8 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// </returns>
     public Dictionary<long, Dictionary<short, double>> Calculate(Dictionary<long, short[]> chainCharacteristicsIds)
     {
-        var newCharacteristics = new List<CharacteristicValue>();
-        var allCharacteristics = new Dictionary<long, Dictionary<short, double>>();
+        List<CharacteristicValue> newCharacteristics = [];
+        Dictionary<long, Dictionary<short, double>> allCharacteristics = [];
 
         var characteristicLinkIds = chainCharacteristicsIds.SelectMany(c => c.Value).Distinct();
         var calculators = new Dictionary<short, LinkedFullCalculator>();
@@ -96,7 +96,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
                     {
                         LinkedFullCalculator calculator = calculators[sequenceCharacteristicLinkId];
                         double characteristicValue = calculator.Calculate(sequence);
-                        var characteristic = new CharacteristicValue
+                        CharacteristicValue characteristic = new()
                         {
                             SequenceId = sequenceId,
                             CharacteristicLinkId = sequenceCharacteristicLinkId,
@@ -110,7 +110,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
             }
         }
 
-        var characteristicRepository = new CharacteristicRepository(db);
+        CharacteristicRepository characteristicRepository = new(db);
         characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
 
         return allCharacteristics;
@@ -134,7 +134,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
 
         Dictionary<long, Dictionary<short, double>> dictionaryResult = Calculate(chainCharacteristicsIds);
 
-        var result = new double[chainIds.Length];
+        double[] result = new double[chainIds.Length];
         for (int i = 0; i < dictionaryResult.Count; i++)
         {
             result[i] = dictionaryResult[chainIds[i]][characteristicLinkId];
@@ -166,11 +166,11 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// </returns>
     public double[][] Calculate(long[][] chainIds, short[] characteristicLinkIds, bool rotate, bool complementary, uint? rotationLength)
     {
-        var links = new Link[characteristicLinkIds.Length];
-        var calculators = new IFullCalculator[characteristicLinkIds.Length];
-        var characteristics = new double[chainIds.Length][];
-        var sequenceIds = chainIds.SelectMany(c => c).Distinct();
-        var sequences = new Dictionary<long, Chain>();
+        Link[] links = new Link[characteristicLinkIds.Length];
+        IFullCalculator[] calculators = new IFullCalculator[characteristicLinkIds.Length];
+        double[][] characteristics = new double[chainIds.Length][];
+        IEnumerable<long> sequenceIds = chainIds.SelectMany(c => c).Distinct();
+        Dictionary<long, Chain> sequences = [];
         using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
@@ -191,10 +191,10 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
             for (int j = 0; j < calculators.Length; j++)
             {
                 long sequenceId = chainIds[i][j];
-                var sequence = (Chain)sequences[sequenceId].Clone();
+                Chain sequence = (Chain)sequences[sequenceId].Clone();
                 if (complementary)
                 {
-                    var sourceSequence = new Sequence(Alphabets.DNA, sequence.ToString());
+                    Sequence sourceSequence = new(Alphabets.DNA, sequence.ToString());
                     ISequence complementarySequence = sourceSequence.GetReverseComplementedSequence();
                     sequence = new Chain(complementarySequence.ConvertToString());
                 }
@@ -259,7 +259,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// </returns>
     private double[][] ExtractCharacteristicsValues(Dictionary<long, Dictionary<short, double>> characteristics, long[][] sequenceIds, short[] characteristicIds)
     {
-        var result = new double[sequenceIds.Length][];
+        double[][] result = new double[sequenceIds.Length][];
         for (int i = 0; i < sequenceIds.Length; i++)
         {
             result[i] = new double[sequenceIds[i].Length];

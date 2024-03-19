@@ -70,7 +70,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
 
         string stringSequence = fastaSequence.ConvertToString().ToUpper();
 
-        var chain = new BaseChain(stringSequence);
+        BaseChain chain = new(stringSequence);
 
         if (!ElementRepository.ElementsInDb(chain.Alphabet, sequence.Notation))
         {
@@ -92,7 +92,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// </param>
     public void Create(CommonSequence sequence, bool partial)
     {
-        var dnaSequence = new DnaSequence
+        DnaSequence dnaSequence = new()
         {
             MatterId = sequence.MatterId,
             Notation = sequence.Notation,
@@ -119,7 +119,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// </returns>
     public long[] GetNucleotideSequenceIds(long[] matterIds)
     {
-        var chains = new long[matterIds.Length];
+        long[] chains = new long[matterIds.Length];
         DnaSequence[] sequences = Db.DnaSequences.Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides).ToArray();
         for (int i = 0; i < matterIds.Length; i++)
         {

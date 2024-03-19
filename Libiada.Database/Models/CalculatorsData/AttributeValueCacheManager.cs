@@ -9,12 +9,12 @@ public class AttributeValueCacheManager
     /// <summary>
     /// United non-redundant list of all attributes values.
     /// </summary>
-    private readonly List<AttributeValue> attributeValuesCache = new List<AttributeValue>();
+    private readonly List<AttributeValue> attributeValuesCache = [];
 
     /// <summary>
     /// Dictionary of indexes of all attributeValues present in attributeValues list.
     /// </summary>
-    private readonly Dictionary<AttributeValue, int> attributeValueIndexDictionary = new Dictionary<AttributeValue, int>();
+    private readonly Dictionary<AttributeValue, int> attributeValueIndexDictionary = [];
     private readonly LibiadaDatabaseEntities db;
 
     public AttributeValueCacheManager(LibiadaDatabaseEntities db)
@@ -37,8 +37,8 @@ public class AttributeValueCacheManager
 
         for (int i = 0; i < subsequencesData.Length; i++)
         {
-            subsequencesAttributes.TryGetValue(subsequenceIds[i], out AttributeValue[] attributes);
-            attributes = attributes ?? new AttributeValue[0];
+            subsequencesAttributes.TryGetValue(subsequenceIds[i], out AttributeValue[]? attributes);
+            attributes ??= [];
             subsequencesData[i].Attributes = AddAttributeValues(attributes);
         }
     }
@@ -54,8 +54,8 @@ public class AttributeValueCacheManager
     /// </returns>
     private Dictionary<long, AttributeValue[]> GetSubsequencesAttributesValues(long[] subsequenceIds)
     {
-        
-            var sequenceAttributeRepository = new SequenceAttributeRepository(db);
+
+        SequenceAttributeRepository sequenceAttributeRepository = new(db);
             return sequenceAttributeRepository.GetAttributes(subsequenceIds);
     }
 

@@ -18,7 +18,7 @@ public class MatterRepository : IMatterRepository
     /// <summary>
     /// GenBank date formats.
     /// </summary>
-    private readonly string[] GenBankDateFormats = new[] { "dd-MMM-yyyy", "MMM-yyyy", "yyyy", "yyyy-MM-ddTHH:mmZ", "yyyy-MM-ddTHHZ", "yyyy-MM-dd", "yyyy-MM" };
+    private readonly string[] GenBankDateFormats = ["dd-MMM-yyyy", "MMM-yyyy", "yyyy", "yyyy-MM-ddTHH:mmZ", "yyyy-MM-ddTHHZ", "yyyy-MM-dd", "yyyy-MM"];
 
     /// <summary>
     /// Database context.
@@ -152,7 +152,7 @@ public class MatterRepository : IMatterRepository
     /// </returns>
     public Matter CreateMatterFromGenBankMetadata(GenBankMetadata metadata)
     {
-        var sources = metadata.Features.All.Where(f => f.Key == "source").ToArray();
+        FeatureItem[] sources = metadata.Features.All.Where(f => f.Key == "source").ToArray();
         string collectionCountry = SequenceAttributeRepository.GetAttributeSingleValue(sources, "country");
         string collectionCoordinates = SequenceAttributeRepository.GetAttributeSingleValue(sources, "lat_lon");
 
@@ -167,7 +167,7 @@ public class MatterRepository : IMatterRepository
         string commonName = metadata.Source.CommonName;
         string definition = metadata.Definition;
 
-        var matter = new Matter
+        Matter matter = new()
         {
             Name = $"{ExtractMatterName(species, commonName, definition)} | {metadata.Version.CompoundAccession}",
             Nature = Nature.Genetic,

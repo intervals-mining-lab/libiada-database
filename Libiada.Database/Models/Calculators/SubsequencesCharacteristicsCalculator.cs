@@ -48,7 +48,7 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
     /// <returns></returns>
     public double[] CalculateSubsequencesCharacteristics(long parentId, short characteristicId, Feature[] features, string[] filters = null)
     {
-        var characteristicsIds = new[] { characteristicId };
+        short[] characteristicsIds = [characteristicId];
         SubsequenceData[] subsequencesData = CalculateSubsequencesCharacteristics(characteristicsIds, features, parentId, filters);
         return subsequencesData.Select(s => s.CharacteristicsValues[0]).ToArray();
     }
@@ -81,9 +81,9 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
         long[] subsequenceIds;
         SubsequenceData[] subsequenceData;
         Dictionary<long, Dictionary<short, double>> characteristics;
-        var calculators = new IFullCalculator[characteristicIds.Length];
-        var links = new Link[characteristicIds.Length];
-        var newCharacteristics = new List<CharacteristicValue>();
+        IFullCalculator[] calculators = new IFullCalculator[characteristicIds.Length];
+        Link[] links = new Link[characteristicIds.Length];
+        List<CharacteristicValue> newCharacteristics = [];
 
         // creating local context to avoid memory overflow due to possibly big cache of characteristics
         using var db = dbFactory.CreateDbContext();
@@ -105,7 +105,7 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
                             .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
         if (characteristics.Count == subsequences.Length && characteristics.All(c => c.Value.Count == characteristicIds.Length))
         {
-            sequences = new Dictionary<long, Chain>();
+            sequences = [];
         }
         else
         {
@@ -124,8 +124,8 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
         for (int i = 0; i < subsequenceIds.Length; i++)
         {
             characteristics.TryGetValue(subsequenceIds[i], out Dictionary<short, double> sequenceDbCharacteristics);
-            sequenceDbCharacteristics = sequenceDbCharacteristics ?? new Dictionary<short, double>();
-            var values = new double[calculators.Length];
+            sequenceDbCharacteristics ??= [];
+            double[] values = new double[calculators.Length];
 
             // cycle through characteristics and notations
             for (int j = 0; j < calculators.Length; j++)
@@ -134,7 +134,7 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
                 if (!sequenceDbCharacteristics.TryGetValue(characteristicLinkId, out values[j]))
                 {
                     values[j] = calculators[j].Calculate(sequences[subsequenceIds[i]], links[j]);
-                    var currentCharacteristic = new CharacteristicValue
+                    CharacteristicValue currentCharacteristic = new()
                     {
                         SequenceId = subsequenceIds[i],
                         CharacteristicLinkId = characteristicLinkId,
@@ -149,7 +149,7 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
         }
 
         // trying to save calculated characteristics to database
-        var characteristicRepository = new CharacteristicRepository(db);
+        CharacteristicRepository characteristicRepository = new(db);
         characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
 
         return subsequenceData;

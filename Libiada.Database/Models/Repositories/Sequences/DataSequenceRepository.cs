@@ -42,7 +42,7 @@ public class DataSequenceRepository : SequenceImporter
 
        string[] cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToArray();
 
-        var elements = new List<IBaseObject>(cleanedSequence.Length);
+        List<IBaseObject> elements = new(cleanedSequence.Length);
 
         for (int i = 0; i < cleanedSequence.Length; i++)
         {
@@ -60,12 +60,12 @@ public class DataSequenceRepository : SequenceImporter
             elements.Add(new ValueInt(intElement));
         }
 
-        var chain = new BaseChain(elements);
+        BaseChain chain = new(elements);
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
 
         long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
-        var dataSequence = new DataSequence()
+        DataSequence dataSequence = new()
         {
             Alphabet = alphabet,
             Order = chain.Order,
@@ -94,7 +94,7 @@ public class DataSequenceRepository : SequenceImporter
     /// </param>
     public void Create(CommonSequence sequence)
     {
-        var dataSequence = new DataSequence()
+        DataSequence dataSequence = new()
         {
             Alphabet = sequence.Alphabet,
             Order = sequence.Order,

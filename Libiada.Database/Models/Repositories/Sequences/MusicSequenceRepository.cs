@@ -55,10 +55,10 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     public void Create(CommonSequence sequence, Stream sequenceStream)
     {
         string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
-        var doc = new XmlDocument();
+        XmlDocument doc = new();
         doc.LoadXml(stringSequence);
 
-        var parser = new MusicXmlParser();
+        MusicXmlParser parser = new();
         parser.Execute(doc);
         ScoreTrack tempTrack = parser.ScoreModel;
 
@@ -76,10 +76,10 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
         long[] measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
 
         var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable).ToArray();
-        List<BaseChain> fmotifsSequences = new List<BaseChain>(pauseTreatments.Length);
-        List<long[]> fmotifsAlphabets = new List<long[]>(pauseTreatments.Length);
-        List<BaseChain> fmotifsSequencesWithSequentialTransfer = new List<BaseChain>(pauseTreatments.Length);
-        List<long[]> fmotifsAlphabetsWithSequentialTransfer = new List<long[]>(pauseTreatments.Length);
+        List<BaseChain> fmotifsSequences = new(pauseTreatments.Length);
+        List<long[]> fmotifsAlphabets = new(pauseTreatments.Length);
+        List<BaseChain> fmotifsSequencesWithSequentialTransfer = new(pauseTreatments.Length);
+        List<long[]> fmotifsAlphabetsWithSequentialTransfer = new(pauseTreatments.Length);
 
         for (int i = 0; i < pauseTreatments.Length; i++)
         {
@@ -93,7 +93,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
         }
 
 
-        var musicSequence = new MusicSequence
+        MusicSequence musicSequence = new()
         {
             MatterId = sequence.MatterId,
             RemoteDb = sequence.RemoteDb,
@@ -170,7 +170,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// </param>
     public void Create(CommonSequence commonSequence, PauseTreatment pauseTreatment = PauseTreatment.NotApplicable, bool sequentialTransfer = false)
     {
-        var musicSequence = new MusicSequence
+        MusicSequence musicSequence = new()
         {
             MatterId = commonSequence.MatterId,
             Order = commonSequence.Order,
@@ -228,7 +228,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// </returns>
     private BaseChain ConvertCongenericScoreTrackToFormalMotifsBaseChain(CongenericScoreTrack scoreTrack, PauseTreatment pauseTreatment, bool sequentialTransfer)
     {
-        var borodaDivider = new BorodaDivider();
+        BorodaDivider borodaDivider = new();
         FmotifChain fmotifChain = borodaDivider.Divide(scoreTrack, pauseTreatment, sequentialTransfer);
         return new BaseChain(((IEnumerable<IBaseObject>)fmotifChain.FmotifsList).ToList());
     }

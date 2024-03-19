@@ -16,7 +16,7 @@ public class ElementRepository : IElementRepository
     /// <summary>
     /// The lazy cache.
     /// </summary>
-    private Element[] lazyCache;
+    private Element[]? lazyCache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ElementRepository"/> class.
@@ -32,7 +32,7 @@ public class ElementRepository : IElementRepository
     /// <summary>
     /// Gets the cached elements.
     /// </summary>
-    private Element[] CachedElements => lazyCache ?? (lazyCache = db.Elements.Where(e => StaticCollections.StaticNotations.Contains(e.Notation)).ToArray());
+    private Element[] CachedElements => lazyCache ??= db.Elements.Where(e => StaticCollections.StaticNotations.Contains(e.Notation)).ToArray();
 
     /// <summary>
     /// The dispose.
@@ -73,8 +73,8 @@ public class ElementRepository : IElementRepository
     /// </returns>
     public long[] GetOrCreateNotesInDb(Alphabet alphabet)
     {
-        var newNotes = new List<Note>();
-        var result = new Note[alphabet.Cardinality];
+        List<Note> newNotes = [];
+        Note[] result = new Note[alphabet.Cardinality];
         ValueNote[] notesAlphabet = alphabet.Cast<ValueNote>().ToArray();
         string[] stringNotes = notesAlphabet.Select(n => n.ToString()).ToArray();
         Dictionary<string, Note> existingNotes = db.Notes.Where(n => stringNotes.Contains(n.Value))
@@ -173,7 +173,7 @@ public class ElementRepository : IElementRepository
     /// </returns>
     public Alphabet ToLibiadaAlphabet(long[] elementIds)
     {
-        var alphabet = new Alphabet { NullValue.Instance() };
+        Alphabet alphabet = [NullValue.Instance()];
         Element[] elements = GetElements(elementIds);
         foreach (long elementId in elementIds)
         {
@@ -209,7 +209,7 @@ public class ElementRepository : IElementRepository
     /// </returns>
     private int[] GetOrCreatePitchesInDb(List<Pitch> pitches)
     {
-        var newPitches = new List<Models.Pitch>();
+        List<Models.Pitch> newPitches = [];
         var result = new Models.Pitch[pitches.Count];
         int[] midiNumbers = pitches.Select(p => p.MidiNumber).ToArray();
         Dictionary<int, Models.Pitch> existingPitches = db.Pitches.Where(p => midiNumbers.Contains(p.Midinumber))
@@ -231,7 +231,7 @@ public class ElementRepository : IElementRepository
             }
             else
             {
-                result[i] = new Database.Models.Pitch
+                result[i] = new Models.Pitch
                 {
                     Accidental = pitch.Alter,
                     NoteSymbol = pitch.Step,
@@ -265,8 +265,8 @@ public class ElementRepository : IElementRepository
                                           .Select(e => e.Value)
                                           .ToList();
 
-        List<string> newElements = elements.Where(e => !existingElements.Contains(e)).ToList();
-        db.Elements.AddRange(newElements.ConvertAll(e => new Element
+        var newElements = elements.Where(e => !existingElements.Contains(e));
+        db.Elements.AddRange(newElements.Select(e => new Element
                                                             {
                                                                 Value = e,
                                                                 Name = e,

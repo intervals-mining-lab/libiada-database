@@ -56,7 +56,7 @@ public class LocalCharacteristicsCalculator
         calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
         link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
-        var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
+        SubsequenceExtractor subsequenceExtractor = new(db, commonSequenceRepository);
 
         Subsequence subsequence = db.Subsequences.Single(s => s.Id == subsequenceId);
         chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
@@ -66,14 +66,14 @@ public class LocalCharacteristicsCalculator
 
         CutRuleIterator iterator = cutRule.GetIterator();
 
-        var fragments = new List<Chain>();
+        List<Chain> fragments = [];
 
         while (iterator.Next())
         {
             int start = iterator.GetStartPosition();
             int end = iterator.GetEndPosition();
 
-            var fragment = new List<IBaseObject>();
+            List<IBaseObject> fragment = [];
             for (int k = 0; start + k < end; k++)
             {
                 fragment.Add(chain[start + k]);
@@ -82,7 +82,7 @@ public class LocalCharacteristicsCalculator
             fragments.Add(new Chain(fragment));
         }
 
-        var characteristics = new double[fragments.Count];
+        double[] characteristics = new double[fragments.Count];
 
         for (int k = 0; k < fragments.Count; k++)
         {

@@ -50,13 +50,13 @@ public class SubsequenceExtractor
     public Dictionary<long, Chain> GetSubsequencesSequences(Subsequence[] subsequences)
     {
         long[] parentSequenceIds = subsequences.Select(s => s.SequenceId).Distinct().ToArray();
-        Dictionary<long, Sequence> parentSequences = new Dictionary<long, Sequence>();
+        Dictionary<long, Sequence> parentSequences = [];
         foreach (long id in parentSequenceIds)
         {
             parentSequences[id] = GetDotNetBioSequence(id);
         }
 
-        var result = new Dictionary<long, Chain>();
+        Dictionary<long, Chain> result = [];
 
         foreach (Subsequence subsequence in subsequences)
         {
@@ -138,7 +138,7 @@ public class SubsequenceExtractor
     public Subsequence[] GetSubsequences(long sequenceId, IReadOnlyList<Feature> features, string[] filters)
     {
         filters = filters.ConvertAll(f => f.ToLowerInvariant()).ToArray();
-        var result = new List<Subsequence>();
+        List<Subsequence> result = [];
         Subsequence[] allSubsequences = GetSubsequences(sequenceId, features);
 
         foreach (Subsequence subsequence in allSubsequences)
@@ -174,7 +174,7 @@ public class SubsequenceExtractor
                          .Include(s => s.SequenceAttribute)
                          .ToArray();
         sequences = GetSubsequencesSequences(subsequences);
-        var parentIds = subsequences.Select(s => s.SequenceId).ToArray();
+        long[] parentIds = subsequences.Select(s => s.SequenceId).ToArray();
         mattersNames = db.DnaSequences
                          .Include(ds => ds.Matter)
                          .Where(ds => parentIds.Contains(ds.Id))
@@ -183,8 +183,8 @@ public class SubsequenceExtractor
         ISequence[] bioSequences = new ISequence[subsequences.Length];
         for (int i = 0; i < subsequences.Length; i++)
         {
-            var subsequence = subsequences[i];
-            var bioSequence = new Sequence(Alphabets.DNA, sequences[subsequence.Id].ToString());
+            Subsequence subsequence = subsequences[i];
+            Sequence bioSequence = new(Alphabets.DNA, sequences[subsequence.Id].ToString());
             bioSequence.ID = $"{mattersNames[subsequence.SequenceId].Replace(' ', '_')}?from={subsequence.Start}to={subsequence.Start + subsequence.Length}";
             bioSequences[i] = bioSequence;
         }

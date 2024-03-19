@@ -92,7 +92,7 @@ public class NcbiHelper : INcbiHelper
     /// </returns>
     public static ISequence GetFastaSequence(Stream fastaFileStream)
     {
-        var fastaParser = new FastAParser();
+        FastAParser fastaParser = new();
         ISequence result = fastaParser.ParseOne(fastaFileStream);
         fastaFileStream.Dispose();
         return result;
@@ -206,14 +206,14 @@ public class NcbiHelper : INcbiHelper
 
         do
         {
-            var urlEsummary = $"esummary.fcgi?db=nuccore&retmode=json" +
+            string urlEsummary = $"esummary.fcgi?db=nuccore&retmode=json" +
                               $"&WebEnv={ncbiWebEnvironment}" +
                               $"&query_key={queryKey}" +
                               $"&retmax={retmax}&retstart={retstart}";
-            var esummaryResponse = GetResponceString(urlEsummary);
+            string esummaryResponse = GetResponceString(urlEsummary);
             retstart += retmax;
 
-            var esummaryResultJObject = JObject.Parse(esummaryResponse)["result"];
+            JToken? esummaryResultJObject = JObject.Parse(esummaryResponse)["result"];
             if (esummaryResultJObject != null)
             {
                 // removing array of uids because it breakes deserialization
@@ -287,7 +287,7 @@ public class NcbiHelper : INcbiHelper
         }
 
         const string urlEPost = $"epost.fcgi";
-        using var httpClient = httpClientFactory.CreateClient();
+        using HttpClient httpClient = httpClientFactory.CreateClient();
         httpClient.BaseAddress = BaseAddress;
         StringContent postData = new(data, Encoding.UTF8, "application/x-www-form-urlencoded");
 
@@ -411,7 +411,7 @@ public class NcbiHelper : INcbiHelper
 
         WaitForRequest();
 
-        using var httpClient = httpClientFactory.CreateClient();
+        using HttpClient httpClient = httpClientFactory.CreateClient();
         httpClient.BaseAddress = BaseAddress;
 
         using Stream stream = httpClient.GetStreamAsync(url).Result ?? throw new Exception("Response stream was null.");
@@ -432,7 +432,7 @@ public class NcbiHelper : INcbiHelper
             int delay = string.IsNullOrEmpty(ApiKey) ? 334 : 100;
 
             // calculationg time to next request
-            var timeToRequest = (lastRequestDateTime + TimeSpan.FromMilliseconds(delay)) - DateTimeOffset.UtcNow;
+            TimeSpan timeToRequest = (lastRequestDateTime + TimeSpan.FromMilliseconds(delay)) - DateTimeOffset.UtcNow;
 
             if (timeToRequest > TimeSpan.Zero)
             {

@@ -42,8 +42,8 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
     /// </returns>
     public Dictionary<long, Dictionary<(short, long), double>> Calculate(Dictionary<long, short[]> chainCharacteristicsIds)
     {
-        var newCharacteristics = new List<CongenericCharacteristicValue>();
-        var allCharacteristics = new Dictionary<long, Dictionary<(short, long), double>>();
+        List<CongenericCharacteristicValue> newCharacteristics = [];
+        Dictionary<long, Dictionary<(short, long), double>> allCharacteristics = [];
 
         var characteristicLinkIds = chainCharacteristicsIds.SelectMany(c => c.Value).Distinct();
         var calculators = new Dictionary<short, LinkedCongenericCalculator>();
@@ -60,7 +60,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
         using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
-            var dbAlphabet = dbAlphabets[sequenceId];
+            long[] dbAlphabet = dbAlphabets[sequenceId];
             short[] sequenceCharacteristicLinkIds = chainCharacteristicsIds[sequenceId];
             Dictionary<(short, long), double> characteristics = db.CongenericCharacteristicValues
                                                           .Where(c => sequenceId == c.SequenceId && sequenceCharacteristicLinkIds.Contains(c.CharacteristicLinkId))
@@ -72,7 +72,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
             {
                 Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 // TODO: add ids to IBaseObject to avoid duplicate enumeration
-                var alphabet = sequence.Alphabet;
+                Alphabet alphabet = sequence.Alphabet;
 
                 foreach (short sequenceCharacteristicLinkId in sequenceCharacteristicLinkIds)
                 {
@@ -80,12 +80,12 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
 
                     for (int i = 0; i < alphabet.Cardinality; i++)
                     {
-                        var elementId = dbAlphabet[i];
+                        long elementId = dbAlphabet[i];
                         if (!characteristics.ContainsKey((sequenceCharacteristicLinkId, elementId)))
                         {
 
                             double characteristicValue = calculator.Calculate(sequence.CongenericChain(i));
-                            var characteristic = new CongenericCharacteristicValue
+                            CongenericCharacteristicValue characteristic = new()
                             {
                                 SequenceId = sequenceId,
                                 CharacteristicLinkId = sequenceCharacteristicLinkId,
@@ -102,7 +102,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
             }
         }
 
-        var characteristicRepository = new CharacteristicRepository(db);
+        CharacteristicRepository characteristicRepository = new(db);
         characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
 
         return allCharacteristics;

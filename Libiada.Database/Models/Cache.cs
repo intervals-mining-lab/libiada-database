@@ -9,7 +9,7 @@ public class Cache
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private List<Matter>? matters;
-    private readonly object syncRoot = new object();
+    private readonly object syncRoot = new();
 
     /// <summary>
     /// The list of matters.

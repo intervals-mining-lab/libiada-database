@@ -35,7 +35,7 @@ public class FmotifRepository : IFmotifRepository
     /// </returns>
     public long[] GetOrCreateFmotifsInDb(Alphabet alphabet)
     {
-        var result = new long[alphabet.Cardinality];
+        long[] result = new long[alphabet.Cardinality];
         for (int i = 0; i < alphabet.Cardinality; i++)
         {
             result[i] = CreateFmotif((Fmotif)alphabet[i]);
@@ -55,11 +55,11 @@ public class FmotifRepository : IFmotifRepository
     /// </returns>
     public long CreateFmotif(Fmotif fmotif)
     {
-        var notesChain = new BaseChain(fmotif.NoteList.ToList());
+        BaseChain notesChain = new(fmotif.NoteList.ToList());
         long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(notesChain.Alphabet);
 
-        var localFmotifHash = fmotif.GetHashCode().ToString();
-        var dbFmotifs = db.Fmotifs.Where(f => f.Value == localFmotifHash).ToList();
+        string localFmotifHash = fmotif.GetHashCode().ToString();
+        List<Models.Fmotif> dbFmotifs = db.Fmotifs.Where(f => f.Value == localFmotifHash).ToList();
         if (dbFmotifs.Count > 0)
         {
             foreach (var dbFmotif in dbFmotifs)
@@ -81,7 +81,7 @@ public class FmotifRepository : IFmotifRepository
             }
         }
 
-        var result = new Models.Fmotif
+        Models.Fmotif result = new()
         {
             //Id = db.GetNewElementId(),
             Value = fmotif.GetHashCode().ToString(),

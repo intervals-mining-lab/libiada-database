@@ -18,7 +18,7 @@ public class OrderTransformer
 
     public void CalculateTransformations(int length)
     {
-        var orderGenerator = new OrderGenerator();
+        OrderGenerator orderGenerator = new();
         Orders = orderGenerator.GenerateOrders(length);
         TransformationsData = new OrderTransformationData[Orders.Count];
         TransformOrders();
@@ -37,7 +37,7 @@ public class OrderTransformer
 
     private OrderTransformationResult TransformOrder(OrderTransformation transformationType, int id)
     {
-        var transformationResult = new OrderTransformationResult();
+        OrderTransformationResult transformationResult = new();
         Chain chain = transformationType == OrderTransformation.Dissimilar
                           ? DissimilarChainFactory.Create(new BaseChain(Orders[id]))
                           : HighOrderFactory.Create(new Chain(Orders[id]), transformationType.GetLink());
@@ -58,11 +58,11 @@ public class OrderTransformer
     {
         OrderTransformation[] transformationTypes = EnumExtensions.ToArray<OrderTransformation>();
         bool completed = false;
-        var ordersForChecking = new List<int> { id };
-        var checkedOrders = new List<int> { id };
+        List<int> ordersForChecking = [id];
+        List<int> checkedOrders = [id];
         while (!completed)
         {
-            var newOrders = new List<int>();
+            List<int> newOrders = [];
             foreach (int order in ordersForChecking)
             {
                 for (int i = 0; i < transformationTypes.Length; i++)

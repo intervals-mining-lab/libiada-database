@@ -10,17 +10,17 @@ public class MultisequenceRepository
     /// <summary>
     /// Array of sequence types used in multisequence grouping.
     /// </summary>
-    public static readonly SequenceType[] SequenceTypesFilter = new[]
-    {
+    public static readonly SequenceType[] SequenceTypesFilter =
+    [
             SequenceType.CompleteGenome,
             SequenceType.MitochondrialGenome,
             SequenceType.ChloroplastGenome,
             SequenceType.Plasmid,
             SequenceType.Plastid,
             SequenceType.MitochondrialPlasmid
-    };
+    ];
 
-    private static readonly Dictionary<int, string> RomanDigits = new Dictionary<int, string>
+    private static readonly Dictionary<int, string> RomanDigits = new()
     {
         { 1000, "M" },
         { 900, "CM" },
@@ -78,7 +78,7 @@ public class MultisequenceRepository
     /// </returns>
     public static int GetSequenceNumberByName(string matterName)
     {
-        var splitName = matterName.Split(' ').ToList();
+        List<string> splitName = matterName.Split(' ').ToList();
         if (matterName.Contains("chromosome"))
         {
             int chromosomeWordIndex = splitName.IndexOf("chromosome");
@@ -120,7 +120,7 @@ public class MultisequenceRepository
             if (splitName[plasmidWordIndex + 1].Length > 1 && !splitName[plasmidWordIndex + 1].All(char.IsDigit))
             {
                 bool check = false;
-                foreach (var ch in splitName[plasmidWordIndex + 1])
+                foreach (char ch in splitName[plasmidWordIndex + 1])
                 {
                     if (char.IsNumber(ch))
                     {

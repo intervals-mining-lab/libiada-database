@@ -95,7 +95,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// </param>
     public void Create(CommonSequence sequence, bool original, Language language, Translator translator)
     {
-        var literatureSequence = new LiteratureSequence
+        LiteratureSequence literatureSequence = new()
         {
             MatterId = sequence.MatterId,
             Alphabet = sequence.Alphabet,

@@ -20,7 +20,7 @@ public static class DataTransformers
     {
         string[] splittedFile = file.Split('\0', '\t');
 
-        var result = new StringBuilder();
+        StringBuilder result = new();
 
         foreach (string line in splittedFile)
         {

@@ -35,7 +35,7 @@ public class MeasureRepository : IMeasureRepsitory
     /// </returns>
     public long[] GetOrCreateMeasuresInDb(Alphabet alphabet)
     {
-        var result = new long[alphabet.Cardinality];
+        long[] result = new long[alphabet.Cardinality];
         for (int i = 0; i < alphabet.Cardinality; i++)
         {
             result[i] = CreateMeasure((Measure)alphabet[i]);
@@ -56,11 +56,11 @@ public class MeasureRepository : IMeasureRepsitory
     /// </returns>
     public long CreateMeasure(Measure measure)
     {
-        var measureChain = new BaseChain(measure.NoteList.Cast<IBaseObject>().ToList());
+        BaseChain measureChain = new(measure.NoteList.Cast<IBaseObject>().ToList());
         long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
 
         string localMeasureHash = measure.GetHashCode().ToString();
-        var dbMeasures = db.Measures.Where(m => m.Value == localMeasureHash).ToList();
+        List<Models.Measure> dbMeasures = db.Measures.Where(m => m.Value == localMeasureHash).ToList();
         if (dbMeasures.Count > 0)
         {
             foreach (var dbMeasure in dbMeasures)
@@ -84,8 +84,8 @@ public class MeasureRepository : IMeasureRepsitory
             }
         }
 
-        var mode = measure.Attributes.Key.Mode;
-        var result = new Models.Measure
+        string mode = measure.Attributes.Key.Mode;
+        Models.Measure result = new()
         {
             //Id = db.GetNewElementId(),
             Alphabet = notes,

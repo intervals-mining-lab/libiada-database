@@ -29,7 +29,7 @@ public class NatureAttributeTests
     [Test]
     public void NatureAttributeValueTest([Values] Nature value)
     {
-        var attribute = new NatureAttribute(value);
+        NatureAttribute attribute = new(value);
         Assert.That(attribute.Value, Is.EqualTo(value));
         Assert.That(attribute.Value.GetDisplayValue(), Is.EqualTo(value.GetDisplayValue()));
     }

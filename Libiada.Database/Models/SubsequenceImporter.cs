@@ -195,7 +195,7 @@ public class SubsequenceImporter
         // first child start and last child end
         if (geneLocation.Count == 1
          && geneLocation[0].LocationStart == otherLocation[0].LocationStart
-         && geneLocation[0].LocationEnd == otherLocation[otherLocation.Count - 1].LocationEnd)
+         && geneLocation[0].LocationEnd == otherLocation[^1].LocationEnd)
         {
             return true;
         }
@@ -229,9 +229,9 @@ public class SubsequenceImporter
     /// </returns>
     private (int, int) CreateFeatureSubsequences()
     {
-        var codingSubsequences = new List<Subsequence>(features.Count);
-        var newPositions = new List<Position>();
-        var newSequenceAttributes = new List<SequenceAttribute>();
+        List<Subsequence> codingSubsequences = new(features.Count);
+        List<Position> newPositions = [];
+        List<SequenceAttribute> newSequenceAttributes = [];
 
         for (int i = 1; i < features.Count; i++)
         {
@@ -274,7 +274,7 @@ public class SubsequenceImporter
             int end = leafLocations[0].LocationEnd - 1;
             int length = end - start + 1;
 
-            var subsequence = new Subsequence
+            Subsequence subsequence = new()
             {
                 Id = db.GetNewElementId(),
                 Feature = subsequenceFeature,
@@ -288,11 +288,11 @@ public class SubsequenceImporter
             codingSubsequences.Add(subsequence);
             AddPositionToMap(start, end);
             newPositions.AddRange(CreateAdditionalPositions(leafLocations, subsequence.Id));
-            var sequenceAttributes = sequenceAttributeRepository.Create(feature.Qualifiers, complement, complementJoin, subsequence);
+            List<SequenceAttribute> sequenceAttributes = sequenceAttributeRepository.Create(feature.Qualifiers, complement, complementJoin, subsequence);
             newSequenceAttributes.AddRange(sequenceAttributes);
         }
 
-        var nonCodingSubsequences = CreateNonCodingSubsequences();
+        List<Subsequence> nonCodingSubsequences = CreateNonCodingSubsequences();
 
         db.Subsequences.AddRange(codingSubsequences);
         db.Subsequences.AddRange(nonCodingSubsequences);
@@ -318,7 +318,7 @@ public class SubsequenceImporter
     /// </returns>
     private List<Position> CreateAdditionalPositions(List<ILocation> leafLocations, long subsequenceId)
     {
-        var result = new List<Position>(leafLocations.Count - 1);
+        List<Position> result = new(leafLocations.Count - 1);
 
         for (int k = 1; k < leafLocations.Count; k++)
         {
@@ -380,9 +380,9 @@ public class SubsequenceImporter
     /// </returns>
     private List<NonCodingPosition> ExtractNonCodingSubsequencesPositions()
     {
-        var map = new List<NonCodingPosition>();
-        var currentStart = 0;
-        var currentLength = 0;
+        List<NonCodingPosition> map = [];
+        int currentStart = 0;
+        int currentLength = 0;
 
         for (int i = 0; i < positionsMap.Length; i++)
         {

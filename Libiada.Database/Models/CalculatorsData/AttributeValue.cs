@@ -88,7 +88,7 @@ public readonly struct AttributeValue : IEquatable<AttributeValue>
     {
         unchecked
         {
-            var hashCode = 1468198044;
+            int hashCode = 1468198044;
             hashCode = (hashCode * -1521134295) + AttributeId.GetHashCode();
             hashCode = (hashCode * -1521134295) + Value.GetHashCode();
             return hashCode;

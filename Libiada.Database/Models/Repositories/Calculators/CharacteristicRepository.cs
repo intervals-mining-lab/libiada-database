@@ -39,8 +39,8 @@ public class CharacteristicRepository : ICharacteristicRepository
             catch (Exception)
             {
                 // todo: refactor and optimize all this
-                var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
-                var characteristicsTypes = characteristics.Select(c => c.CharacteristicLinkId).Distinct().ToArray();
+                long[] characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
+                short[] characteristicsTypes = characteristics.Select(c => c.CharacteristicLinkId).Distinct().ToArray();
                 var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicLinkId }).ToArray();
                 var wasteCharacteristics = db.CharacteristicValues.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicLinkId))
                         .ToArray().Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicLinkId })).Select(c => new { c.SequenceId, c.CharacteristicLinkId });
@@ -76,9 +76,9 @@ public class CharacteristicRepository : ICharacteristicRepository
             catch (Exception)
             {
                 // todo: refactor and optimize all this
-                var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
-                var characteristicsTypes = characteristics.Select(c => c.CharacteristicLinkId).Distinct().ToArray();
-                var characteristicsElements = characteristics.Select(c => c.ElementId).Distinct().ToArray();
+                long[] characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
+                short[] characteristicsTypes = characteristics.Select(c => c.CharacteristicLinkId).Distinct().ToArray();
+                long[] characteristicsElements = characteristics.Select(c => c.ElementId).Distinct().ToArray();
                 var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicLinkId, c.ElementId }).ToArray();
                 var wasteCharacteristics = db.CongenericCharacteristicValues.Where(c => characteristicsSequences.Contains(c.SequenceId) 
                                                                                      && characteristicsTypes.Contains(c.CharacteristicLinkId)

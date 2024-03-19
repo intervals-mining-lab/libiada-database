@@ -76,23 +76,23 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
 
         if (Db.CommonSequences.Any(s => s.Id == sequenceId))
         {
-            var DBSequence = Db.CommonSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
-            var matter = DBSequence.Matter;
+            CommonSequence DBSequence = Db.CommonSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
+            Matter matter = DBSequence.Matter;
             return new Chain(DBSequence.Order.ToArray(), GetAlphabet(sequenceId), sequenceId);
         }
 
         // if it is not "real" sequence , then it must be image "sequence" 
-        var imageSequence = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
+        ImageSequence imageSequence = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
         if (imageSequence.Matter.Nature != Nature.Image)
         {
             throw new Exception("Cannot find sequence to return");
         }
 
-        var image = Image.Load<Rgba32>(imageSequence.Matter.Source);
-        var orderExtractor = imageSequence.OrderExtractor.GetAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>().Value;
-        var sequence = ImageProcessor.ProcessImage(image, [], [], (IImageOrderExtractor)Activator.CreateInstance(orderExtractor));
+        Image<Rgba32> image = Image.Load<Rgba32>(imageSequence.Matter.Source);
+        Type orderExtractor = imageSequence.OrderExtractor.GetAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>().Value;
+        BaseChain sequence = ImageProcessor.ProcessImage(image, [], [], (IImageOrderExtractor)Activator.CreateInstance(orderExtractor));
         Alphabet alphabet = [NullValue.Instance()];
-        var incompleteAlphabet = sequence.Alphabet;
+        Alphabet incompleteAlphabet = sequence.Alphabet;
         for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
         {
             alphabet.Add(incompleteAlphabet[j]);
@@ -114,7 +114,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     {
         int[] order = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Order;
         Alphabet alphabet = GetAlphabet(sequenceId);
-        var stringBuilder = new StringBuilder(order.Length);
+        StringBuilder stringBuilder = new(order.Length);
         foreach (int element in order)
         {
             stringBuilder.Append(alphabet[element]);
@@ -158,7 +158,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     {
 
 
-        var sequenceIds = new long[matterIds.Length][];
+        long[][] sequenceIds = new long[matterIds.Length][];
         CreateMissingImageSequences(matterIds, notations, imageOrderExtractors);
 
         for (int i = 0; i < matterIds.Length; i++)
@@ -167,7 +167,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
         }
         for (int j = 0; j < notations.Length; j++)
         {
-            var sequenceIdsForOneNotation = GetSequenceIds(matterIds,
+            long[] sequenceIdsForOneNotation = GetSequenceIds(matterIds,
                                                            notations[j],
                                                            languages.IsNullOrEmpty() ? null : languages[j],
                                                            translators.IsNullOrEmpty() ? null : translators[j],
@@ -192,41 +192,37 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
         bool? sequentialTransfer,
         ImageOrderExtractor? imageOrderExtractor)
     {
-        switch (notation.GetNature())
+        return notation.GetNature() switch
         {
-            case Nature.Literature:
-                return Db.LiteratureSequences
-                         .Where(l => matterIds.Contains(l.MatterId)
-                                  && l.Notation == notation
-                                  && l.Language == language
-                                  && l.Translator == translator)
-                         .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
-                         .Select(s => s.Id)
-                         .ToArray();
-            case Nature.Music:
-                return Db.MusicSequences
-                         .Where(m => matterIds.Contains(m.MatterId)
-                                  && m.Notation == notation
-                                  && m.PauseTreatment == pauseTreatment
-                                  && m.SequentialTransfer == sequentialTransfer)
-                         .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
-                         .Select(s => s.Id)
-                         .ToArray();
-            case Nature.Image:
-                return Db.ImageSequences
-                         .Where(c => matterIds.Contains(c.MatterId)
-                                  && c.Notation == notation
-                                  && c.OrderExtractor == imageOrderExtractor)
-                         .OrderBy(s =>Array.IndexOf(matterIds, s.MatterId))
-                         .Select(s => s.Id)
-                         .ToArray();
-            default:
-                return Db.CommonSequences
-                         .Where(c => matterIds.Contains(c.MatterId) && c.Notation == notation)
-                         .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
-                         .Select(s => s.Id)
-                         .ToArray();
-        }
+            Nature.Literature => Db.LiteratureSequences
+                                     .Where(l => matterIds.Contains(l.MatterId)
+                                              && l.Notation == notation
+                                              && l.Language == language
+                                              && l.Translator == translator)
+                                     .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
+                                     .Select(s => s.Id)
+                                     .ToArray(),
+            Nature.Music => Db.MusicSequences
+                                     .Where(m => matterIds.Contains(m.MatterId)
+                                              && m.Notation == notation
+                                              && m.PauseTreatment == pauseTreatment
+                                              && m.SequentialTransfer == sequentialTransfer)
+                                     .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
+                                     .Select(s => s.Id)
+                                     .ToArray(),
+            Nature.Image => Db.ImageSequences
+                                     .Where(c => matterIds.Contains(c.MatterId)
+                                              && c.Notation == notation
+                                              && c.OrderExtractor == imageOrderExtractor)
+                                     .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
+                                     .Select(s => s.Id)
+                                     .ToArray(),
+            _ => Db.CommonSequences
+                                     .Where(c => matterIds.Contains(c.MatterId) && c.Notation == notation)
+                                     .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
+                                     .Select(s => s.Id)
+                                     .ToArray(),
+        };
     }
 
     /// <summary>
@@ -261,7 +257,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     {
         if (notations[0].GetNature() == Nature.Image)
         {
-            var existingSequences = Db.ImageSequences
+            List<ImageSequence> existingSequences = Db.ImageSequences
                 .Where(s => matterIds.Contains(s.MatterId)
                          && notations.Contains(s.Notation)
                          && imageOrderExtractors.Contains(s.OrderExtractor))
@@ -275,7 +271,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
                                                  && s.Notation == notations[j]
                                                  && s.OrderExtractor == imageOrderExtractors[j]))
                     {
-                        var newImageSequence = new ImageSequence
+                        ImageSequence newImageSequence = new()
                         {
                             MatterId = matterIds[i],
                             Notation = notations[j],
