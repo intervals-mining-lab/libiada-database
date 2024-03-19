@@ -1,7 +1,6 @@
-﻿namespace Libiada.Database.Models.Repositories.Sequences
+﻿namespace Libiada.Database.Models.Repositories.Sequences;
+
+public interface ICommonSequenceRepositoryFactory
 {
-    public interface ICommonSequenceRepositoryFactory
-    {
-        ICommonSequenceRepository Create();
-    }
+    ICommonSequenceRepository Create();
 }
