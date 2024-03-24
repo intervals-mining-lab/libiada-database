@@ -8,7 +8,7 @@ using Libiada.Core.Core;
 using Libiada.Core.DataTransformers;
 using Libiada.Core.Extensions;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 public class OrderTransformer
 {

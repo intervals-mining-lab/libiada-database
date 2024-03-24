@@ -4,7 +4,7 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Extensions;
 
-using EnumExtensions = Libiada.Core.Extensions.EnumExtensions;
+using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// Group enum tests.

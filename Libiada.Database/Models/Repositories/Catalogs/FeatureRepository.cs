@@ -2,7 +2,7 @@ namespace Libiada.Database.Models.Repositories.Catalogs;
 
 using Libiada.Core.Extensions;
 
-using FeatureExtensions = Libiada.Database.Extensions.FeatureExtensions;
+using FeatureExtensions = Extensions.FeatureExtensions;
 
 /// <summary>
 /// The feature repository.
