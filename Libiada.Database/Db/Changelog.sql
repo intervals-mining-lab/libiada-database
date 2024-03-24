@@ -3849,4 +3849,13 @@ CREATE INDEX IF NOT EXISTS ix_task_user_id ON task(user_id);
 COMMENT ON COLUMN note.notation IS 'Note notation enum numeric value (always 8).';
 ALTER TABLE IF EXISTS element ALTER COLUMN value SET NOT NULL;
 
+-- 22.03.2024
+-- Add sequence type and group columns to sequence_group table.
+
+ALTER TABLE IF EXISTS sequence_group ADD COLUMN sequence_type smallint NOT NULL;
+COMMENT ON COLUMN sequence_group.sequence_type IS 'Sequence type enum numeric value.';
+
+ALTER TABLE IF EXISTS sequence_group ADD COLUMN "group" smallint NOT NULL;
+COMMENT ON COLUMN sequence_group."group" IS 'Group enum numeric value.';
+
 COMMIT;

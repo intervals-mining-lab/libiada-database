@@ -74,6 +74,20 @@ public partial class SequenceGroup
     [Comment("Sequence group type enum numeric value.")]
     public SequenceGroupType? SequenceGroupType { get; set; }
 
+    /// <summary>
+    /// Sequence type enum numeric value.
+    /// </summary>
+    [Column("sequence_type")]
+    [Comment("Sequence type enum numeric value.")]
+    public SequenceType SequenceType { get; set; }
+
+    /// <summary>
+    /// Group enum numeric value.
+    /// </summary>
+    [Column("group")]
+    [Comment("Group enum numeric value.")]
+    public Group Group { get; set; }
+
     [ForeignKey("CreatorId")]
     public virtual AspNetUser Creator { get; set; } = null!;
 
