@@ -89,10 +89,10 @@ public partial class SequenceGroup
     public Group Group { get; set; }
 
     [ForeignKey("CreatorId")]
-    public virtual AspNetUser Creator { get; set; } = null!;
+    public virtual AspNetUser? Creator { get; set; }
 
     [ForeignKey("ModifierId")]
-    public virtual AspNetUser Modifier { get; set; } = null!;
+    public virtual AspNetUser? Modifier { get; set; }
 
     [ForeignKey("GroupId")]
     [InverseProperty("Groups")]
