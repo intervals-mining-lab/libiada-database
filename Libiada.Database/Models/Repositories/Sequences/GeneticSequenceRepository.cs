@@ -106,6 +106,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
 
         Db.DnaSequences.Add(dnaSequence);
         Db.SaveChanges();
+        sequence.Id = dnaSequence.Id;
     }
 
     /// <summary>

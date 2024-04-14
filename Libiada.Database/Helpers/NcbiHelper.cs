@@ -207,9 +207,9 @@ public class NcbiHelper : INcbiHelper
         do
         {
             string urlEsummary = $"esummary.fcgi?db=nuccore&retmode=json" +
-                              $"&WebEnv={ncbiWebEnvironment}" +
-                              $"&query_key={queryKey}" +
-                              $"&retmax={retmax}&retstart={retstart}";
+                                  $"&WebEnv={ncbiWebEnvironment}" +
+                                  $"&query_key={queryKey}" +
+                                  $"&retmax={retmax}&retstart={retstart}";
             string esummaryResponse = GetResponceString(urlEsummary);
             retstart += retmax;
 
@@ -327,8 +327,12 @@ public class NcbiHelper : INcbiHelper
     {
         if (minLength == null && maxLength == null)
         {
+            if (searchTerm.Contains('[')) return searchTerm;
+
             return $"\"{searchTerm}\"[Organism]";
         }
+
+        if (searchTerm.Contains('[')) return $"""{searchTerm} AND ("{minLength ?? 1}"[SLEN] : "{maxLength ?? int.MaxValue}"[SLEN])""";
 
         return $"\"{searchTerm}\"[Organism] AND (\"{minLength ?? 1}\"[SLEN] : \"{maxLength ?? int.MaxValue}\"[SLEN])";
     }

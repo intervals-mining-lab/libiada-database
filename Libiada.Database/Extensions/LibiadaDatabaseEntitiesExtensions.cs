@@ -17,7 +17,8 @@ public static class LibiadaDatabaseEntitiesExtensions
     /// </returns>
     public static long GetNewElementId(this LibiadaDatabaseEntities db)
     {
-        return db.Database.SqlQuery<long>($"SELECT nextval('elements_id_seq');").Single();
+        // using "Value" psudonim for ef core wrap
+        return db.Database.SqlQuery<long>($"SELECT nextval('elements_id_seq') AS \"Value\"").Single();
     }
 
     /// <summary>

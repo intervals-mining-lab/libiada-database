@@ -3858,4 +3858,11 @@ COMMENT ON COLUMN sequence_group.sequence_type IS 'Sequence type enum numeric va
 ALTER TABLE IF EXISTS sequence_group ADD COLUMN "group" smallint NOT NULL;
 COMMENT ON COLUMN sequence_group."group" IS 'Group enum numeric value.';
 
+-- 14.04.2024
+-- Replace unique index on chain_attribute table with index on md5 hash of "value" text column.
+
+ALTER TABLE chain_attribute DROP CONSTRAINT uk_chain_attribute;
+CREATE UNIQUE INDEX ON chain_attribute (chain_id, attribute, md5(value));
+ALTER INDEX chain_attribute_chain_id_attribute_md5_idx RENAME TO uk_chain_attribute;
+
 COMMIT;

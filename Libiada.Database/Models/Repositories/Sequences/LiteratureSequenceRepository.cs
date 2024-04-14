@@ -111,5 +111,6 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
 
         Db.LiteratureSequences.Add(literatureSequence);
         Db.SaveChanges();
+        sequence.Id = literatureSequence.Id;
     }
 }

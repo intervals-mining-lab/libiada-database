@@ -78,6 +78,7 @@ public class DataSequenceRepository : SequenceImporter
 
         Db.DataSequences.Add(dataSequence);
         Db.SaveChanges();
+        sequence.Id = dataSequence.Id;
     }
 
     /// <summary>
@@ -107,5 +108,6 @@ public class DataSequenceRepository : SequenceImporter
 
         Db.DataSequences.Add(dataSequence);
         Db.SaveChanges();
+        sequence.Id = dataSequence.Id;
     }
 }

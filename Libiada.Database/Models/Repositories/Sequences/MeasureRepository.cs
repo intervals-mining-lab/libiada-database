@@ -56,7 +56,7 @@ public class MeasureRepository : IMeasureRepsitory
     /// </returns>
     public long CreateMeasure(Measure measure)
     {
-        BaseChain measureChain = new(measure.NoteList.Cast<IBaseObject>().ToList());
+        BaseChain measureChain = new(measure.NoteList);
         long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(measureChain.Alphabet);
 
         string localMeasureHash = measure.GetHashCode().ToString();
