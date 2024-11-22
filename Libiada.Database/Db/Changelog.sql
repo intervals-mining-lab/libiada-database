@@ -40,21 +40,21 @@ function CheckChain() {
     if (chain.length != chainDistinct.length) {
         plv8.elog(ERROR, 'id таблицы chain и/или дочерних таблиц не уникальны.');
     }else{
-		plv8.elog(INFO, "id всех цепочек уникальны.");
+        plv8.elog(INFO, "id всех цепочек уникальны.");
     }
-	
+    
     plv8.elog(INFO, "Проверяем соответствие всех записей таблицы chain и её наследников с записями в таблице chain_key.");
     
     var chainDisproportion = plv8.execute('SELECT c.id, ck.id FROM (SELECT id FROM chain UNION SELECT id FROM gene) c FULL OUTER JOIN chain_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL');
     
     if (chainDisproportion.length > 0) {
-		var debugQuery = 'SELECT c.id chain_id, ck.id chain_key_id FROM (SELECT id FROM chain UNION SELECT id FROM gene) c FULL OUTER JOIN chain_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
+        var debugQuery = 'SELECT c.id chain_id, ck.id chain_key_id FROM (SELECT id FROM chain UNION SELECT id FROM gene) c FULL OUTER JOIN chain_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
         plv8.elog(ERROR, 'Количество записей в таблице chain_key не совпадает с количеством записей с таблице chain и её наследниках. Для подробностей выполните "', debugQuery, '".');
     }else{
-		plv8.elog(INFO, "Все записи в таблицах цепочек однозначно соответствуют записям в таблице chain_key.");
+        plv8.elog(INFO, "Все записи в таблицах цепочек однозначно соответствуют записям в таблице chain_key.");
     }
-	
-	plv8.elog(INFO, 'Таблицы цепочек успешно проверены.');
+    
+    plv8.elog(INFO, 'Таблицы цепочек успешно проверены.');
 }
 
 function CheckElement() {
@@ -65,7 +65,7 @@ function CheckElement() {
     if (element.length != elementDistinct.length) {
         plv8.elog(ERROR, 'id таблицы element и/или дочерних таблиц не уникальны.');
     }else{
-		plv8.elog(INFO, "id всех элементов уникальны.");
+        plv8.elog(INFO, "id всех элементов уникальны.");
     }
 
     plv8.elog(INFO, "Проверяем соответствие всех записей таблицы element и её наследников с записями в таблице element_key.");
@@ -73,29 +73,29 @@ function CheckElement() {
     var elementDisproportion = plv8.execute('SELECT c.id, ck.id FROM element c FULL OUTER JOIN element_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL');
     
     if (elementDisproportion.length > 0) {
-		var debugQuery = 'SELECT c.id, ck.id FROM element c FULL OUTER JOIN element_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
+        var debugQuery = 'SELECT c.id, ck.id FROM element c FULL OUTER JOIN element_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
         plv8.elog(ERROR, 'Количество записей в таблице element_key не совпадает с количеством записей с таблице element и её наследниках. Для подробностей выполните "', debugQuery,'"');
     }else{
-		plv8.elog(INFO, "Все записи в таблицах элементов однозначно соответствуют записям в таблице element_key.");
+        plv8.elog(INFO, "Все записи в таблицах элементов однозначно соответствуют записям в таблице element_key.");
     }
-	
-	plv8.elog(INFO, 'Таблицы элементов успешно проверены.');
+    
+    plv8.elog(INFO, 'Таблицы элементов успешно проверены.');
 }
 
 function CheckAlphabet() {
-	plv8.elog(INFO, 'Проверяем алфавиты всех цепочек.');
-	
-	var orphanedElements = plv8.execute('SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL');
-	if (orphanedElements.length > 0) { 
-		var debugQuery = 'SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL';
-		plv8.elog(ERROR, 'В БД отсутствует ', orphanedElements,' элементов алфавита. Для подробностей выполните "', debugQuery,'".');
-	}
-	else {
-		plv8.elog(INFO, 'Все элементы всех алфавитов присутствуют в таблице element_key.');
-	}
-	
-	//TODO: Проверить что все бинарные и однородныее характеристики вычислены для элементов присутствующих в алфавите.
-	plv8.elog(INFO, 'Все алфавиты цепочек успешно проверены.');
+    plv8.elog(INFO, 'Проверяем алфавиты всех цепочек.');
+    
+    var orphanedElements = plv8.execute('SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL');
+    if (orphanedElements.length > 0) { 
+        var debugQuery = 'SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL';
+        plv8.elog(ERROR, 'В БД отсутствует ', orphanedElements,' элементов алфавита. Для подробностей выполните "', debugQuery,'".');
+    }
+    else {
+        plv8.elog(INFO, 'Все элементы всех алфавитов присутствуют в таблице element_key.');
+    }
+    
+    //TODO: Проверить что все бинарные и однородныее характеристики вычислены для элементов присутствующих в алфавите.
+    plv8.elog(INFO, 'Все алфавиты цепочек успешно проверены.');
 }
 
 function db_integrity_test() {
@@ -221,19 +221,19 @@ $BODY$
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
 
 if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
-	var check_element_in_alphabet = plv8.find_function("check_element_in_alphabet");
-	var firstElementInAlphabet = check_element_in_alphabet(NEW.first_chain_id, NEW.first_element_id);
-	var secondElementInAlphabet = check_element_in_alphabet(NEW.second_chain_id, NEW.second_element_id);
-	if(firstElementInAlphabet && secondElementInAlphabet){
-		return NEW;
-	}
-	else if(firstElementInAlphabet){
-		plv8.elog(ERROR, 'Добавлемая характеристика привязана к элементу, отсутствующему в алфавите цепочки. second_element_id = ', NEW.second_element_id,' ; chain_id = ', NEW.first_chain_id);
-	} else{
-		plv8.elog(ERROR, 'Добавлемая характеристика привязана к элементу, отсутствующему в алфавите цепочки. first_element_id = ', NEW.first_element_id,' ; chain_id = ', NEW.second_chain_id);
-	}
+    var check_element_in_alphabet = plv8.find_function("check_element_in_alphabet");
+    var firstElementInAlphabet = check_element_in_alphabet(NEW.first_chain_id, NEW.first_element_id);
+    var secondElementInAlphabet = check_element_in_alphabet(NEW.second_chain_id, NEW.second_element_id);
+    if(firstElementInAlphabet && secondElementInAlphabet){
+        return NEW;
+    }
+    else if(firstElementInAlphabet){
+        plv8.elog(ERROR, 'Добавлемая характеристика привязана к элементу, отсутствующему в алфавите цепочки. second_element_id = ', NEW.second_element_id,' ; chain_id = ', NEW.first_chain_id);
+    } else{
+        plv8.elog(ERROR, 'Добавлемая характеристика привязана к элементу, отсутствующему в алфавите цепочки. first_element_id = ', NEW.first_element_id,' ; chain_id = ', NEW.second_chain_id);
+    }
 } else{
-	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями chain_id, first_element_id и second_element_id');
+    plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями chain_id, first_element_id и second_element_id');
 }$BODY$
   LANGUAGE plv8 VOLATILE
   COST 100;
@@ -496,15 +496,15 @@ $BODY$
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
 
 if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
-	var applicabilityOk = plv8.execute('SELECT c.' + TG_ARGV[0] + ' AS result FROM characteristic_type_link cl INNER JOIN characteristic_type c ON c.id = cl.characteristic_type_id WHERE cl.id = $1;', [NEW.characteristic_type_link_id])[0].result;
-	if(applicabilityOk){
-		return NEW;
-	}
-	else{
-		plv8.elog(ERROR, 'Добавлемая характеристика неприменима к данному типу цепочки.');
-	}
+    var applicabilityOk = plv8.execute('SELECT c.' + TG_ARGV[0] + ' AS result FROM characteristic_type_link cl INNER JOIN characteristic_type c ON c.id = cl.characteristic_type_id WHERE cl.id = $1;', [NEW.characteristic_type_link_id])[0].result;
+    if(applicabilityOk){
+        return NEW;
+    }
+    else{
+        plv8.elog(ERROR, 'Добавлемая характеристика неприменима к данному типу цепочки.');
+    }
 } else{
-	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id.');
+    plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id.');
 }
 $BODY$
   LANGUAGE plv8 VOLATILE
@@ -578,7 +578,7 @@ CREATE TABLE attribute
 
 CREATE TABLE chain_attribute
 (
-	id bigserial NOT NULL, 
+    id bigserial NOT NULL, 
    chain_id bigint NOT NULL, 
    attribute_id integer NOT NULL, 
    value text NOT NULL, 
@@ -686,7 +686,7 @@ if (TG_OP == "INSERT"){
   }
  }
 } else{
-	plv8.elog(ERROR, 'Unknown db operation. This trigger only operates on INSET and UPDARE operations on tables with id column.');
+    plv8.elog(ERROR, 'Unknown db operation. This trigger only operates on INSET and UPDARE operations on tables with id column.');
 }
 $BODY$
   LANGUAGE plv8 VOLATILE
@@ -703,21 +703,21 @@ function CheckChain() {
     if (chain.length != chainDistinct.length) {
         plv8.elog(ERROR, 'ids in table sequence and/or its cildren are not unique.');
     }else{
-		plv8.elog(INFO, "All sequence ids are unique.");
+        plv8.elog(INFO, "All sequence ids are unique.");
     }
-	
+    
     plv8.elog(INFO, "Checking accordance of records in table sequence (and its children) to records in sequence_key table.");
     
     var chainDisproportion = plv8.execute('SELECT c.id, ck.id FROM (SELECT id FROM chain UNION SELECT id FROM subsequence) c FULL OUTER JOIN chain_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL');
     
     if (chainDisproportion.length > 0) {
-		var debugQuery = 'SELECT c.id chain_id, ck.id chain_key_id FROM (SELECT id FROM chain UNION SELECT id FROM subsequence) c FULL OUTER JOIN chain_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
+        var debugQuery = 'SELECT c.id chain_id, ck.id chain_key_id FROM (SELECT id FROM chain UNION SELECT id FROM subsequence) c FULL OUTER JOIN chain_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
         plv8.elog(ERROR, 'Number of records in sequence_key is not equal to number of records in sequence and its children. For detail see "', debugQuery, '".');
     }else{
-		plv8.elog(INFO, "sequence_key is in sync with sequence and its children.");
+        plv8.elog(INFO, "sequence_key is in sync with sequence and its children.");
     }
-	
-	plv8.elog(INFO, 'Sequences tables are all checked.');
+    
+    plv8.elog(INFO, 'Sequences tables are all checked.');
 }
 
 function CheckElement() {
@@ -728,7 +728,7 @@ function CheckElement() {
     if (element.length != elementDistinct.length) {
         plv8.elog(ERROR, 'ids in table element and/or its cildren are not unique.');
     }else{
-		plv8.elog(INFO, "All element ids are unique.");
+        plv8.elog(INFO, "All element ids are unique.");
     }
 
     plv8.elog(INFO, "Checking accordance of records in table element (and its children) to records in element_key table.");
@@ -736,29 +736,29 @@ function CheckElement() {
     var elementDisproportion = plv8.execute('SELECT c.id, ck.id FROM element c FULL OUTER JOIN element_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL');
     
     if (elementDisproportion.length > 0) {
-		var debugQuery = 'SELECT c.id, ck.id FROM element c FULL OUTER JOIN element_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
+        var debugQuery = 'SELECT c.id, ck.id FROM element c FULL OUTER JOIN element_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
         plv8.elog(ERROR, 'Number of records in element_key is not equal to number of records in element and its children. For detail see "', debugQuery,'"');
     }else{
-		plv8.elog(INFO, "element_key is in sync with element and its children.");
+        plv8.elog(INFO, "element_key is in sync with element and its children.");
     }
-	
-	plv8.elog(INFO, 'Elements tables are all checked.');
+    
+    plv8.elog(INFO, 'Elements tables are all checked.');
 }
 
 function CheckAlphabet() {
-	plv8.elog(INFO, 'Checking alphabets of all sequences.');
-	
-	var orphanedElements = plv8.execute('SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL');
-	if (orphanedElements.length > 0) { 
-		var debugQuery = 'SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL';
-		plv8.elog(ERROR, 'There are ', orphanedElements.length,' missing elements of alphabet. For details see "', debugQuery,'".');
-	}
-	else {
-		plv8.elog(INFO, 'All alphabets elements are present in element_key table.');
-	}
-	
-	//TODO: Проверить что все бинарные и однородные характеристики вычислены для элементов присутствующих в алфавите.
-	plv8.elog(INFO, 'All alphabets are checked.');
+    plv8.elog(INFO, 'Checking alphabets of all sequences.');
+    
+    var orphanedElements = plv8.execute('SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL');
+    if (orphanedElements.length > 0) { 
+        var debugQuery = 'SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL';
+        plv8.elog(ERROR, 'There are ', orphanedElements.length,' missing elements of alphabet. For details see "', debugQuery,'".');
+    }
+    else {
+        plv8.elog(INFO, 'All alphabets elements are present in element_key table.');
+    }
+    
+    //TODO: Проверить что все бинарные и однородные характеристики вычислены для элементов присутствующих в алфавите.
+    plv8.elog(INFO, 'All alphabets are checked.');
 }
 
 function db_integrity_test() {
@@ -781,16 +781,16 @@ COMMENT ON FUNCTION db_integrity_test() IS 'Procedure for cheking referential in
 CREATE FUNCTION create_chatacteristic_type(IN name character varying, IN description text, IN characteristic_group_id integer, IN class_name character varying, IN full_sequence_applicable boolean, IN congeneric_sequence_applicable boolean, IN binary_sequence_applicable boolean, IN accordance_applicable boolean, IN linkable boolean) RETURNS integer AS
 $BODY$
 DECLARE
-	id integer;
+    id integer;
 BEGIN
-	SELECT nextval('characteristic_type_id_seq') INTO id;
-	INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) VALUES (id, name, description, characteristic_group_id, class_name, full_sequence_applicable, congeneric_sequence_applicable, binary_sequence_applicable, accordance_applicable);
-	IF linkable THEN
-		INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT id, c.linkid FROM (SELECT link.id linkid FROM link WHERE link.id !=0) c);
-	ELSE
-		INSERT INTO characteristic_type_link (characteristic_type_id, link_id) VALUES (id, 0);
-	END IF;
-	RETURN id;
+    SELECT nextval('characteristic_type_id_seq') INTO id;
+    INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) VALUES (id, name, description, characteristic_group_id, class_name, full_sequence_applicable, congeneric_sequence_applicable, binary_sequence_applicable, accordance_applicable);
+    IF linkable THEN
+        INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT id, c.linkid FROM (SELECT link.id linkid FROM link WHERE link.id !=0) c);
+    ELSE
+        INSERT INTO characteristic_type_link (characteristic_type_id, link_id) VALUES (id, 0);
+    END IF;
+    RETURN id;
 END;$BODY$
 LANGUAGE plpgsql VOLATILE NOT LEAKPROOF;
 
@@ -845,13 +845,13 @@ INSERT INTO attribute(name) VALUES ('ncRNA_class');
 CREATE OR REPLACE FUNCTION trigger_set_modified() RETURNS trigger AS
 $BODY$
     BEGIN
-	NEW.modified := now();
-	IF (TG_OP = 'INSERT') THEN
+    NEW.modified := now();
+    IF (TG_OP = 'INSERT') THEN
             NEW.created := now();
-	    RETURN NEW;
+        RETURN NEW;
         END IF;
         IF (TG_OP = 'UPDATE') THEN
-	    NEW.created = OLD.created;
+        NEW.created = OLD.created;
             RETURN NEW;
         END IF;
         RAISE EXCEPTION 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблицах с полями modified и created.';
@@ -1131,12 +1131,12 @@ $BODY$
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
 
 if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
-	plv8.execute('DELETE FROM characteristic USING chain c WHERE characteristic.chain_id = c.id AND characteristic.created < c.modified;');
-	plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id AND binary_characteristic.created < c.modified;');
-	plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id AND congeneric_characteristic.created < c.modified;');
-	plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE accordance_characteristic.chain_id = c.id AND accordance_characteristic.created < c.modified;');
+    plv8.execute('DELETE FROM characteristic USING chain c WHERE characteristic.chain_id = c.id AND characteristic.created < c.modified;');
+    plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id AND binary_characteristic.created < c.modified;');
+    plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id AND congeneric_characteristic.created < c.modified;');
+    plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE accordance_characteristic.chain_id = c.id AND accordance_characteristic.created < c.modified;');
 } else{
-	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей.');
+    plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей.');
 }
 
 $BODY$
@@ -1173,12 +1173,12 @@ $BODY$
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
 
 if (TG_OP == "UPDATE"){
-	plv8.execute('DELETE FROM characteristic USING chain c WHERE characteristic.chain_id = c.id AND characteristic.created < c.modified;');
-	plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id AND binary_characteristic.created < c.modified;');
-	plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id AND congeneric_characteristic.created < c.modified;');
-	plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE (accordance_characteristic.first_chain_id = c.id OR accordance_characteristic.second_chain_id = c.id) AND accordance_characteristic.created < c.modified;');
+    plv8.execute('DELETE FROM characteristic USING chain c WHERE characteristic.chain_id = c.id AND characteristic.created < c.modified;');
+    plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id AND binary_characteristic.created < c.modified;');
+    plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id AND congeneric_characteristic.created < c.modified;');
+    plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE (accordance_characteristic.first_chain_id = c.id OR accordance_characteristic.second_chain_id = c.id) AND accordance_characteristic.created < c.modified;');
 } else{
-	plv8.elog(ERROR, 'Unknown operation: ' + TG_OP + '. This trigger only works on UPDATE operation.');
+    plv8.elog(ERROR, 'Unknown operation: ' + TG_OP + '. This trigger only works on UPDATE operation.');
 }
 
 $BODY$
@@ -1206,8 +1206,8 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Gene (non codi
 INSERT INTO feature (name, description, nature_id, type) VALUES ('3 end', 'Region at the 3 end of a mature transcript (following the stop codon) that is not translated into a protein; region at the 3 end of an RNA virus (following the last stop codon) that is not translated into a protein.', 1, '3''UTR');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('5 end', 'Region at the 5 end of a mature transcript (preceding the initiation codon) that is not translated into a protein;region at the 5 end of an RNA virus genome (preceding the first initiation codon) that is not translated into a protein.', 1, '5''UTR');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Primer bind', 'Non-covalent primer binding site for initiation of replication, transcription, or reverse transcription; includes site(s) for synthetic e.g., PCR primer elements.', 1, 'primer_bind');
-	
-	
+    
+    
 -- 02.07.2016
 -- Removing not used column in chain.
 
@@ -1226,13 +1226,13 @@ ALTER TABLE matter ADD COLUMN sequence_type smallint;
 COMMENT ON COLUMN matter.sequence_type IS 'Reference to SequrnceType enum.';
 
 UPDATE matter SET sequence_type = CASE 
-	WHEN nature_id IN (2, 3, 4) THEN nature_id
-	WHEN nature_id = 1 AND (description LIKE '%Plasmid%'  OR description LIKE '%plasmid%') THEN 5
-	WHEN nature_id = 1 AND (description LIKE '%Mitochondrion%'  OR description LIKE '%mitochondrion%' OR description LIKE '%mitochondrial%' OR description LIKE '%Mitochondrial%') THEN 6
-	WHEN nature_id = 1 AND (description LIKE '%Chloroplast%'  OR description LIKE '%chloroplast%') THEN 7
+    WHEN nature_id IN (2, 3, 4) THEN nature_id
+    WHEN nature_id = 1 AND (description LIKE '%Plasmid%'  OR description LIKE '%plasmid%') THEN 5
+    WHEN nature_id = 1 AND (description LIKE '%Mitochondrion%'  OR description LIKE '%mitochondrion%' OR description LIKE '%mitochondrial%' OR description LIKE '%Mitochondrial%') THEN 6
+    WHEN nature_id = 1 AND (description LIKE '%Chloroplast%'  OR description LIKE '%chloroplast%') THEN 7
     WHEN nature_id = 1 AND description LIKE '%16S%' THEN 8
     WHEN nature_id = 1 AND description LIKE '%18S%' THEN 9
-	ELSE 1
+    ELSE 1
 END;
 
 ALTER TABLE matter ALTER COLUMN sequence_type SET NOT NULL;
@@ -1242,10 +1242,10 @@ ALTER TABLE matter ADD COLUMN "group" smallint;
 COMMENT ON COLUMN matter.group IS 'Reference to Group enum.';
 
 UPDATE matter SET "group" = CASE 
-	WHEN nature_id IN (2, 3, 4) THEN nature_id
-	WHEN nature_id = 1 AND (name LIKE '%virus%'  OR name LIKE '%Virus%') THEN 5
+    WHEN nature_id IN (2, 3, 4) THEN nature_id
+    WHEN nature_id = 1 AND (name LIKE '%virus%'  OR name LIKE '%Virus%') THEN 5
     WHEN nature_id = 1 AND description LIKE '%18S%' THEN 6
-	ELSE 1
+    ELSE 1
 END;
 
 ALTER TABLE matter ALTER COLUMN "group" SET NOT NULL;
@@ -1901,12 +1901,12 @@ $BODY$
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
 
 if (TG_OP == "UPDATE"){
-	plv8.execute('DELETE FROM full_characteristic USING chain c WHERE full_characteristic.chain_id = c.id;');
-	plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id;');
-	plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id;');
-	plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE accordance_characteristic.first_chain_id = c.id OR accordance_characteristic.second_chain_id = c.id;');
+    plv8.execute('DELETE FROM full_characteristic USING chain c WHERE full_characteristic.chain_id = c.id;');
+    plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id;');
+    plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id;');
+    plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE accordance_characteristic.first_chain_id = c.id OR accordance_characteristic.second_chain_id = c.id;');
 } else{
-	plv8.elog(ERROR, 'Unknown operation: ' + TG_OP + '. This trigger only works on UPDATE operation.');
+    plv8.elog(ERROR, 'Unknown operation: ' + TG_OP + '. This trigger only works on UPDATE operation.');
 }
 
 $BODY$
@@ -2324,10 +2324,10 @@ LANGUAGE 'plpgsql' VOLATILE AS
 $BODY$
 BEGIN
 IF TG_OP = 'UPDATE' THEN
-	UPDATE chain SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM chain c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE chain.id = c1.id;
-	RETURN NEW;
+    UPDATE chain SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM chain c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE chain.id = c1.id;
+    RETURN NEW;
 END IF; 
-	RAISE EXCEPTION 'Unknown operation. This trigger is only meat for update operations on tables with alphabet field';
+    RAISE EXCEPTION 'Unknown operation. This trigger is only meat for update operations on tables with alphabet field';
 END
 $BODY$;
 COMMENT ON FUNCTION trigger_element_update_alphabet() IS 'Automaticly updates elements ids in sequences alphabet when ids are changed in element table.';
@@ -2339,11 +2339,11 @@ DECLARE
 element_exists bool;
 BEGIN
 IF TG_OP = 'INSERT' THEN
-	SELECT count(*) = 1 INTO element_exists FROM element WHERE id = NEW.id;
-	IF element_exists THEN
-		RETURN NEW;
-	END IF;
-	RAISE EXCEPTION 'Cannot add record into element_key before adding record into element table or its child.';
+    SELECT count(*) = 1 INTO element_exists FROM element WHERE id = NEW.id;
+    IF element_exists THEN
+        RETURN NEW;
+    END IF;
+    RAISE EXCEPTION 'Cannot add record into element_key before adding record into element table or its child.';
 END IF;
 RAISE EXCEPTION 'Unknown operation. This trigger only works on insert into table with id field.';
 END
@@ -2355,14 +2355,14 @@ LANGUAGE 'plpgsql' VOLATILE AS
 $BODY$
 BEGIN
 IF TG_OP = 'INSERT' THEN
-	INSERT INTO element_key VALUES (NEW.id);
-	return NEW;
+    INSERT INTO element_key VALUES (NEW.id);
+    return NEW;
 ELSE IF TG_OP = 'UPDATE' AND NEW.id != OLD.id THEN
-	UPDATE element_key SET id = NEW.id WHERE id = OLD.id;
-	return NEW;
+    UPDATE element_key SET id = NEW.id WHERE id = OLD.id;
+    return NEW;
 ELSE IF TG_OP = 'DELETE' THEN
-	DELETE FROM element_key WHERE id = OLD.id;
-	return OLD;
+    DELETE FROM element_key WHERE id = OLD.id;
+    return OLD;
 END IF;
 END IF;
 END IF;
@@ -2377,15 +2377,15 @@ DECLARE
 element_used bool;
 BEGIN
 IF TG_OP = 'DELETE' THEN
-	SELECT count(*) > 0 INTO element_used FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c WHERE c.a = OLD.id;
-	IF element_used THEN
-		return OLD;
-	ELSE
-		RAISE EXCEPTION  'Cannot delete element, because it still is in some of the cequences alphabets.';
-	END IF;
-	
+    SELECT count(*) > 0 INTO element_used FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c WHERE c.a = OLD.id;
+    IF element_used THEN
+        return OLD;
+    ELSE
+        RAISE EXCEPTION  'Cannot delete element, because it still is in some of the cequences alphabets.';
+    END IF;
+    
 ELSE
-	RAISE EXCEPTION  'Unknown operation. This trigger shoud be used only in delete operation on tables with id field.';
+    RAISE EXCEPTION  'Unknown operation. This trigger shoud be used only in delete operation on tables with id field.';
 END IF;
 END
 $BODY$;
@@ -2396,13 +2396,13 @@ LANGUAGE 'plpgsql' VOLATILE AS
 $BODY$
 BEGIN
 IF TG_OP = 'UPDATE' THEN
-	DELETE FROM full_characteristic WHERE full_characteristic.chain_id = OLD.id;
-	DELETE FROM binary_characteristic WHERE binary_characteristic.chain_id = OLD.id;
-	DELETE FROM congeneric_characteristic WHERE congeneric_characteristic.chain_id = OLD.id;
-	DELETE FROM accordance_characteristic WHERE accordance_characteristic.first_chain_id = OLD.id OR accordance_characteristic.second_chain_id = OLD.id;
-	RETURN NEW;
+    DELETE FROM full_characteristic WHERE full_characteristic.chain_id = OLD.id;
+    DELETE FROM binary_characteristic WHERE binary_characteristic.chain_id = OLD.id;
+    DELETE FROM congeneric_characteristic WHERE congeneric_characteristic.chain_id = OLD.id;
+    DELETE FROM accordance_characteristic WHERE accordance_characteristic.first_chain_id = OLD.id OR accordance_characteristic.second_chain_id = OLD.id;
+    RETURN NEW;
 ELSE
-	RAISE EXCEPTION 'Unknown operation. This trigger only works on UPDATE operation.';
+    RAISE EXCEPTION 'Unknown operation. This trigger only works on UPDATE operation.';
 END IF;
 END;
 $BODY$;
@@ -2415,15 +2415,15 @@ first_element_in_alphabet bool;
 second_element_in_alphabet bool;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-	first_element_in_alphabet := check_element_in_alphabet(NEW.first_chain_id, NEW.first_element_id);
-	second_element_in_alphabet := check_element_in_alphabet(NEW.second_chain_id, NEW.second_element_id);
-	IF first_element_in_alphabet AND second_element_in_alphabet THEN
-		RETURN NEW;
-	ELSE 
-		RAISE EXCEPTION 'New characteristic is referencing element not present in sequence alphabet.';
-	END IF;
+    first_element_in_alphabet := check_element_in_alphabet(NEW.first_chain_id, NEW.first_element_id);
+    second_element_in_alphabet := check_element_in_alphabet(NEW.second_chain_id, NEW.second_element_id);
+    IF first_element_in_alphabet AND second_element_in_alphabet THEN
+        RETURN NEW;
+    ELSE 
+        RAISE EXCEPTION 'New characteristic is referencing element not present in sequence alphabet.';
+    END IF;
 ELSE
-	RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with first_chain_id, second_chain_id, first_element_id, second_element_id.';
+    RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with first_chain_id, second_chain_id, first_element_id, second_element_id.';
 END IF;
 END
 $BODY$;
@@ -2437,15 +2437,15 @@ first_element_in_alphabet bool;
 second_element_in_alphabet bool;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-	first_element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.first_element_id);
-	second_element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.second_element_id);
-	IF first_element_in_alphabet AND second_element_in_alphabet THEN
-		RETURN NEW;
-	ELSE 
-		RAISE EXCEPTION 'New characteristic is referencing element or elements (first_id = %, second_id = %) not present in sequence (id = %) alphabet.', NEW.first_element_id, NEW.second_element_id, NEW.chain_id;
-	END IF;
+    first_element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.first_element_id);
+    second_element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.second_element_id);
+    IF first_element_in_alphabet AND second_element_in_alphabet THEN
+        RETURN NEW;
+    ELSE 
+        RAISE EXCEPTION 'New characteristic is referencing element or elements (first_id = %, second_id = %) not present in sequence (id = %) alphabet.', NEW.first_element_id, NEW.second_element_id, NEW.chain_id;
+    END IF;
 ELSE
-	RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with chain_id, first_element_id, second_element_id.';
+    RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with chain_id, first_element_id, second_element_id.';
 END IF;
 END
 $BODY$;
@@ -2458,14 +2458,14 @@ DECLARE
 element_in_alphabet bool;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-	element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.element_id);
-	IF element_in_alphabet THEN
-		RETURN NEW;
-	ELSE 
-		RAISE EXCEPTION 'New characteristic is referencing element (id = %) not present in sequence (id = %) alphabet.', NEW.element_id, NEW.chain_id;
-	END IF;
+    element_in_alphabet := check_element_in_alphabet(NEW.chain_id, NEW.element_id);
+    IF element_in_alphabet THEN
+        RETURN NEW;
+    ELSE 
+        RAISE EXCEPTION 'New characteristic is referencing element (id = %) not present in sequence (id = %) alphabet.', NEW.element_id, NEW.chain_id;
+    END IF;
 ELSE
-	RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with chain_id, element_id.';
+    RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in insert and update operation on tables with chain_id, element_id.';
 END IF;
 END
 $BODY$;
@@ -2478,16 +2478,16 @@ DECLARE
 sequence_with_id_count integer;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-	SELECT count(*) INTO sequence_with_id_count FROM(SELECT id FROM chain WHERE id = NEW.id UNION ALL SELECT id FROM subsequence WHERE id = NEW.id) s;
-	IF sequence_with_id_count = 1 THEN
-		RETURN NEW;
-	ELSE IF sequence_with_id_count = 0 THEN
-		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
-	END IF;
-		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id.';
-	END IF;
+    SELECT count(*) INTO sequence_with_id_count FROM(SELECT id FROM chain WHERE id = NEW.id UNION ALL SELECT id FROM subsequence WHERE id = NEW.id) s;
+    IF sequence_with_id_count = 1 THEN
+        RETURN NEW;
+    ELSE IF sequence_with_id_count = 0 THEN
+        RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
+    END IF;
+        RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id.';
+    END IF;
 ELSE	
-	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
+    RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
 END IF;
 END
 $BODY$;
@@ -2498,14 +2498,14 @@ LANGUAGE 'plpgsql' VOLATILE AS
 $BODY$
 BEGIN
 IF TG_OP = 'INSERT' THEN
-	INSERT INTO chain_key VALUES (NEW.id);
-	return NEW;
+    INSERT INTO chain_key VALUES (NEW.id);
+    return NEW;
 ELSE IF TG_OP = 'UPDATE' AND NEW.id != OLD.id THEN
-	UPDATE chain_key SET id = NEW.id WHERE id = OLD.id;
-	return NEW;
+    UPDATE chain_key SET id = NEW.id WHERE id = OLD.id;
+    return NEW;
 ELSE IF TG_OP = 'DELETE' THEN
-	DELETE FROM chain_key WHERE id = OLD.id;
-	return OLD;
+    DELETE FROM chain_key WHERE id = OLD.id;
+    return OLD;
 END IF;
 END IF;
 END IF;
@@ -2520,24 +2520,24 @@ DECLARE
 max_value integer;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-	IF NEW.building[1] != 1 THEN
-		RAISE EXCEPTION  'First order value is not 1. Actual value %.', NEW.building[1];
-	END IF;
-	max_value := 0;
-	FOR i IN array_lower(NEW.building, 1)..array_upper(NEW.building, 1) LOOP
-		IF NEW.building[i] > (max_value + 1) THEN
-			RAISE EXCEPTION  'Order is incorrect starting from % position.', i ;
-		END IF;
-		IF NEW.building[i] = (max_value + 1) THEN
-			max_value := NEW.building[i];
-		END IF;
-	END LOOP;
-	IF max_value != array_length(NEW.alphabet, 1) THEN
-		RAISE EXCEPTION  'Alphabet size is not equal to the order maximum value. Alphabet elements count %, and order max value %.', array_length(NEW.alphabet, 1), max_value;
-	END IF;
-	RETURN NEW;
+    IF NEW.building[1] != 1 THEN
+        RAISE EXCEPTION  'First order value is not 1. Actual value %.', NEW.building[1];
+    END IF;
+    max_value := 0;
+    FOR i IN array_lower(NEW.building, 1)..array_upper(NEW.building, 1) LOOP
+        IF NEW.building[i] > (max_value + 1) THEN
+            RAISE EXCEPTION  'Order is incorrect starting from % position.', i ;
+        END IF;
+        IF NEW.building[i] = (max_value + 1) THEN
+            max_value := NEW.building[i];
+        END IF;
+    END LOOP;
+    IF max_value != array_length(NEW.alphabet, 1) THEN
+        RAISE EXCEPTION  'Alphabet size is not equal to the order maximum value. Alphabet elements count %, and order max value %.', array_length(NEW.alphabet, 1), max_value;
+    END IF;
+    RETURN NEW;
 ELSE
-	RAISE EXCEPTION  'Unknown operation. This trigger only operates on INSERT operation on tables with building column.';
+    RAISE EXCEPTION  'Unknown operation. This trigger only operates on INSERT operation on tables with building column.';
 END IF;
 END
 $BODY$;
@@ -2550,14 +2550,14 @@ $BODY$
 BEGIN
 NEW.modified := now();
 IF TG_OP = 'INSERT' THEN
-	NEW.created := now();
-	RETURN NEW;
+    NEW.created := now();
+    RETURN NEW;
 END IF;
 IF TG_OP = 'UPDATE' THEN
-	NEW.created := OLD.created;
-	RETURN NEW;
+    NEW.created := OLD.created;
+    RETURN NEW;
 END IF;
-	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT and UPDATE operation on tables with modified and created columns.';
+    RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT and UPDATE operation on tables with modified and created columns.';
 END;
 $BODY$;
 COMMENT ON FUNCTION trigger_set_modified() IS 'Rewrites created and modified columns with current values.';
@@ -2594,20 +2594,20 @@ RAISE INFO 'Checking "sequence" table and its children.';
 SELECT COUNT(s.id) INTO sequence_ids_count FROM (SELECT id FROM chain UNION ALL SELECT id FROM subsequence) s;
 SELECT COUNT(DISTINCT s.id) INTO distincs_sequence_ids_count FROM (SELECT id FROM chain UNION SELECT id FROM subsequence) s;
 IF sequence_ids_count != distincs_sequence_ids_count THEN
-	RAISE EXCEPTION  'Ids in "sequence" table and/or its cildren are not unique.';
+    RAISE EXCEPTION  'Ids in "sequence" table and/or its cildren are not unique.';
 ELSE
-	RAISE INFO 'All sequence ids are unique.';
+    RAISE INFO 'All sequence ids are unique.';
 END IF;
 
 RAISE INFO 'Checking accordance of records in "sequence" table and its children to the records in sequence_key table.';
 SELECT COUNT(*) INTO sequences_keys_disproportion 
-	FROM (SELECT id FROM chain UNION ALL SELECT id FROM subsequence) s 
-	FULL OUTER JOIN chain_key sk ON sk.id = s.id 
-	WHERE s.id IS NULL OR sk.id IS NULL;
+    FROM (SELECT id FROM chain UNION ALL SELECT id FROM subsequence) s 
+    FULL OUTER JOIN chain_key sk ON sk.id = s.id 
+    WHERE s.id IS NULL OR sk.id IS NULL;
 IF sequences_keys_disproportion > 0 THEN
-	RAISE EXCEPTION 'Number of records in sequence_key is not equal to number of records in sequence table and its children.';
+    RAISE EXCEPTION 'Number of records in sequence_key is not equal to number of records in sequence table and its children.';
 ELSE
-	RAISE INFO 'sequence_key is in sync with sequence table and its children.';
+    RAISE INFO 'sequence_key is in sync with sequence table and its children.';
 END IF;
 
 RAISE INFO 'Sequences tables are all checked.';
@@ -2616,71 +2616,71 @@ RAISE INFO 'Checking "element" table and its children.';
 SELECT COUNT(id) INTO elements_ids_count FROM element;
 SELECT COUNT(DISTINCT id) INTO distinct_elements_count FROM element;
 IF elements_ids_count != distinct_elements_count THEN
-	RAISE EXCEPTION 'ids in "element" table and/or its cildren are not unique.';
+    RAISE EXCEPTION 'ids in "element" table and/or its cildren are not unique.';
 ELSE
-	RAISE INFO 'All element ids are unique.';
+    RAISE INFO 'All element ids are unique.';
 END IF;
 
 RAISE INFO 'Checking accordance of records in "element" table and its children to the records in element_key table.';
 SELECT COUNT (*) INTO element_key_disproportion 
-	FROM (SELECT e.id, ek.id  FROM element e 
-		  FULL OUTER JOIN element_key ek 
-		  ON ek.id = e.id 
-		  WHERE e.id IS NULL OR ek.id IS NULL) ec;
+    FROM (SELECT e.id, ek.id  FROM element e 
+          FULL OUTER JOIN element_key ek 
+          ON ek.id = e.id 
+          WHERE e.id IS NULL OR ek.id IS NULL) ec;
 IF element_key_disproportion > 0 THEN
-	RAISE EXCEPTION 'Number of records in element_key is not equal to number of records in element and its children.';
+    RAISE EXCEPTION 'Number of records in element_key is not equal to number of records in element and its children.';
 ELSE
-	RAISE INFO 'element_key is in sync with element and its children.';
+    RAISE INFO 'element_key is in sync with element and its children.';
 END IF;
 
 RAISE INFO 'Elements tables are all checked.';
 
 RAISE INFO 'Checking alphabets of all sequences.';
 SELECT COUNT(c.a) INTO orphaned_elements_count 
-	FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c 
-		  LEFT OUTER JOIN element_key e 
-		  ON e.id = c.a 
-		  WHERE e.id IS NULL;
+    FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c 
+          LEFT OUTER JOIN element_key e 
+          ON e.id = c.a 
+          WHERE e.id IS NULL;
 IF orphaned_elements_count > 0 THEN 
-	RAISE EXCEPTION 'There are % missing elements of alphabet.', orphaned_elements_count;
+    RAISE EXCEPTION 'There are % missing elements of alphabet.', orphaned_elements_count;
 ELSE
-	RAISE INFO 'All alphabets elements are present in element_key table.';
+    RAISE INFO 'All alphabets elements are present in element_key table.';
 END IF;
 
 SELECT COUNT(cc.id) INTO orphaned_congeneric_characteristics
-	FROM congeneric_characteristic cc 
-	LEFT OUTER JOIN
-		(SELECT unnest(alphabet) a, id FROM chain) c 
-	ON c.id = cc.chain_id AND c.a = cc.element_id 
-	WHERE c.a IS NULL;
+    FROM congeneric_characteristic cc 
+    LEFT OUTER JOIN
+        (SELECT unnest(alphabet) a, id FROM chain) c 
+    ON c.id = cc.chain_id AND c.a = cc.element_id 
+    WHERE c.a IS NULL;
 IF orphaned_congeneric_characteristics > 0 THEN
-	RAISE EXCEPTION 'There are % orphaned congeneric characteristics without according elements in alphabets.', orphaned_congeneric_characteristics;
+    RAISE EXCEPTION 'There are % orphaned congeneric characteristics without according elements in alphabets.', orphaned_congeneric_characteristics;
 ELSE
-	RAISE INFO 'All congeneric characteristics have corresponding elements in alphabets.';
+    RAISE INFO 'All congeneric characteristics have corresponding elements in alphabets.';
 END IF;
 
 SELECT COUNT(bc.id) INTO orphaned_binary_characteristics
-	FROM binary_characteristic bc 
-	LEFT OUTER JOIN 
-		(SELECT unnest(alphabet) a, id FROM chain) c 
-	ON c.id = bc.chain_id AND (c.a = bc.first_element_id OR c.a = bc.second_element_id)
-	WHERE c.a IS NULL;
+    FROM binary_characteristic bc 
+    LEFT OUTER JOIN 
+        (SELECT unnest(alphabet) a, id FROM chain) c 
+    ON c.id = bc.chain_id AND (c.a = bc.first_element_id OR c.a = bc.second_element_id)
+    WHERE c.a IS NULL;
 IF orphaned_binary_characteristics > 0 THEN
-	RAISE EXCEPTION 'There are % orphaned binary characteristics without according elements in alphabets.', orphaned_binary_characteristics;
+    RAISE EXCEPTION 'There are % orphaned binary characteristics without according elements in alphabets.', orphaned_binary_characteristics;
 ELSE
-	RAISE INFO 'All binary characteristics have corresponding elements in alphabets.';
+    RAISE INFO 'All binary characteristics have corresponding elements in alphabets.';
 END IF;
 
 SELECT COUNT(ac.id) INTO orphaned_accordance_characteristics
-	FROM accordance_characteristic ac 
-	LEFT OUTER JOIN 
-		(SELECT unnest(alphabet) a, id FROM chain) c 
-	ON (c.id = ac.first_chain_id AND c.a = ac.first_element_id) OR(c.id = ac.second_chain_id AND c.a = ac.second_element_id)
-	WHERE c.a IS NULL;
+    FROM accordance_characteristic ac 
+    LEFT OUTER JOIN 
+        (SELECT unnest(alphabet) a, id FROM chain) c 
+    ON (c.id = ac.first_chain_id AND c.a = ac.first_element_id) OR(c.id = ac.second_chain_id AND c.a = ac.second_element_id)
+    WHERE c.a IS NULL;
 IF orphaned_accordance_characteristics > 0 THEN
-	RAISE EXCEPTION 'There are % orphaned accordance characteristics without according elements in alphabets.', orphaned_accordance_characteristics;
+    RAISE EXCEPTION 'There are % orphaned accordance characteristics without according elements in alphabets.', orphaned_accordance_characteristics;
 ELSE
-	RAISE INFO 'All accordance characteristics have corresponding elements in alphabets.';
+    RAISE INFO 'All accordance characteristics have corresponding elements in alphabets.';
 END IF;
 
 RAISE INFO 'All alphabets are checked.';
@@ -2717,22 +2717,22 @@ LANGUAGE 'plpgsql'
 VOLATILE AS
 $BODY$
 DECLARE
-	orphaned_elements integer;
-	alphabet_elemnts_not_unique bool;
+    orphaned_elements integer;
+    alphabet_elemnts_not_unique bool;
 BEGIN
-	IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-		SELECT a.dc != a.ec INTO alphabet_elemnts_not_unique FROM (SELECT COUNT(DISTINCT e) dc, COUNT(e) ec FROM unnest(NEW.alphabet) e) a;
-		IF alphabet_elemnts_not_unique THEN
-			RAISE EXCEPTION 'Alphabet elements are not unique. Alphabet %', NEW.alphabet ;
-		END IF;
-		
-		SELECT count(1) INTO orphaned_elements result FROM unnest(NEW.alphabet) a LEFT OUTER JOIN element_key e ON e.id = a WHERE e.id IS NULL;
-		IF orphaned_elements != 0 THEN 
-			RAISE EXCEPTION 'There are % elements of the alphabet missing in database.', orphaned_elements;
-		END IF;
-		
-		RETURN NEW;
-	END IF;
+    IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+        SELECT a.dc != a.ec INTO alphabet_elemnts_not_unique FROM (SELECT COUNT(DISTINCT e) dc, COUNT(e) ec FROM unnest(NEW.alphabet) e) a;
+        IF alphabet_elemnts_not_unique THEN
+            RAISE EXCEPTION 'Alphabet elements are not unique. Alphabet %', NEW.alphabet ;
+        END IF;
+        
+        SELECT count(1) INTO orphaned_elements result FROM unnest(NEW.alphabet) a LEFT OUTER JOIN element_key e ON e.id = a WHERE e.id IS NULL;
+        IF orphaned_elements != 0 THEN 
+            RAISE EXCEPTION 'There are % elements of the alphabet missing in database.', orphaned_elements;
+        END IF;
+        
+        RETURN NEW;
+    END IF;
     RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT and UPDATE operation on tables with alphabet column (of array type).';
 END;
 $BODY$;
@@ -2774,17 +2774,17 @@ DECLARE
 element_used bool;
 BEGIN
 IF TG_OP = 'DELETE' THEN
-	SELECT count(*) > 0 INTO element_used 
-	FROM (SELECT DISTINCT unnest(alphabet) a 
-		  FROM (SELECT alphabet FROM chain 
-				UNION SELECT alphabet FROM fmotif 
-				UNION SELECT alphabet FROM measure) c
-		  WHERE c.alphabet @> ARRAY[OLD.id]) s;
-	IF element_used THEN
-		RAISE EXCEPTION 'Cannot delete element, because it still is in some of the sequences alphabets.';
-	ELSE
-		return OLD;
-	END IF;
+    SELECT count(*) > 0 INTO element_used 
+    FROM (SELECT DISTINCT unnest(alphabet) a 
+          FROM (SELECT alphabet FROM chain 
+                UNION SELECT alphabet FROM fmotif 
+                UNION SELECT alphabet FROM measure) c
+          WHERE c.alphabet @> ARRAY[OLD.id]) s;
+    IF element_used THEN
+        RAISE EXCEPTION 'Cannot delete element, because it still is in some of the sequences alphabets.';
+    ELSE
+        return OLD;
+    END IF;
 END IF;
 RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in delete operation on tables with id field.';
 END
@@ -2797,11 +2797,11 @@ VOLATILE AS
 $BODY$
 BEGIN
 IF TG_OP = 'UPDATE' THEN
-	UPDATE chain SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM chain c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE chain.id = c1.id;
-	UPDATE fmotif SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM fmotif c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE fmotif.id = c1.id;
-	UPDATE measure SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM measure c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE measure.id = c1.id;
-	
-	RETURN NEW;
+    UPDATE chain SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM chain c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE chain.id = c1.id;
+    UPDATE fmotif SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM fmotif c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE fmotif.id = c1.id;
+    UPDATE measure SET alphabet = c1.alphabet FROM (SELECT c1.id, array_replace(c1.alphabet, OLD.id, NEW.id) alphabet FROM measure c1 WHERE alphabet @> ARRAY[OLD.id]) c1 WHERE measure.id = c1.id;
+    
+    RETURN NEW;
 END IF; 
 RAISE EXCEPTION 'Unknown operation. This trigger is only meat for update operations on tables with alphabet field';
 END
@@ -2866,10 +2866,10 @@ VOLATILE PARALLEL UNSAFE AS
 $BODY$
 BEGIN
 RETURN (SELECT count(*) = 1 
-		FROM (SELECT alphabet a 
-			  FROM chain 
-			  WHERE id = chain_id) c 
-		WHERE c.a @> ARRAY[element_id]);
+        FROM (SELECT alphabet a 
+              FROM chain 
+              WHERE id = chain_id) c 
+        WHERE c.a @> ARRAY[element_id]);
 END
 $BODY$;
 
@@ -2881,15 +2881,15 @@ DECLARE
 elements_with_id_count integer;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-	SELECT count(*) INTO elements_with_id_count FROM element WHERE id = NEW.id;
-	IF elements_with_id_count = 1 THEN
-		RETURN NEW;
-	ELSE IF elements_with_id_count = 0 THEN
-		RAISE EXCEPTION 'New record in table element_key cannot be addded because there is no elements with given id = %.', NEW.id;
-	END IF;
-		RAISE EXCEPTION 'New record in table element_key cannot be addded because there is more than one element with given id = %.', NEW.id;
-	END IF;
-	RAISE EXCEPTION 'Cannot add record into element_key before adding record into element table or its child.';
+    SELECT count(*) INTO elements_with_id_count FROM element WHERE id = NEW.id;
+    IF elements_with_id_count = 1 THEN
+        RETURN NEW;
+    ELSE IF elements_with_id_count = 0 THEN
+        RAISE EXCEPTION 'New record in table element_key cannot be addded because there is no elements with given id = %.', NEW.id;
+    END IF;
+        RAISE EXCEPTION 'New record in table element_key cannot be addded because there is more than one element with given id = %.', NEW.id;
+    END IF;
+    RAISE EXCEPTION 'Cannot add record into element_key before adding record into element table or its child.';
 END IF;
 RAISE EXCEPTION 'Unknown operation. This trigger only works on insert into table with id field.';
 END
@@ -2904,16 +2904,16 @@ DECLARE
 sequence_with_id_count integer;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-	SELECT count(*) INTO sequence_with_id_count FROM(SELECT id FROM chain WHERE id = NEW.id UNION ALL SELECT id FROM subsequence WHERE id = NEW.id) s;
-	IF sequence_with_id_count = 1 THEN
-		RETURN NEW;
-	ELSE IF sequence_with_id_count = 0 THEN
-		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
-	END IF;
-		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id. Sequences count = %', sequence_with_id_count;
-	END IF;
+    SELECT count(*) INTO sequence_with_id_count FROM(SELECT id FROM chain WHERE id = NEW.id UNION ALL SELECT id FROM subsequence WHERE id = NEW.id) s;
+    IF sequence_with_id_count = 1 THEN
+        RETURN NEW;
+    ELSE IF sequence_with_id_count = 0 THEN
+        RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
+    END IF;
+        RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id. Sequences count = %', sequence_with_id_count;
+    END IF;
 ELSE	
-	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
+    RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
 END IF;
 END
 $BODY$;
@@ -2923,22 +2923,22 @@ LANGUAGE 'plpgsql'
 VOLATILE NOT LEAKPROOF AS
 $BODY$
 DECLARE
-	orphaned_elements integer;
-	alphabet_elemnts_not_unique bool;
+    orphaned_elements integer;
+    alphabet_elemnts_not_unique bool;
 BEGIN
-	IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-		SELECT a.dc != a.ec INTO alphabet_elemnts_not_unique FROM (SELECT COUNT(DISTINCT e) dc, COUNT(e) ec FROM unnest(NEW.alphabet) e) a;
-		IF alphabet_elemnts_not_unique THEN
-			RAISE EXCEPTION 'Alphabet notes are not unique. Alphabet %', NEW.alphabet ;
-		END IF;
-		
-		SELECT count(1) INTO orphaned_elements result FROM unnest(NEW.alphabet) a LEFT OUTER JOIN note e ON e.id = a WHERE e.id IS NULL;
-		IF orphaned_elements != 0 THEN 
-			RAISE EXCEPTION 'There are % notes of the alphabet missing in database.', orphaned_elements;
-		END IF;
-		
-		RETURN NEW;
-	END IF;
+    IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
+        SELECT a.dc != a.ec INTO alphabet_elemnts_not_unique FROM (SELECT COUNT(DISTINCT e) dc, COUNT(e) ec FROM unnest(NEW.alphabet) e) a;
+        IF alphabet_elemnts_not_unique THEN
+            RAISE EXCEPTION 'Alphabet notes are not unique. Alphabet %', NEW.alphabet ;
+        END IF;
+        
+        SELECT count(1) INTO orphaned_elements result FROM unnest(NEW.alphabet) a LEFT OUTER JOIN note e ON e.id = a WHERE e.id IS NULL;
+        IF orphaned_elements != 0 THEN 
+            RAISE EXCEPTION 'There are % notes of the alphabet missing in database.', orphaned_elements;
+        END IF;
+        
+        RETURN NEW;
+    END IF;
     RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT and UPDATE operation on tables with alphabet column (of array type).';
 END;
 $BODY$;
@@ -2981,12 +2981,12 @@ CREATE TABLE image_sequence
     id bigint NOT NULL DEFAULT nextval('elements_id_seq'::regclass),
     notation smallint NOT NULL,
     order_extractor smallint NOT NULL,
-	image_transformations smallint[] NOT NULL,
-	matrix_transformations smallint[] NOT NULL,
+    image_transformations smallint[] NOT NULL,
+    matrix_transformations smallint[] NOT NULL,
     matter_id bigint NOT NULL,
     remote_id text,
     remote_db smallint,
-	created timestamp with time zone NOT NULL DEFAULT now(),
+    created timestamp with time zone NOT NULL DEFAULT now(),
     modified timestamp with time zone NOT NULL DEFAULT now(),
     CONSTRAINT pk_image_sequence PRIMARY KEY (id),
     CONSTRAINT fk_image_sequence_chain_key FOREIGN KEY (id)
@@ -3024,21 +3024,21 @@ DECLARE
 sequence_with_id_count integer;
 BEGIN
 IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
-	SELECT count(*) INTO sequence_with_id_count FROM(
-		SELECT id FROM chain WHERE id = NEW.id 
-		UNION ALL 
-		SELECT id FROM subsequence WHERE id = NEW.id
-		UNION ALL 
-		SELECT id FROM image_sequence WHERE id = NEW.id) s;
-	IF sequence_with_id_count = 1 THEN
-		RETURN NEW;
-	ELSE IF sequence_with_id_count = 0 THEN
-		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
-	END IF;
-		RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id. Sequences count = %', sequence_with_id_count;
-	END IF;
+    SELECT count(*) INTO sequence_with_id_count FROM(
+        SELECT id FROM chain WHERE id = NEW.id 
+        UNION ALL 
+        SELECT id FROM subsequence WHERE id = NEW.id
+        UNION ALL 
+        SELECT id FROM image_sequence WHERE id = NEW.id) s;
+    IF sequence_with_id_count = 1 THEN
+        RETURN NEW;
+    ELSE IF sequence_with_id_count = 0 THEN
+        RAISE EXCEPTION 'New record in table chain_key cannot be addded because there is no sequences with given id.';
+    END IF;
+        RAISE EXCEPTION 'New record in table chain_key cannot be addded because there more than one sequences with given id. Sequences count = %', sequence_with_id_count;
+    END IF;
 ELSE	
-	RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
+    RAISE EXCEPTION 'Unknown operation. This trigger only operates on INSERT operation on tables with id column.';
 END IF;
 END
 $BODY$;
@@ -3068,21 +3068,21 @@ COMMENT ON TABLE dbo."AspNetPushNotificationSubscribers" IS 'Table for storing d
 -- Copy tasks results into task_result table.
 
 INSERT INTO task_result (task_id, key, value) 
-	SELECT id, 'data', result
-	FROM task
-	WHERE result IS NOT NULL;
+    SELECT id, 'data', result
+    FROM task
+    WHERE result IS NOT NULL;
 
 INSERT INTO task_result (task_id, key, value) 
-	SELECT id, 'similarityMatrix', additional_result_data 
-	FROM task
-	WHERE additional_result_data IS NOT NULL;
+    SELECT id, 'similarityMatrix', additional_result_data 
+    FROM task
+    WHERE additional_result_data IS NOT NULL;
 
 INSERT INTO task_result (task_id, key, value) 
-	SELECT t.id, d.key, d.value :: json 
-	FROM task t
-	INNER JOIN json_each_text(t.result::json ) d ON true
-	WHERE t.additional_result_data IS NOT NULL
-	AND d.key IN ('characteristics', 'attributeValues');
+    SELECT t.id, d.key, d.value :: json 
+    FROM task t
+    INNER JOIN json_each_text(t.result::json ) d ON true
+    WHERE t.additional_result_data IS NOT NULL
+    AND d.key IN ('characteristics', 'attributeValues');
 
 -- 01.02.2022
 -- Add collection country and collection date columns for genetic matters.
@@ -3338,7 +3338,7 @@ COMMENT ON COLUMN public.accordance_characteristic.first_element_id IS 'Id of th
 COMMENT ON COLUMN public.accordance_characteristic.second_element_id IS 'Id of the element of the second sequence for which the characteristic is calculated.';
 
 COMMENT ON COLUMN public.accordance_characteristic.characteristic_link_id IS 'Characteristic type id.';
-	
+    
 COMMENT ON COLUMN public.accordance_characteristic_link.id IS 'Unique identifier.';
 
 COMMENT ON COLUMN public.accordance_characteristic_link.accordance_characteristic IS 'Characteristic enum numeric value.';
