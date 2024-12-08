@@ -26,7 +26,7 @@ public class TaskTypeTests
     /// Tests count of task types.
     /// </summary>
     [Test]
-    public void TaskTypeCountTest() => Assert.That(taskTypes.Length, Is.EqualTo(TaskTypesCount));
+    public void TaskTypeCountTest() => Assert.That(taskTypes, Has.Length.EqualTo(TaskTypesCount));
 
     /// <summary>
     /// Tests values of task types.
@@ -36,7 +36,7 @@ public class TaskTypeTests
     {
         for (int i = 1; i <= TaskTypesCount; i++)
         {
-            Assert.That(taskTypes, Has.Member((TaskType)i));
+            Assert.That(taskTypes, Contains.Item((TaskType)i));
         }
     }
 
@@ -99,7 +99,7 @@ public class TaskTypeTests
     /// The task type.
     /// </param>
     [Test]
-    public void TaskTypeHasDisplayValueTest([Values] TaskType taskType) => Assert.That(taskType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void TaskTypeHasDisplayValueTest([Values] TaskType taskType) => Assert.That(taskType.GetDisplayValue(), Is.Not.Empty);
 
     // TODO: fix that
 

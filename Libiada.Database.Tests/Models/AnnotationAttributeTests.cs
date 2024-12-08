@@ -6,7 +6,7 @@ using Libiada.Core.Extensions;
 /// Attribute enum tests.
 /// </summary>
 [TestFixture(TestOf = typeof(AnnotationAttribute))]
-public class AttributeTests
+public class AnnotationAttributeTests
 {
     /// <summary>
     /// The attributes count.
@@ -22,17 +22,17 @@ public class AttributeTests
     /// Tests count of attributes.
     /// </summary>
     [Test]
-    public void AttributesCountTest() => Assert.That(attributes.Length, Is.EqualTo(AttributesCount));
+    public void AnnotationAttributeCountTest() => Assert.That(attributes, Has.Length.EqualTo(AttributesCount));
 
     /// <summary>
     /// Tests values of attributes.
     /// </summary>
     [Test]
-    public void AttributeValuesTest()
+    public void AnnotationAttributeValuesTest()
     {
         for (int i = 1; i <= AttributesCount; i++)
         {
-            Assert.That(attributes, Has.Member((AnnotationAttribute)i));
+            Assert.That(attributes, Contains.Item((AnnotationAttribute)i));
         }
     }
 
@@ -93,11 +93,20 @@ public class AttributeTests
     [TestCase((AnnotationAttribute)46, "GO_component")]
     [TestCase((AnnotationAttribute)47, "GO_process")]
     [TestCase((AnnotationAttribute)48, "satellite")]
-    public void AttributesDisplayValuesTest(AnnotationAttribute attribute, string name) => Assert.That(attribute.GetDisplayValue(), Is.EqualTo(name));
+    public void AnnotationAttributeDisplayValuesTest(AnnotationAttribute attribute, string name) => Assert.That(attribute.GetDisplayValue(), Is.EqualTo(name));
+
+    /// <summary>
+    /// Tests that all annotation attributes have display value.
+    /// </summary>
+    /// <param name="AnnotationAttribute">
+    /// The annotation attribute.
+    /// </param>
+    [Test]
+    public void AnnotationAttributeHasDisplayValueTest([Values] AnnotationAttribute attribute) => Assert.That(attribute.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all attributes values are unique.
     /// </summary>
     [Test]
-    public void AttributeValuesUniqueTest() => Assert.That(attributes.Cast<byte>(), Is.Unique);
+    public void AnnotationAttributeValuesUniqueTest() => Assert.That(attributes.Cast<byte>(), Is.Unique);
 }

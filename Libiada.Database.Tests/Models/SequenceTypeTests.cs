@@ -31,7 +31,7 @@ public class SequenceTypeTests
     /// Tests count of sequence types.
     /// </summary>
     [Test]
-    public void SequenceTypeCountTest() => Assert.That(sequenceTypes.Length, Is.EqualTo(SequenceTypesCount));
+    public void SequenceTypeCountTest() => Assert.That(sequenceTypes, Has.Length.EqualTo(SequenceTypesCount));
 
     /// <summary>
     /// Tests values of sequence types.
@@ -41,7 +41,7 @@ public class SequenceTypeTests
     {
         for (int i = 1; i <= SequenceTypesCount; i++)
         {
-            Assert.That(sequenceTypes, Has.Member((SequenceType)i));
+            Assert.That(sequenceTypes, Contains.Item((SequenceType)i));
         }
     }
 
@@ -77,7 +77,7 @@ public class SequenceTypeTests
     /// The sequence type.
     /// </param>
     [Test]
-    public void SequenceTypeHasDisplayValueTest([Values] SequenceType sequenceType) => Assert.That(sequenceType.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void SequenceTypeHasDisplayValueTest([Values] SequenceType sequenceType) => Assert.That(sequenceType.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all sequence types have description.
@@ -86,7 +86,7 @@ public class SequenceTypeTests
     /// The sequence Type.
     /// </param>
     [Test]
-    public void SequenceTypeHasDescriptionTest([Values] SequenceType sequenceType) => Assert.That(sequenceType.GetDescription(), Is.Not.Null.And.Not.Empty);
+    public void SequenceTypeHasDescriptionTest([Values] SequenceType sequenceType) => Assert.That(sequenceType.GetDescription(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all sequence types have valid nature attribute.
@@ -95,7 +95,7 @@ public class SequenceTypeTests
     /// The sequence Type.
     /// </param>
     [Test]
-    public void SequenceTypeHasNatureTest([Values] SequenceType sequenceType) => Assert.That(natures, Has.Member(sequenceType.GetNature()));
+    public void SequenceTypeHasNatureTest([Values] SequenceType sequenceType) => Assert.That(natures, Contains.Item(sequenceType.GetNature()));
 
     /// <summary>
     /// Tests that all sequence types values are unique.

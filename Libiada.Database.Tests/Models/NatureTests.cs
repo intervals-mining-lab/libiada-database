@@ -22,7 +22,7 @@ public class NatureTests
     /// Tests count of natures.
     /// </summary>
     [Test]
-    public void NatureCountTest() => Assert.That(natures.Length, Is.EqualTo(NaturesCount));
+    public void NatureCountTest() => Assert.That(natures, Has.Length.EqualTo(NaturesCount));
 
     /// <summary>
     /// Tests values of natures.
@@ -32,7 +32,7 @@ public class NatureTests
     {
         for (int i = 1; i <= NaturesCount; i++)
         {
-            Assert.That(natures, Has.Member((Nature)i));
+            Assert.That(natures, Contains.Item((Nature)i));
         }
     }
 
@@ -59,7 +59,7 @@ public class NatureTests
     /// The nature.
     /// </param>
     [Test]
-    public void NatureHasDisplayValueTest([Values] Nature nature) => Assert.That(nature.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void NatureHasDisplayValueTest([Values] Nature nature) => Assert.That(nature.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all natures have description.
@@ -68,7 +68,7 @@ public class NatureTests
     /// The nature.
     /// </param>
     [Test]
-    public void NatureHasDescriptionTest([Values] Nature nature) => Assert.That(nature.GetDescription(), Is.Not.Null.And.Not.Empty);
+    public void NatureHasDescriptionTest([Values] Nature nature) => Assert.That(nature.GetDescription(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all natures values are unique.

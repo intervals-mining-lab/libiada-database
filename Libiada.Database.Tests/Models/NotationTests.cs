@@ -31,7 +31,7 @@ public class NotationTests
     /// Tests count of notations.
     /// </summary>
     [Test]
-    public void NotationCountTest() => Assert.That(notations.Length, Is.EqualTo(NotationsCount));
+    public void NotationCountTest() => Assert.That(notations, Has.Length.EqualTo(NotationsCount));
 
     /// <summary>
     /// Tests values of notations.
@@ -41,7 +41,7 @@ public class NotationTests
     {
         for (int i = 1; i <= NotationsCount; i++)
         {
-            Assert.That(notations, Has.Member((Notation)i));
+            Assert.That(notations, Contains.Item((Notation)i));
         }
     }
 
@@ -76,7 +76,7 @@ public class NotationTests
     /// The notation.
     /// </param>
     [Test]
-    public void NotationHasDisplayValueTest([Values] Notation notation) => Assert.That(notation.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void NotationHasDisplayValueTest([Values] Notation notation) => Assert.That(notation.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all notations have description.
@@ -85,7 +85,7 @@ public class NotationTests
     /// The notation.
     /// </param>
     [Test]
-    public void NotationHasDescriptionTest([Values] Notation notation) => Assert.That(notation.GetDescription(), Is.Not.Null.And.Not.Empty);
+    public void NotationHasDescriptionTest([Values] Notation notation) => Assert.That(notation.GetDescription(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all notations have valid nature attribute.
@@ -94,7 +94,7 @@ public class NotationTests
     /// The notation.
     /// </param>
     [Test]
-    public void NotationHasNatureTest([Values] Notation notation) => Assert.That(natures, Has.Member(notation.GetNature()));
+    public void NotationHasNatureTest([Values] Notation notation) => Assert.That(natures, Contains.Item(notation.GetNature()));
 
     /// <summary>
     /// Tests that all notations values are unique.

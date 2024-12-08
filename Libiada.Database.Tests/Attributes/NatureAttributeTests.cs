@@ -16,8 +16,12 @@ public class NatureAttributeTests
     [Test]
     public void InvalidNatureValueTest()
     {
-        Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)10));
-        Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)0));
+        Assert.Multiple(() =>
+        {
+            Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)10));
+            Assert.Throws<ArgumentException>(() => new NatureAttribute((Nature)0));
+        });
+
     }
 
     /// <summary>
@@ -30,7 +34,10 @@ public class NatureAttributeTests
     public void NatureAttributeValueTest([Values] Nature value)
     {
         NatureAttribute attribute = new(value);
-        Assert.That(attribute.Value, Is.EqualTo(value));
-        Assert.That(attribute.Value.GetDisplayValue(), Is.EqualTo(value.GetDisplayValue()));
+        Assert.Multiple(() =>
+        {
+            Assert.That(attribute.Value, Is.EqualTo(value));
+            Assert.That(attribute.Value.GetDisplayValue(), Is.EqualTo(value.GetDisplayValue()));
+        });
     }
 }

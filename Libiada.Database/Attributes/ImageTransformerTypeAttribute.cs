@@ -5,7 +5,7 @@ using Libiada.Core.Images;
 /// <summary>
 /// The image transformer type attribute.
 /// </summary>
-[AttributeUsage(AttributeTargets.Field)]
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public class ImageTransformerTypeAttribute : Attribute
 {
     /// <summary>
@@ -23,7 +23,7 @@ public class ImageTransformerTypeAttribute : Attribute
     /// </exception>
     public ImageTransformerTypeAttribute(Type imageProcessorType)
     {
-        if (!imageProcessorType.IsSubclassOf(typeof(IImageTransformer)))
+        if (!imageProcessorType.IsAssignableTo(typeof(IImageTransformer)))
         {
             throw new ArgumentException($"Task class attribute value is invalid, it can only be subtype of {nameof(IImageTransformer)}", nameof(imageProcessorType));
         }

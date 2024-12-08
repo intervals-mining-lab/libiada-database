@@ -31,7 +31,7 @@ public class FeatureTests
     /// Tests count of features.
     /// </summary>
     [Test]
-    public void FeatureCountTest() => Assert.That(features.Length, Is.EqualTo(FeaturesCount));
+    public void FeatureCountTest() => Assert.That(features, Has.Length.EqualTo(FeaturesCount));
 
     /// <summary>
     /// Tests values of features.
@@ -41,7 +41,7 @@ public class FeatureTests
     {
         for (int i = 0; i < FeaturesCount; i++)
         {
-            Assert.That(features, Has.Member((Feature)i));
+            Assert.That(features, Contains.Item((Feature)i));
         }
     }
 
@@ -109,7 +109,7 @@ public class FeatureTests
     /// The feature.
     /// </param>
     [Test]
-    public void FeatureHasDisplayValueTest([Values] Feature feature) => Assert.That(feature.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void FeatureHasDisplayValueTest([Values] Feature feature) => Assert.That(feature.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all features have description.
@@ -118,7 +118,7 @@ public class FeatureTests
     /// The feature.
     /// </param>
     [Test]
-    public void FeatureHasDescriptionTest([Values] Feature feature) => Assert.That(feature.GetDescription(), Is.Not.Null.And.Not.Empty);
+    public void FeatureHasDescriptionTest([Values] Feature feature) => Assert.That(feature.GetDescription(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all features have valid nature attribute.
@@ -127,7 +127,7 @@ public class FeatureTests
     /// The feature.
     /// </param>
     [Test]
-    public void FeatureHasValidNatureTest([Values] Feature feature) => Assert.That(natures, Has.Member(feature.GetNature()));
+    public void FeatureHasValidNatureTest([Values] Feature feature) => Assert.That(natures, Contains.Item(feature.GetNature()));
 
     /// <summary>
     /// Tests that all features values are unique.

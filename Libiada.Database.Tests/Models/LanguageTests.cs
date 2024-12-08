@@ -22,7 +22,7 @@ public class LanguageTests
     /// Tests count of languages.
     /// </summary>
     [Test]
-    public void LanguageCountTest() => Assert.That(languages.Length, Is.EqualTo(LanguagesCount));
+    public void LanguageCountTest() => Assert.That(languages, Has.Length.EqualTo(LanguagesCount));
 
     /// <summary>
     /// Tests values of languages.
@@ -32,7 +32,7 @@ public class LanguageTests
     {
         for (int i = 1; i <= LanguagesCount; i++)
         {
-            Assert.That(languages, Has.Member((Language)i));
+            Assert.That(languages, Contains.Item((Language)i));
         }
     }
 
@@ -57,7 +57,7 @@ public class LanguageTests
     /// The language.
     /// </param>
     [Test]
-    public void LanguageHasDisplayValueTest([Values] Language language) => Assert.That(language.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void LanguageHasDisplayValueTest([Values] Language language) => Assert.That(language.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all languages have description.
@@ -66,7 +66,7 @@ public class LanguageTests
     /// The language.
     /// </param>
     [Test]
-    public void LanguageHasDescriptionTest([Values] Language language) => Assert.That(language.GetDescription(), Is.Not.Null.And.Not.Empty);
+    public void LanguageHasDescriptionTest([Values] Language language) => Assert.That(language.GetDescription(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all languages values are unique.

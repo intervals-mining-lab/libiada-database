@@ -3,7 +3,7 @@
 /// <summary>
 /// The nature attribute.
 /// </summary>
-[AttributeUsage(AttributeTargets.Field)]
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public sealed class NatureAttribute : Attribute
 {
     /// <summary>
@@ -19,7 +19,7 @@ public sealed class NatureAttribute : Attribute
     /// </param>
     public NatureAttribute(Nature value)
     {
-        if (!Enum.IsDefined(typeof(Nature), value))
+        if (!Enum.IsDefined<Nature>(value))
         {
             throw new ArgumentException("Nature attribute value is not valid nature", nameof(value));
         }

@@ -24,7 +24,7 @@ public class TaskStateTests
     /// Tests count of task states.
     /// </summary>
     [Test]
-    public void TaskStateCountTest() => Assert.That(taskStates.Length, Is.EqualTo(TaskStatesCount));
+    public void TaskStateCountTest() => Assert.That(taskStates, Has.Length.EqualTo(TaskStatesCount));
 
     /// <summary>
     /// Tests values of task states.
@@ -34,7 +34,7 @@ public class TaskStateTests
     {
         for (int i = 1; i <= TaskStatesCount; i++)
         {
-            Assert.That(taskStates, Has.Member((TaskState)i));
+            Assert.That(taskStates, Contains.Item((TaskState)i));
         }
     }
 
@@ -60,7 +60,7 @@ public class TaskStateTests
     /// The task state.
     /// </param>
     [Test]
-    public void TaskStateHasDisplayValueTest([Values] TaskState taskState) => Assert.That(taskState.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void TaskStateHasDisplayValueTest([Values] TaskState taskState) => Assert.That(taskState.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all task states have description.
@@ -69,7 +69,7 @@ public class TaskStateTests
     /// The task state.
     /// </param>
     [Test]
-    public void TaskStateHasDescriptionTest([Values] TaskState taskState) => Assert.That(taskState.GetDescription(), Is.Not.Null.And.Not.Empty);
+    public void TaskStateHasDescriptionTest([Values] TaskState taskState) => Assert.That(taskState.GetDescription(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all task states values are unique.

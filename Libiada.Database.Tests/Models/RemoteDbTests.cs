@@ -31,7 +31,7 @@ public class RemoteDbTests
     /// Tests count of remote dbs.
     /// </summary>
     [Test]
-    public void RemoteDbCountTest() => Assert.That(remoteDbs.Length, Is.EqualTo(RemoteDbsCount));
+    public void RemoteDbCountTest() => Assert.That(remoteDbs, Has.Length.EqualTo(RemoteDbsCount));
 
     /// <summary>
     /// Tests values of remote dbs.
@@ -41,7 +41,7 @@ public class RemoteDbTests
     {
         for (int i = 1; i <= RemoteDbsCount; i++)
         {
-            Assert.That(remoteDbs, Has.Member((RemoteDb)i));
+            Assert.That(remoteDbs, Contains.Item((RemoteDb)i));
         }
     }
 
@@ -64,7 +64,7 @@ public class RemoteDbTests
     /// The remote database.
     /// </param>
     [Test]
-    public void RemoteDbHasDisplayValueTest([Values] RemoteDb remoteDb) => Assert.That(remoteDb.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void RemoteDbHasDisplayValueTest([Values] RemoteDb remoteDb) => Assert.That(remoteDb.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all remote dbs have description.
@@ -73,7 +73,7 @@ public class RemoteDbTests
     /// The remote database.
     /// </param>
     [Test]
-    public void RemoteDbHasDescriptionTest([Values] RemoteDb remoteDb) => Assert.That(remoteDb.GetDescription(), Is.Not.Null.And.Not.Empty);
+    public void RemoteDbHasDescriptionTest([Values] RemoteDb remoteDb) => Assert.That(remoteDb.GetDescription(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all remote dbs have valid nature attribute.
@@ -82,7 +82,7 @@ public class RemoteDbTests
     /// The remote database.
     /// </param>
     [Test]
-    public void RemoteDbHasNatureTest([Values] RemoteDb remoteDb) => Assert.That(natures, Has.Member(remoteDb.GetNature()));
+    public void RemoteDbHasNatureTest([Values] RemoteDb remoteDb) => Assert.That(natures, Contains.Item(remoteDb.GetNature()));
 
     /// <summary>
     /// Tests that all remote dbs values are unique.

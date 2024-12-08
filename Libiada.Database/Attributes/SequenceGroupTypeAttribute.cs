@@ -4,7 +4,7 @@
 /// The group type attribute.
 /// Used to specify group types hierarchy.
 /// </summary>
-[AttributeUsage(AttributeTargets.Field)]
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public class SequenceGroupTypeAttribute : Attribute
 {
     /// <summary>
@@ -23,7 +23,7 @@ public class SequenceGroupTypeAttribute : Attribute
     /// </exception>
     public SequenceGroupTypeAttribute(SequenceGroupType value)
     {
-        if (!Enum.IsDefined(typeof(SequenceGroupType), value))
+        if (!Enum.IsDefined<SequenceGroupType>(value))
         {
             throw new ArgumentException("GroupType attribute value is not valid group type", nameof(value));
         }

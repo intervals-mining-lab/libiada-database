@@ -31,7 +31,7 @@ public class GroupTests
     /// Tests count of groups.
     /// </summary>
     [Test]
-    public void GroupCountTest() => Assert.That(groups.Length, Is.EqualTo(GroupsCount));
+    public void GroupCountTest() => Assert.That(groups, Has.Length.EqualTo(GroupsCount));
 
     /// <summary>
     /// Tests values of groups.
@@ -41,7 +41,7 @@ public class GroupTests
     {
         for (int i = 1; i <= GroupsCount; i++)
         {
-            Assert.That(groups, Has.Member((Group)i));
+            Assert.That(groups, Contains.Item((Group)i));
         }
     }
 
@@ -73,7 +73,7 @@ public class GroupTests
     /// The group.
     /// </param>
     [Test]
-    public void GroupHasDisplayValueTest([Values] Group group) => Assert.That(group.GetDisplayValue(), Is.Not.Null.And.Not.Empty);
+    public void GroupHasDisplayValueTest([Values] Group group) => Assert.That(group.GetDisplayValue(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all groups have description.
@@ -82,7 +82,7 @@ public class GroupTests
     /// The group.
     /// </param>
     [Test]
-    public void GroupHasDescriptionTest([Values] Group group) => Assert.That(group.GetDescription(), Is.Not.Null.And.Not.Empty);
+    public void GroupHasDescriptionTest([Values] Group group) => Assert.That(group.GetDescription(), Is.Not.Empty);
 
     /// <summary>
     /// Tests that all groups have valid nature attribute.
@@ -91,7 +91,7 @@ public class GroupTests
     /// The group.
     /// </param>
     [Test]
-    public void GroupHasNatureTest([Values] Group group) => Assert.That(natures, Has.Member(@group.GetNature()));
+    public void GroupHasNatureTest([Values] Group group) => Assert.That(natures, Contains.Item(@group.GetNature()));
 
     /// <summary>
     /// Tests that all groups values are unique.

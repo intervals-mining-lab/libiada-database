@@ -2,7 +2,7 @@
 
 using Libiada.Core.Images;
 
-[AttributeUsage(AttributeTargets.Field)]
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public class ImageOrderExtractorAttribute : Attribute
 {
     /// <summary>
@@ -21,7 +21,7 @@ public class ImageOrderExtractorAttribute : Attribute
     /// </exception>
     public ImageOrderExtractorAttribute(Type value)
     {
-        if (!typeof(IImageOrderExtractor).IsAssignableFrom(value))
+        if (!value.IsAssignableTo(typeof(IImageOrderExtractor)))
         {
             throw new ArgumentException($"Image order extractor attribute value is invalid, it can only class implementing {nameof(IImageOrderExtractor)} interface", nameof(value));
         }

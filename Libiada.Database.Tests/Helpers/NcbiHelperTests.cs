@@ -7,10 +7,12 @@ using Libiada.Database.Tests;
 public class NcbiHelperTests
 {
 
+    private readonly string TestDataFolderPath = Path.Join(TestContext.CurrentContext.TestDirectory, "TestData");
+
     [Test]
     public void GetIDFromFileTest()
     {
-        StreamReader txtReader = new($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result.txt");
+        StreamReader txtReader = new(Path.Join(TestDataFolderPath, "nuccore_result.txt"));
         string textFromFile = txtReader.ReadToEnd();
         string[] result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, true);
         const int expectedSequencesCount = 2111;
@@ -20,7 +22,7 @@ public class NcbiHelperTests
     [Test]
     public void IncludePartialInGetIdFromFileTest()
     {
-        StreamReader txtReader = new($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+        StreamReader txtReader = new(Path.Join(TestDataFolderPath, "nuccore_result2.txt"));
         string textFromFile = txtReader.ReadToEnd();
         string[] result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, false);
         int expectedSequencesCount = 1447;
@@ -32,7 +34,7 @@ public class NcbiHelperTests
     [Test]
     public void LengthInGetIdFromFileTest()
     {
-        StreamReader txtReader = new($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+        StreamReader txtReader = new(Path.Join(TestDataFolderPath, "nuccore_result2.txt"));
         string textFromFile = txtReader.ReadToEnd();
         string[] result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, true, 5000, 100000);
         const int expectedSequencesCount = 122;
@@ -42,7 +44,7 @@ public class NcbiHelperTests
     [Test]
     public void LengthPartialFalseInGetIdFromFileWithTest()
     {
-        StreamReader txtReader = new($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+        StreamReader txtReader = new(Path.Join(TestDataFolderPath, "nuccore_result2.txt"));
         string textFromFile = txtReader.ReadToEnd();
         string[] result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, false, 5000, 100000);
         const int expectedSequencesCount = 121;
@@ -52,7 +54,7 @@ public class NcbiHelperTests
     [Test]
     public void MaxLengthPartialFalseInGetIdFromFileTest()
     {
-        StreamReader txtReader = new($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+        StreamReader txtReader = new(Path.Join(TestDataFolderPath, "nuccore_result2.txt"));
         string textFromFile = txtReader.ReadToEnd();
         string[] result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, false, maxLength: 10000);
         const int expectedSequencesCount = 507;
@@ -62,7 +64,7 @@ public class NcbiHelperTests
     [Test]
     public void MaxLengthPartialTrueInGetIdFromFileTest()
     {
-        StreamReader txtReader = new($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+        StreamReader txtReader = new(Path.Join(TestDataFolderPath, "nuccore_result2.txt"));
         string textFromFile = txtReader.ReadToEnd();
         string[] result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, true, maxLength: 10000);
         const int expectedSequencesCount = 1330;
@@ -72,7 +74,7 @@ public class NcbiHelperTests
     [Test]
     public void MinLengthPartialTrueInGetIdFromFileTest()
     {
-        StreamReader txtReader = new($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+        StreamReader txtReader = new(Path.Join(TestDataFolderPath, "nuccore_result2.txt"));
         string textFromFile = txtReader.ReadToEnd();
         string[] result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, true, minLength: 30000);
         const int expectedSequencesCount = 115;
@@ -81,7 +83,7 @@ public class NcbiHelperTests
     [Test]
     public void MinLengthPartialFalseInGetIdFromFileTest()
     {
-        StreamReader txtReader = new($"{SystemData.ProjectFolderPathForNcbiHelper}nuccore_result2.txt");
+        StreamReader txtReader = new(Path.Join(TestDataFolderPath, "nuccore_result2.txt"));
         string textFromFile = txtReader.ReadToEnd();
         string[] result = NcbiHelper.GetIdsFromNcbiSearchResults(textFromFile, false, minLength: 1000);
         const int expectedSequencesCount = 415;

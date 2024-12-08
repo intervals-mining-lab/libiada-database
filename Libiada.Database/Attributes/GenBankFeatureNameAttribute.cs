@@ -4,7 +4,7 @@
 /// GenBank feature name attribute.
 /// Used to specify name of feature in geneBank standard.
 /// </summary>
-[AttributeUsage(AttributeTargets.Field)]
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public class GenBankFeatureNameAttribute : Attribute
 {
     /// <summary>
