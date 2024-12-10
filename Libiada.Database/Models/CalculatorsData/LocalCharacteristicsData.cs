@@ -1,28 +1,19 @@
 ﻿namespace Libiada.Database.Models.CalculatorsData;
 
-public struct LocalCharacteristicsData
+public record struct LocalCharacteristicsData(
+    string matterName,
+    FragmentData[] fragmentsData,
+    double[][] differenceData,
+    double[][] fourierData,
+    double[][] autocorrelationData)
 {
-    public readonly string MatterName;
+    public readonly string MatterName = matterName;
 
-    public readonly FragmentData[] FragmentsData;
+    public readonly FragmentData[] FragmentsData = fragmentsData;
 
-    public readonly double[][] DifferenceData;
+    public readonly double[][] DifferenceData = differenceData;
 
-    public readonly double[][] FourierData;
+    public readonly double[][] FourierData = fourierData;
 
-    public readonly double[][] AutocorrelationData;
-
-    public LocalCharacteristicsData(
-        string matterName, 
-        FragmentData[] fragmentsData, 
-        double[][] differenceData, 
-        double[][] fourierData, 
-        double[][] autocorrelationData)
-    {
-        MatterName = matterName;
-        FragmentsData = fragmentsData;
-        DifferenceData = differenceData;
-        FourierData = fourierData;
-        AutocorrelationData = autocorrelationData;
-    }
+    public readonly double[][] AutocorrelationData = autocorrelationData;
 }

@@ -1,7 +1,7 @@
 ﻿namespace Libiada.Database.Attributes;
 
 /// <summary>
-/// The nature attribute.
+/// Used to set nature value to other enums.
 /// </summary>
 [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
 public sealed class NatureAttribute : Attribute

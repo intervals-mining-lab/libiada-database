@@ -1,4 +1,4 @@
-﻿namespace Libiada.Web.Tests.Tasks;
+﻿namespace Libiada.Database.Tests.Tasks;
 
 using Libiada.Core.Extensions;
 
@@ -100,17 +100,6 @@ public class TaskTypeTests
     /// </param>
     [Test]
     public void TaskTypeHasDisplayValueTest([Values] TaskType taskType) => Assert.That(taskType.GetDisplayValue(), Is.Not.Empty);
-
-    // TODO: fix that
-
-    /// <summary>
-    /// Tests that all task types have display value.
-    /// </summary>
-    /// <param name="taskType">
-    /// The task type.
-    /// </param>
-    //[Test]
-    //public void TaskTypeHasTaskClassAttributeTest([Values]TaskType taskType) => Assert.That(taskType.GetTaskClass(), Is.Not.Null);
 
     /// <summary>
     /// Tests that all task types values are unique.

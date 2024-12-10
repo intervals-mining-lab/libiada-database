@@ -1,9 +1,9 @@
 ﻿namespace Libiada.Database.Models.CalculatorsData;
 
-public struct SequencePredictionData
+public record struct SequencePredictionData(double theoreticalCharacteristic, double actualCharacteristic, string fragment, string predicted)
 {
-    public double TheoreticalCharacteristic;
-    public double ActualCharacteristic;
-    public string Fragment;
-    public string Predicted;
+    public double TheoreticalCharacteristic = theoreticalCharacteristic;
+    public double ActualCharacteristic = actualCharacteristic;
+    public string Fragment = fragment;
+    public string Predicted = predicted;
 }

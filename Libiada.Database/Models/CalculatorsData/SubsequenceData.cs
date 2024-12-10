@@ -3,7 +3,7 @@
 /// <summary>
 /// The genes data.
 /// </summary>
-public struct SubsequenceData
+public record struct SubsequenceData
 {
     /// <summary>
     /// The subsequence id.

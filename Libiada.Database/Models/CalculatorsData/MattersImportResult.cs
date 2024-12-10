@@ -3,7 +3,7 @@
 /// <summary>
 /// The matter import result.
 /// </summary>
-public struct MatterImportResult
+public record struct MatterImportResult
 {
     /// <summary>
     /// All possible names of matter.

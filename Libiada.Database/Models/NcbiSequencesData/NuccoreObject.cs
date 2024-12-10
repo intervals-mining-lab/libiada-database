@@ -15,7 +15,7 @@ public struct NuccoreObject
 
     public string Organism { get; set; }
 
-    public override bool Equals(object other) =>  other is NuccoreObject nuccoreObject && nuccoreObject.AccessionVersion == AccessionVersion;
+    public override bool Equals(object? other) =>  other is NuccoreObject nuccoreObject && nuccoreObject.AccessionVersion == AccessionVersion;
 
     public override int GetHashCode() => AccessionVersion.GetHashCode();
 

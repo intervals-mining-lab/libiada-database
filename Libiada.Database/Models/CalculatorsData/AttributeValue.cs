@@ -3,32 +3,26 @@
 /// <summary>
 /// The attribute value.
 /// </summary>
-public readonly struct AttributeValue : IEquatable<AttributeValue>
+/// <remarks>
+/// Initializes a new instance of the <see cref="AttributeValue"/> structure.
+/// </remarks>
+/// <param name="attributeId">
+/// The attribute id.
+/// </param>
+/// <param name="value">
+/// The attribute value.
+/// </param>
+public readonly struct AttributeValue(byte attributeId, string value) : IEquatable<AttributeValue>
 {
     /// <summary>
     /// The attribute id.
     /// </summary>
-    public readonly byte AttributeId;
+    public readonly byte AttributeId = attributeId;
 
     /// <summary>
     /// Attribute value.
     /// </summary>
-    public readonly string Value;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AttributeValue"/> structure.
-    /// </summary>
-    /// <param name="attributeId">
-    /// The attribute id.
-    /// </param>
-    /// <param name="value">
-    /// The attribute value.
-    /// </param>
-    public AttributeValue(byte attributeId, string value)
-    {
-        AttributeId = attributeId;
-        Value = value;
-    }
+    public readonly string Value = value;
 
     /// <summary>
     /// The == operator overload.
@@ -76,7 +70,7 @@ public readonly struct AttributeValue : IEquatable<AttributeValue>
     /// <returns>
     /// The <see cref="bool"/>.
     /// </returns>
-    public override bool Equals(object other) => other is AttributeValue attributeValue && this == attributeValue;
+    public override bool Equals(object? other) => other is AttributeValue attributeValue && this == attributeValue;
 
     /// <summary>
     /// Calculates hash using <see cref="AttributeId"/> and <see cref="Value"/> hash codes.
