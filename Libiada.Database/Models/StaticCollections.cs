@@ -44,7 +44,7 @@ public static class StaticCollections
         FullCharacteristic.GCRatio,
         FullCharacteristic.GCSkew,
         FullCharacteristic.GCToATRatio,
-        FullCharacteristic.IdentificationInformation,
+        FullCharacteristic.IdentifyingInformation,
         FullCharacteristic.Length,
         FullCharacteristic.MKSkew,
         FullCharacteristic.RYSkew,
@@ -57,7 +57,7 @@ public static class StaticCollections
     public static readonly ReadOnlyCollection<CongenericCharacteristic> UserAvailableCongenericCharacteristics = new(
     [
         CongenericCharacteristic.AverageRemoteness,
-        CongenericCharacteristic.IdentificationInformation,
+        CongenericCharacteristic.IdentifyingInformation,
         CongenericCharacteristic.Length
     ]);
 
