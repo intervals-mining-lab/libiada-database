@@ -21,6 +21,7 @@ public partial class FullCharacteristicLink
     /// Unique internal identifier.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     [Comment("Unique identifier.")]
     public short Id { get; set; }

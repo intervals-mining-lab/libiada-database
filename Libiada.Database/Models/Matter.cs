@@ -19,6 +19,7 @@ public partial class Matter
     /// Unique internal identifier of the research object.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     [Comment("Unique identifier of the research object.")]
     public long Id { get; set; }

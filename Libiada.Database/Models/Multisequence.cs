@@ -17,6 +17,7 @@ public partial class Multisequence
     /// Unique internal identifier.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     [Comment("Unique identifier.")]
     public int Id { get; set; }

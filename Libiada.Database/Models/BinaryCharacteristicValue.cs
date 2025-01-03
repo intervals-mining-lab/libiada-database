@@ -19,6 +19,7 @@ public partial class BinaryCharacteristicValue
     /// Unique internal identifier.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     [Comment("Unique identifier.")]
     public long Id { get; set; }

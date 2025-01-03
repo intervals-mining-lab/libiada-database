@@ -42,7 +42,7 @@ public partial class CommonSequence
     /// Id of the research object to which the sequence belongs.
     /// </summary>
     [Column("matter_id")]
-    [Display(Name = "Кesearch object to which the sequence belongs")]
+    [Display(Name = "Research object to which the sequence belongs")]
     [Comment("Id of the research object to which the sequence belongs.")]
     public long MatterId { get; set; }
 

@@ -17,6 +17,7 @@ public partial class AspNetPushNotificationSubscriber
     /// Unique identifier.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Comment("Unique identifier.")]
     public int Id { get; set; }
 

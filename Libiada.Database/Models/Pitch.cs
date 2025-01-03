@@ -19,6 +19,7 @@ public partial class Pitch
     /// Unique internal identifier of the pitch.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     [Comment("Unique identifier of the pitch.")]
     public int Id { get; set; }

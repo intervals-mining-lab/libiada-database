@@ -19,6 +19,7 @@ public partial class CongenericCharacteristicValue
     /// Unique internal identifier.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     [Comment("Unique identifier.")]
     public long Id { get; set; }
@@ -26,7 +27,7 @@ public partial class CongenericCharacteristicValue
     /// <summary>
     /// Id of the sequence for which the characteristic is calculated.
     /// </summary>
-    [Column("chain_id")]
+    [Column("sequence_id")]
     [Comment("Id of the sequence for which the characteristic is calculated.")]
     public long SequenceId { get; set; }
 

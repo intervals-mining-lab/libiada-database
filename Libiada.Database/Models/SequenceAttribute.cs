@@ -18,6 +18,7 @@ public partial class SequenceAttribute
     /// Unique internal identifier.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     [Comment("Unique identifier.")]
     public long Id { get; set; }

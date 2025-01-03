@@ -19,6 +19,7 @@ public partial class AccordanceCharacteristicValue
     /// Unique internal identifier.
     /// </summary>
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     [Comment("Unique internal identifier.")]
     public long Id { get; set; }
