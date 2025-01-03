@@ -53,12 +53,12 @@ public partial class CongenericCharacteristicValue
     [Comment("Characteristic type id.")]
     public short CharacteristicLinkId { get; set; }
 
-    [ForeignKey("CharacteristicLinkId")]
+    [ForeignKey(nameof(CharacteristicLinkId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("CongenericCharacteristicValues")]
     public virtual CongenericCharacteristicLink CongenericCharacteristicLink { get; set; } = null!;
 
-    [ForeignKey("ElementId")]
+    [ForeignKey(nameof(ElementId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public virtual Element Element { get; set; } = null!;
 }

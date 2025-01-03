@@ -89,10 +89,10 @@ public partial class SequenceGroup
     [Comment("Group enum numeric value.")]
     public Group Group { get; set; }
 
-    [ForeignKey("CreatorId")]
+    [ForeignKey(nameof(CreatorId))]
     public virtual AspNetUser? Creator { get; set; }
 
-    [ForeignKey("ModifierId")]
+    [ForeignKey(nameof(ModifierId))]
     public virtual AspNetUser? Modifier { get; set; }
 
     [ForeignKey("GroupId")]

@@ -70,16 +70,16 @@ public partial class AccordanceCharacteristicValue
     [Comment("Characteristic type id.")]
     public short CharacteristicLinkId { get; set; }
 
-    [ForeignKey("CharacteristicLinkId")]
+    [ForeignKey(nameof(CharacteristicLinkId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("AccordanceCharacteristicValues")]
     public virtual AccordanceCharacteristicLink AccordanceCharacteristicLink { get; set; } = null!;
 
-    [ForeignKey("FirstElementId")]
+    [ForeignKey(nameof(FirstElementId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public virtual Element FirstElement { get; set; } = null!;
 
-    [ForeignKey("SecondElementId")]
+    [ForeignKey(nameof(SecondElementId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public virtual Element SecondElement { get; set; } = null!;
 }

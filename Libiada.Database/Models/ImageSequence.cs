@@ -86,7 +86,7 @@ public partial class ImageSequence
     [Comment("Record last change date and time (updated trough trigger).")]
     public DateTimeOffset Modified { get; private set; }
 
-    [ForeignKey("MatterId")]
+    [ForeignKey(nameof(MatterId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("ImageSequence")]
     public virtual Matter Matter { get; set; } = null!;

@@ -72,7 +72,7 @@ public partial class CalculationTask
     [Comment("Task completion date and time.")]
     public DateTimeOffset? Completed { get; set; }
 
-    [ForeignKey("UserId")]
+    [ForeignKey(nameof(UserId))]
     [DeleteBehavior(DeleteBehavior.Cascade)]
     [InverseProperty("CalculationTasks")]
     public virtual AspNetUser AspNetUser { get; set; } = null!;

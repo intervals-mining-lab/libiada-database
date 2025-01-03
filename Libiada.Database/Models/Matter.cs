@@ -133,7 +133,7 @@ public partial class Matter
     [InverseProperty("Matter")]
     public virtual ICollection<LiteratureSequence> LiteratureSequence { get; set; } = new List<LiteratureSequence>();
 
-    [ForeignKey("MultisequenceId")]
+    [ForeignKey(nameof(MultisequenceId))]
     [DeleteBehavior(DeleteBehavior.SetNull)]
     [InverseProperty("Matters")]
     public virtual Multisequence? Multisequence { get; set; }

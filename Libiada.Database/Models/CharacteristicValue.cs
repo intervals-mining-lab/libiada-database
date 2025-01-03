@@ -45,7 +45,7 @@ public partial class CharacteristicValue
     [Comment("Characteristic type id.")]
     public short CharacteristicLinkId { get; set; }
 
-    [ForeignKey("CharacteristicLinkId")]
+    [ForeignKey(nameof(CharacteristicLinkId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("CharacteristicValues")]
     public virtual FullCharacteristicLink FullCharacteristicLink { get; set; } = null!;

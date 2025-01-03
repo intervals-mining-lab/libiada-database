@@ -92,7 +92,7 @@ public partial class CommonSequence
     [Comment("Description of the sequence.")]
     public string? Description { get; set; }
 
-    [ForeignKey("MatterId")]
+    [ForeignKey(nameof(MatterId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("Sequence")]
     public virtual Matter Matter { get; set; } = null!;

@@ -33,7 +33,7 @@ public partial class AspNetPushNotificationSubscriber
 
     public string Auth { get; set; } = null!;
 
-    [ForeignKey("UserId")]
+    [ForeignKey(nameof(UserId))]
     [InverseProperty("AspNetPushNotificationSubscribers")]
     public virtual AspNetUser AspNetUser { get; set; } = null!;
 }

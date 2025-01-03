@@ -44,7 +44,7 @@ public partial class Position
     [Comment("Fragment length.")]
     public int Length { get; set; }
 
-    [ForeignKey("SubsequenceId")]
+    [ForeignKey(nameof(SubsequenceId))]
     [DeleteBehavior(DeleteBehavior.Cascade)]
     [InverseProperty("Position")]
     public virtual Subsequence Subsequence { get; set; } = null!;

@@ -43,7 +43,7 @@ public partial class TaskResult
     [Comment("Results element value (as json).")]
     public string Value { get; set; } = null!;
 
-    [ForeignKey("TaskId")]
+    [ForeignKey(nameof(TaskId))]
     [DeleteBehavior(DeleteBehavior.Cascade)]
     [InverseProperty("TaskResult")]
     public virtual CalculationTask Task { get; set; } = null!;

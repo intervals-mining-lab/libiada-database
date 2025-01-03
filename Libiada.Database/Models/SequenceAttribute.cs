@@ -44,7 +44,7 @@ public partial class SequenceAttribute
     [Comment("Text of the attribute.")]
     public string Value { get; set; } = null!;
 
-    [ForeignKey("SequenceId")]
+    [ForeignKey(nameof(SequenceId))]
     [DeleteBehavior(DeleteBehavior.Cascade)]
     [InverseProperty("SequenceAttribute")]
     public virtual Subsequence Subsequence { get; set; } = null!;
