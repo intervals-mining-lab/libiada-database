@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 /// Contains elements that represent note sequences in form of measures (bars) that are used as elements of segmented music sequences.
 /// </summary>
 [Table("measure")]
-[Index("Notation", Name = "ix_measure_notation_id")]
 [Comment("Contains elements that represent note sequences in form of measures (bars) that are used as elements of segmented music sequences.")]
 public partial class Measure : Element
 {

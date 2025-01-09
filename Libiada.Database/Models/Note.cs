@@ -11,8 +11,6 @@ using Microsoft.EntityFrameworkCore;
 /// Contains elements that represent notes that are used as elements of music sequences.
 /// </summary>
 [Table("note")]
-[Index("Notation", Name = "ix_note_notation_id")]
-[Index("Value", Name = "uk_note", IsUnique = true)]
 [Comment("Contains elements that represent notes that are used as elements of music sequences.")]
 public partial class Note : Element
 {

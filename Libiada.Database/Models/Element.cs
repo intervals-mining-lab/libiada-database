@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 /// Base table for all elements that are stored in the database and used in alphabets of sequences.
 /// </summary>
 [Table("element")]
-[Index("Notation", Name = "ix_element_notation_id")]
+[Index("Notation", Name = "ix_element_notation")]
 [Index("Value", Name = "ix_element_value")]
 [Index("Value", "Notation", Name = "uk_element_value_notation", IsUnique = true)]
 [Comment("Base table for all elements that are stored in the database and used in alphabets of sequences.")]
