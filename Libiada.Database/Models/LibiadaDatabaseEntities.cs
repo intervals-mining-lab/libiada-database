@@ -179,7 +179,8 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Element>(entity =>
         {
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
+            entity.UseTptMappingStrategy();
+            //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             entity.Property(e => e.Created).HasDefaultValueSql("now()");
             entity.Property(e => e.Modified).HasDefaultValueSql("now()");
         });
@@ -187,8 +188,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
         modelBuilder.Entity<Fmotif>(entity =>
         {
             entity.HasIndex(e => e.Alphabet, "ix_fmotif_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
         });
 
         modelBuilder.Entity<FullCharacteristicLink>(entity =>
@@ -221,8 +220,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
         modelBuilder.Entity<Measure>(entity =>
         {
             entity.HasIndex(e => e.Alphabet, "ix_measure_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
         });
 
         modelBuilder.Entity<Multisequence>(entity =>
@@ -240,8 +237,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Note>(entity =>
         {
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
-
             entity.HasMany(d => d.Pitches)
                   .WithMany(p => p.Notes)
                   .UsingEntity("note_pitch",

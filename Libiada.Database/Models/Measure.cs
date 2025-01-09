@@ -12,62 +12,8 @@ using Microsoft.EntityFrameworkCore;
 [Table("measure")]
 [Index("Notation", Name = "ix_measure_notation_id")]
 [Comment("Contains elements that represent note sequences in form of measures (bars) that are used as elements of segmented music sequences.")]
-public partial class Measure
+public partial class Measure : Element
 {
-    /// <summary>
-    /// Unique internal identifier of the measure.
-    /// </summary>
-    [Key]
-    [Column("id")]
-    [Comment("Unique identifier of the measure.")]
-    public long Id { get; set; }
-
-    /// <summary>
-    /// Measure hash value.
-    /// </summary>
-    [Column("value")]
-    [StringLength(255)]
-    [Comment("Measure hash value.")]
-    public string Value { get; set; } = null!;
-
-    /// <summary>
-    /// Description of the sequence.
-    /// </summary>
-    [Column("description")]
-    [Comment("Description of the sequence.")]
-    public string? Description { get; set; }
-
-    /// <summary>
-    /// Measure name.
-    /// </summary>
-    [Column("name")]
-    [StringLength(255)]
-    [Comment("Measure name.")]
-    public string? Name { get; set; }
-
-    /// <summary>
-    /// Measure notation enum numeric value (always 7).
-    /// </summary>
-    [Column("notation")]
-    [Comment("Measure notation enum numeric value (always 7).")]
-    public Notation Notation { get; } = Notation.Measures;
-
-    /// <summary>
-    /// Measure creation date and time (filled trough trigger).
-    /// </summary>
-    [Column("created")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    [Comment("Measure creation date and time (filled trough trigger).")]
-    public DateTimeOffset Created { get; private set; }
-
-    /// <summary>
-    /// Record last change date and time (updated trough trigger).
-    /// </summary>
-    [Column("modified")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    [Comment("Record last change date and time (updated trough trigger).")]
-    public DateTimeOffset Modified { get; private set; }
-
     /// <summary>
     /// Measure alphabet (array of notes ids).
     /// </summary>
@@ -78,7 +24,7 @@ public partial class Measure
     /// <summary>
     /// Measure order.
     /// </summary>
-    [Column("building")]
+    [Column("order")]
     [Comment("Measure order.")]
     public int[] Order { get; set; } = null!;
 
