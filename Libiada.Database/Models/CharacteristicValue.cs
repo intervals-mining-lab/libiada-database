@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 /// Contains numeric chracteristics of complete sequences.
 /// </summary>
 [Table("full_characteristic")]
-[Index("SequenceId", Name = "ix_characteristic_chain_id")]
+[Index("SequenceId", Name = "ix_characteristic_sequence_id")]
 [Index("CharacteristicLinkId", Name = "ix_characteristic_characteristic_type_link")]
 [Index("SequenceId", "CharacteristicLinkId", Name = "uk_characteristic", IsUnique = true)]
 [Comment("Contains numeric chracteristics of complete sequences.")]
@@ -27,7 +27,7 @@ public partial class CharacteristicValue
     /// <summary>
     /// Id of the sequence for which the characteristic is calculated.
     /// </summary>
-    [Column("chain_id")]
+    [Column("sequence_id")]
     [Comment("Id of the sequence for which the characteristic is calculated.")]
     public long SequenceId { get; set; }
 

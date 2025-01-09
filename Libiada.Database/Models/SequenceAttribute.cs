@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 /// <summary>
 /// Contains chains' attributes and their values.
 /// </summary>
-[Table("chain_attribute")]
-[Index("SequenceId", "Attribute", "Value", Name = "uk_chain_attribute", IsUnique = true)]
-[Comment("Contains chains' attributes and their values.")]
+[Table("sequence_attribute")]
+[Index("SequenceId", "Attribute", "Value", Name = "uk_sequence_attribute", IsUnique = true)]
+[Comment("Contains sequences' attributes and their values.")]
 public partial class SequenceAttribute
 {
     /// <summary>
@@ -26,7 +26,7 @@ public partial class SequenceAttribute
     /// <summary>
     /// Id of the sequence to which attribute belongs.
     /// </summary>
-    [Column("chain_id")]
+    [Column("sequence_id")]
     [Comment("Id of the sequence to which attribute belongs.")]
     public long SequenceId { get; set; }
 

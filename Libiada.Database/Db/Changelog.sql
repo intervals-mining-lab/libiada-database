@@ -4377,4 +4377,32 @@ RAISE EXCEPTION 'Unknown operation. This trigger shoud be used only in delete op
 END
 $BODY$;
 
+-- 09.01.2025
+-- Renaming chain to sequence in references, indices and columns names.
+
+ALTER TABLE accordance_characteristic RENAME first_chain_id TO first_sequence_id;
+ALTER TABLE accordance_characteristic RENAME second_chain_id TO second_sequence_id;
+ALTER INDEX ix_accordance_characteristic_first_chain_id RENAME TO ix_accordance_characteristic_first_sequence_id;
+COMMENT ON INDEX ix_accordance_characteristic_first_sequence_id IS 'First sequence id index of accordance characteristic.';
+ALTER INDEX ix_accordance_characteristic_second_chain_id RENAME TO ix_accordance_characteristic_second_sequence_id;
+COMMENT ON INDEX ix_accordance_characteristic_second_sequence_id IS 'Second sequence id index of accordance characteristic.';
+
+ALTER TABLE binary_characteristic RENAME chain_id TO sequence_id;
+ALTER INDEX ix_binary_characteristic_chain_id RENAME TO ix_binary_characteristic_sequence_id;
+COMMENT ON INDEX ix_binary_characteristic_sequence_id IS 'Sequence id index of binary characteristic.';
+
+ALTER TABLE congeneric_characteristic RENAME chain_id TO sequence_id;
+ALTER INDEX ix_congeneric_characteristic_chain_id RENAME TO ix_congeneric_characteristic_sequence_id;
+COMMENT ON INDEX ix_congeneric_characteristic_sequence_id IS 'Sequence id index of congeneric characteristic.';
+
+ALTER TABLE full_characteristic RENAME chain_id TO sequence_id;
+ALTER INDEX ix_characteristic_chain_id RENAME TO ix_characteristic_sequence_id;
+COMMENT ON INDEX ix_characteristic_sequence_id IS 'Sequence id index of integral characteristic.';
+
+ALTER TABLE chain_attribute RENAME TO sequence_attribute;
+COMMENT ON TABLE sequence_attribute IS 'Contains sequences'' attributes and their values.';
+ALTER TABLE sequence_attribute RENAME chain_id TO sequence_id;
+ALTER TABLE sequence_attribute RENAME CONSTRAINT pk_chain_attribute TO pk_sequence_attribute;
+ALTER INDEX uk_chain_attribute RENAME TO uk_sequence_attribute;
+
 COMMIT;

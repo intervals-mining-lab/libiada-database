@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 /// Contains numeric chracteristics of accordance of element in different sequences.
 /// </summary>
 [Table("accordance_characteristic")]
-[Index("FirstSequenceId", Name = "ix_accordance_characteristic_first_chain_id")]
-[Index("SecondSequenceId", Name = "ix_accordance_characteristic_second_chain_id")]
+[Index("FirstSequenceId", Name = "ix_accordance_characteristic_first_sequence_id")]
+[Index("SecondSequenceId", Name = "ix_accordance_characteristic_second_sequence_id")]
 [Index("FirstSequenceId", "SecondSequenceId", "FirstElementId", "SecondElementId", "CharacteristicLinkId", Name = "uk_accordance_characteristic", IsUnique = true)]
 [Comment("Contains numeric chracteristics of accordance of element in different sequences.")]
 public partial class AccordanceCharacteristicValue
@@ -27,7 +27,7 @@ public partial class AccordanceCharacteristicValue
     /// <summary>
     /// Id of the first sequence for which the characteristic is calculated.
     /// </summary>
-    [Column("first_chain_id")]
+    [Column("first_sequence_id")]
     [Display(Name = "First sequence")]
     [Comment("Id of the first sequence for which the characteristic is calculated.")]
     public long FirstSequenceId { get; set; }
@@ -35,7 +35,7 @@ public partial class AccordanceCharacteristicValue
     /// <summary>
     /// Id of the second sequence for which the characteristic is calculated.
     /// </summary>
-    [Column("second_chain_id")]
+    [Column("second_sequence_id")]
     [Display(Name = "Second sequence")]
     [Comment("Id of the second sequence for which the characteristic is calculated.")]
     public long SecondSequenceId { get; set; }

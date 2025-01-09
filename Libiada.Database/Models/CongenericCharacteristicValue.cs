@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 /// </summary>
 [Table("congeneric_characteristic")]
 [Index("SequenceId", "ElementId", Name = "fki_congeneric_characteristic_alphabet_element")]
-[Index("SequenceId", Name = "ix_congeneric_characteristic_chain_id")]
+[Index("SequenceId", Name = "ix_congeneric_characteristic_sequence_id")]
 [Index("SequenceId", "ElementId", "CharacteristicLinkId", Name = "uk_congeneric_characteristic", IsUnique = true)]
 [Comment("Contains numeric chracteristics of congeneric sequences.")]
 public partial class CongenericCharacteristicValue

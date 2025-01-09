@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 /// Contains numeric chracteristics of elements dependece based on their arrangement in sequence.
 /// </summary>
 [Table("binary_characteristic")]
-[Index("SequenceId", Name = "ix_binary_characteristic_chain_id")]
+[Index("SequenceId", Name = "ix_binary_characteristic_sequence_id")]
 [Index("SequenceId", "FirstElementId", "SecondElementId", "CharacteristicLinkId", Name = "uk_binary_characteristic", IsUnique = true)]
 [Comment("Contains numeric chracteristics of elements dependece based on their arrangement in sequence.")]
 public partial class BinaryCharacteristicValue
@@ -27,7 +27,7 @@ public partial class BinaryCharacteristicValue
     /// <summary>
     /// Id of the sequence for which the characteristic is calculated.
     /// </summary>
-    [Column("chain_id")]
+    [Column("sequence_id")]
     [Display(Name = "Sequence")]
     [Comment("Id of the sequence for which the characteristic is calculated.")]
     public long SequenceId { get; set; }
