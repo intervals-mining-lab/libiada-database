@@ -48,5 +48,5 @@ public partial class FullCharacteristicLink
     public ArrangementType ArrangementType { get; set; }
 
     [InverseProperty("FullCharacteristicLink")]
-    public virtual ICollection<CharacteristicValue> CharacteristicValues { get; set; } = new List<CharacteristicValue>();
+    public virtual ICollection<CharacteristicValue> CharacteristicValues { get; set; } = [];
 }

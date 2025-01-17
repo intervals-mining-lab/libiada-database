@@ -74,4 +74,9 @@ public partial class BinaryCharacteristicValue
     [ForeignKey(nameof(SecondElementId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public virtual Element SecondElement { get; set; } = null!;
+
+    [ForeignKey(nameof(SequenceId))]
+    [DeleteBehavior(DeleteBehavior.Cascade)]
+    public virtual AbstractSequenceEntity Sequence { get; set; } = null!;
+
 }

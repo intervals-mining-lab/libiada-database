@@ -143,13 +143,13 @@ public enum TaskType : byte
     /// Sequences import for existing matter.
     /// </summary>
     [Display(Name = "Sequence upload")]
-    CommonSequences = 23,
+    SequencesUpload = 23,
 
     /// <summary>
     /// Matter creation and sequence import task.
     /// </summary>
     [Display(Name = "Sequence import")]
-    Matters = 24,
+    MattersImport = 24,
 
     /// <summary>
     /// The sequence prediction task.

@@ -61,4 +61,8 @@ public partial class CongenericCharacteristicValue
     [ForeignKey(nameof(ElementId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public virtual Element Element { get; set; } = null!;
+
+    [ForeignKey(nameof(SequenceId))]
+    [DeleteBehavior(DeleteBehavior.Cascade)]
+    public virtual AbstractSequenceEntity Sequence { get; set; } = null!;
 }

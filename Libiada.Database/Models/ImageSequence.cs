@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Database.Models;
 
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,18 +8,10 @@ using Microsoft.EntityFrameworkCore;
 /// Contains information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables.
 /// </summary>
 [Table("image_sequence")]
-[Index("MatterId", Name = "ix_image_sequence_matter_id")]
+[Index("MatterId", Name = "ix_image_sequence_research_object_id")]
 [Comment("Contains information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables.")]
-public partial class ImageSequence
+public partial class ImageSequence : AbstractSequenceEntity
 {
-    /// <summary>
-    /// Unique internal identifier of the image sequence.
-    /// </summary>
-    [Key]
-    [Column("id")]
-    [Comment("Unique identifier of the image sequence.")]
-    public long Id { get; set; }
-
     /// <summary>
     /// Notation enum numeric value.
     /// </summary>
@@ -52,42 +43,11 @@ public partial class ImageSequence
     /// <summary>
     /// Id of the research object (image) to which the sequence belongs.
     /// </summary>
-    [Column("matter_id")]
+    [Column("research_object_id")]
     [Comment("Id of the research object (image) to which the sequence belongs.")]
     public long MatterId { get; set; }
 
-    /// <summary>
-    /// Id of the sequence in remote database.
-    /// </summary>
-    [Column("remote_id")]
-    [Comment("Id of the sequence in remote database.")]
-    public string? RemoteId { get; set; }
-
-    /// <summary>
-    /// Enum numeric value of the remote db from which sequence is downloaded.
-    /// </summary>
-    [Column("remote_db")]
-    [Comment("Enum numeric value of the remote db from which sequence is downloaded.")]
-    public short? RemoteDb { get; set; }
-
-    /// <summary>
-    /// Sequence creation date and time (filled trough trigger).
-    /// </summary>
-    [Column("created")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    [Comment("Sequence creation date and time (filled trough trigger).")]
-    public DateTimeOffset Created { get; private set; }
-
-    /// <summary>
-    /// Record last change date and time (updated trough trigger).
-    /// </summary>
-    [Column("modified")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    [Comment("Record last change date and time (updated trough trigger).")]
-    public DateTimeOffset Modified { get; private set; }
-
     [ForeignKey(nameof(MatterId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
-    [InverseProperty("ImageSequence")]
     public virtual Matter Matter { get; set; } = null!;
 }

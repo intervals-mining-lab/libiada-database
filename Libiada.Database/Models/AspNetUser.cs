@@ -29,8 +29,8 @@ public class AspNetUser : IdentityUser<int>
     public DateTimeOffset Modified { get; private set; }
 
     [InverseProperty("AspNetUser")]
-    public virtual ICollection<AspNetPushNotificationSubscriber> AspNetPushNotificationSubscribers { get; set; } = new List<AspNetPushNotificationSubscriber>();
+    public virtual ICollection<AspNetPushNotificationSubscriber> AspNetPushNotificationSubscribers { get; set; } = [];
 
     [InverseProperty("AspNetUser")]
-    public virtual ICollection<CalculationTask> CalculationTasks { get; set; } = new List<CalculationTask>();
+    public virtual ICollection<CalculationTask> CalculationTasks { get; set; } = [];
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 /// Contains chains' attributes and their values.
 /// </summary>
 [Table("sequence_attribute")]
-[Index("SequenceId", "Attribute", "Value", Name = "uk_sequence_attribute", IsUnique = true)]
+[Index("SequenceId", "Attribute", "Value", Name = "uk_sequence_attribute", IsUnique = true)] // for value md5 hash is calculated
 [Comment("Contains sequences' attributes and their values.")]
 public partial class SequenceAttribute
 {
@@ -46,6 +46,5 @@ public partial class SequenceAttribute
 
     [ForeignKey(nameof(SequenceId))]
     [DeleteBehavior(DeleteBehavior.Cascade)]
-    [InverseProperty("SequenceAttribute")]
-    public virtual Subsequence Subsequence { get; set; } = null!;
+    public virtual AbstractSequenceEntity Sequence { get; set; } = null!;
 }

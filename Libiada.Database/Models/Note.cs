@@ -47,5 +47,5 @@ public partial class Note : Element
 
     [ForeignKey("NoteId")]
     [InverseProperty("Notes")]
-    public virtual ICollection<Pitch> Pitches { get; set; } = new List<Pitch>();
+    public virtual ICollection<Pitch> Pitches { get; set; } = [];
 }

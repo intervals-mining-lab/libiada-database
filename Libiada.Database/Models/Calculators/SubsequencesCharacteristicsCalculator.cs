@@ -18,15 +18,15 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
 
     public SubsequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, 
                                                  IFullCharacteristicRepository characteristicTypeLinkRepository, 
-                                                 ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory)
+                                                 ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory)
     {
         this.dbFactory = dbFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
     /// Null by default.
     /// </param>
     /// <returns></returns>
-    public double[] CalculateSubsequencesCharacteristics(long parentId, short characteristicId, Feature[] features, string[] filters = null)
+    public double[] CalculateSubsequencesCharacteristics(long parentId, short characteristicId, Feature[] features, string[] filters)
     {
         short[] characteristicsIds = [characteristicId];
         SubsequenceData[] subsequencesData = CalculateSubsequencesCharacteristics(characteristicsIds, features, parentId, filters);
@@ -87,8 +87,8 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
 
         // creating local context to avoid memory overflow due to possibly big cache of characteristics
         using var db = dbFactory.CreateDbContext();
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
-        var subsequenceExtractor = new SubsequenceExtractor(db, commonSequenceRepository);
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
+        var subsequenceExtractor = new SubsequenceExtractor(db, sequenceRepository);
 
         Subsequence[] subsequences = filters.IsNullOrEmpty() ?
             subsequenceExtractor.GetSubsequences(parentSequenceId, features) :

@@ -33,7 +33,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// </returns>
     public (string[], string[]) SplitAccessionsIntoExistingAndNotImported(string[] accessions)
     {
-        var allExistingAccessions = Db.DnaSequences
+        var allExistingAccessions = Db.CombinedSequenceEntities
                                       .Where(d => d.RemoteId != null)
                                       .Select(d => d.RemoteId)
                                       .ToArray()
@@ -49,7 +49,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// The create DNA sequence.
     /// </summary>
     /// <param name="sequence">
-    /// The common sequence.
+    /// The genetic sequence to create in database.
     /// </param>
     /// <param name="fastaSequence">
     /// Sequence as <see cref="ISequence"/>>.
@@ -61,7 +61,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// Thrown if at least one element of new sequence is missing in db
     /// or if sequence is empty or invalid.
     /// </exception>
-    public void Create(CommonSequence sequence, ISequence fastaSequence, bool partial)
+    public void Create(DnaSequence sequence, ISequence fastaSequence)
     {
         if (fastaSequence.ID.Contains("Resource temporarily unavailable"))
         {
@@ -77,11 +77,13 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
             throw new Exception("At least one element of new sequence is invalid (not A, C, T, G or U).");
         }
 
-        MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
+        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
+
+        MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
         sequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
         sequence.Order = chain.Order;
 
-        Create(sequence, partial);
+        Create(sequence);
     }
 
     /// <summary>
@@ -90,23 +92,13 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// <param name="sequence">
     /// The sequence.
     /// </param>
-    public void Create(CommonSequence sequence, bool partial)
+    public void Create(DnaSequence sequence)
     {
-        DnaSequence dnaSequence = new()
-        {
-            MatterId = sequence.MatterId,
-            Notation = sequence.Notation,
-            RemoteDb = sequence.RemoteDb,
-            RemoteId = sequence.RemoteId,
-            Description = sequence.Description,
-            Alphabet = sequence.Alphabet,
-            Order = sequence.Order,
-            Partial = partial
-        };
+        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        Db.DnaSequences.Add(dnaSequence);
+        Db.CombinedSequenceEntities.Add(dbSequence);
         Db.SaveChanges();
-        sequence.Id = dnaSequence.Id;
+        sequence.Id = dbSequence.Id;
     }
 
     /// <summary>
@@ -121,7 +113,11 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     public long[] GetNucleotideSequenceIds(long[] matterIds)
     {
         long[] chains = new long[matterIds.Length];
-        DnaSequence[] sequences = Db.DnaSequences.Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides).ToArray();
+        CombinedSequenceEntity[] sequences = Db.CombinedSequenceEntities
+                                               .Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides)
+                                               .ToArray();
+        
+        // TODO: use orderby insted of cycle
         for (int i = 0; i < matterIds.Length; i++)
         {
             chains[i] = sequences.Single(c => c.MatterId == matterIds[i]).Id;

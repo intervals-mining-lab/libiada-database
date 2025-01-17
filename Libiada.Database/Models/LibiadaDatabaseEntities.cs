@@ -13,6 +13,8 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
     {
     }
 
+    public virtual DbSet<AbstractSequenceEntity> AbstractSequenceEntities { get; set; }
+
     public virtual DbSet<AccordanceCharacteristicLink> AccordanceCharacteristicLinks { get; set; }
 
     public virtual DbSet<AccordanceCharacteristicValue> AccordanceCharacteristicValues { get; set; }
@@ -27,15 +29,11 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
     public virtual DbSet<CharacteristicValue> CharacteristicValues { get; set; }
 
-    public virtual DbSet<CommonSequence> CommonSequences { get; set; }
+    public virtual DbSet<CombinedSequenceEntity> CombinedSequenceEntities { get; set; }
 
     public virtual DbSet<CongenericCharacteristicLink> CongenericCharacteristicLinks { get; set; }
 
     public virtual DbSet<CongenericCharacteristicValue> CongenericCharacteristicValues { get; set; }
-
-    public virtual DbSet<DataSequence> DataSequences { get; set; }
-
-    public virtual DbSet<DnaSequence> DnaSequences { get; set; }
 
     public virtual DbSet<Element> Elements { get; set; }
 
@@ -45,15 +43,11 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
     public virtual DbSet<ImageSequence> ImageSequences { get; set; }
 
-    public virtual DbSet<LiteratureSequence> LiteratureSequences { get; set; }
-
     public virtual DbSet<Matter> Matters { get; set; }
 
     public virtual DbSet<Measure> Measures { get; set; }
 
     public virtual DbSet<Multisequence> Multisequences { get; set; }
-
-    public virtual DbSet<MusicSequence> MusicSequences { get; set; }
 
     public virtual DbSet<Note> Notes { get; set; }
 
@@ -79,6 +73,14 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<AccordanceCharacteristicLink>(entity =>
         {
+            //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+        });
+
+        modelBuilder.Entity<AbstractSequenceEntity>(entity =>
+        {
+            entity.Property(e => e.Created).HasDefaultValueSql("now()");
+            entity.Property(e => e.Modified).HasDefaultValueSql("now()");
+            //entity.UseTptMappingStrategy();
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
@@ -135,13 +137,20 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
-        modelBuilder.Entity<CommonSequence>(entity =>
+        modelBuilder.Entity<CombinedSequenceEntity>(entity =>
         {
             entity.HasIndex(e => e.Alphabet, "ix_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
-            entity.Property(e => e.Created).HasDefaultValueSql("now()");
-            entity.Property(e => e.Modified).HasDefaultValueSql("now()");
+            entity.HasOne(s => s.Matter)
+                  .WithMany(r => r.Sequences)
+                  .HasForeignKey(s => new { s.MatterId, s.Nature })
+                  .HasPrincipalKey(r => new { r.Id, r.Nature });
+
+            //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            entity.Property(e => e.Partial).HasDefaultValue(false);
+            entity.Property(e => e.Original).HasDefaultValue(true);
+            entity.Property(e => e.SequentialTransfer).HasDefaultValue(false);
         });
 
         modelBuilder.Entity<CongenericCharacteristicLink>(entity =>
@@ -162,20 +171,14 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
-        modelBuilder.Entity<DataSequence>(entity =>
-        {
-            entity.HasIndex(e => e.Alphabet, "data_chain_alphabet_idx").HasAnnotation("Npgsql:IndexMethod", "gin");
+        //modelBuilder.Entity<DataSequence>(entity =>
+        //{
+        //});
 
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
-        });
-
-        modelBuilder.Entity<DnaSequence>(entity =>
-        {
-            entity.HasIndex(e => e.Alphabet, "ix_dna_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
-            entity.Property(e => e.Partial).HasDefaultValue(false);
-        });
+        //modelBuilder.Entity<DnaSequence>(entity =>
+        //{
+        //    entity.Property(e => e.Partial).HasDefaultValue(false);
+        //});
 
         modelBuilder.Entity<Element>(entity =>
         {
@@ -197,18 +200,12 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<ImageSequence>(entity =>
         {
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
-            entity.Property(e => e.Created).HasDefaultValueSql("now()");
-            entity.Property(e => e.Modified).HasDefaultValueSql("now()");
         });
 
-        modelBuilder.Entity<LiteratureSequence>(entity =>
-        {
-            entity.HasIndex(e => e.Alphabet, "ix_literature_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
-            entity.Property(e => e.Original).HasDefaultValue(true);
-        });
+        //modelBuilder.Entity<LiteratureSequence>(entity =>
+        //{
+        //    entity.Property(e => e.Original).HasDefaultValue(true);
+        //});
 
         modelBuilder.Entity<Matter>(entity =>
         {
@@ -227,13 +224,10 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
-        modelBuilder.Entity<MusicSequence>(entity =>
-        {
-            entity.HasIndex(e => e.Alphabet, "ix_music_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
-
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
-            entity.Property(e => e.SequentialTransfer).HasDefaultValue(false);
-        });
+        //modelBuilder.Entity<MusicSequence>(entity =>
+        //{
+        //    entity.Property(e => e.SequentialTransfer).HasDefaultValue(false);
+        //});
 
         modelBuilder.Entity<Note>(entity =>
         {
@@ -266,6 +260,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
+        
         modelBuilder.Entity<SequenceGroup>(entity =>
         {
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -274,10 +269,10 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
             entity.HasMany(d => d.Matters)
                   .WithMany(p => p.Groups)
-                  .UsingEntity("sequence_group_matter",
+                  .UsingEntity("sequence_group_research_object",
                                j =>
                                  {
-                                     j.Property("MatterId").HasColumnName("matter_id");
+                                     j.Property("MatterId").HasColumnName("research_object_id");
                                      j.Property("GroupId").HasColumnName("group_id");
                                  });
         });
@@ -288,11 +283,8 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
             entity.HasIndex(e => e.SequenceId, "ix_subsequence_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.SequenceId, e.Feature }, "ix_subsequence_sequence_id_feature_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => new { e.SequenceId, e.Notation, e.Feature }, "ix_subsequence_sequence_id_notation_feature_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('elements_id_seq'::regclass)");
-            entity.Property(e => e.Created).HasDefaultValueSql("now()");
-            entity.Property(e => e.Modified).HasDefaultValueSql("now()");
             entity.Property(e => e.Partial).HasDefaultValue(false);
         });
 

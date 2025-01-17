@@ -11,16 +11,16 @@ public class LocalCharacteristicsCalculator
 {
     private readonly LibiadaDatabaseEntities db;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICombinedSequenceEntityRepository sequenceRepository;
 
     public LocalCharacteristicsCalculator(
         LibiadaDatabaseEntities db,
         IFullCharacteristicRepository characteristicTypeLinkRepository,
-        ICommonSequenceRepository commonSequenceRepository)
+        ICombinedSequenceEntityRepository sequenceRepository)
     {
         this.db = db;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.sequenceRepository = sequenceRepository;
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class LocalCharacteristicsCalculator
         calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
         link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
-        SubsequenceExtractor subsequenceExtractor = new(db, commonSequenceRepository);
+        SubsequenceExtractor subsequenceExtractor = new(db, sequenceRepository);
 
         Subsequence subsequence = db.Subsequences.Single(s => s.Id == subsequenceId);
         chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);

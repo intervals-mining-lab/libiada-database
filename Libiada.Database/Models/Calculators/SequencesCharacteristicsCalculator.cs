@@ -20,15 +20,15 @@ using Microsoft.EntityFrameworkCore;
 public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalculator
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly IFullCharacteristicRepository characteristicTypeLinkRepository;
 
     public SequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                              ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                               IFullCharacteristicRepository characteristicTypeLinkRepository)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
 
@@ -76,7 +76,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
         }
         using var db = dbFactory.CreateDbContext();
         var sequenceIds = chainCharacteristicsIds.Keys;
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
             short[] sequenceCharacteristicLinkIds = chainCharacteristicsIds[sequenceId];
@@ -88,7 +88,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
 
             if (characteristics.Count < sequenceCharacteristicLinkIds.Length)
             {
-                Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                Chain sequence = sequenceRepository.GetLibiadaChain(sequenceId);
 
                 foreach (short sequenceCharacteristicLinkId in sequenceCharacteristicLinkIds)
                 {
@@ -171,10 +171,10 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
         double[][] characteristics = new double[chainIds.Length][];
         IEnumerable<long> sequenceIds = chainIds.SelectMany(c => c).Distinct();
         Dictionary<long, Chain> sequences = [];
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
-            sequences.Add(sequenceId, commonSequenceRepository.GetLibiadaChain(sequenceId));
+            sequences.Add(sequenceId, sequenceRepository.GetLibiadaChain(sequenceId));
         }
 
         for (int k = 0; k < characteristicLinkIds.Length; k++)

@@ -40,5 +40,5 @@ public partial class BinaryCharacteristicLink
     public Link Link { get; set; }
 
     [InverseProperty("BinaryCharacteristicLink")]
-    public virtual ICollection<BinaryCharacteristicValue> BinaryCharacteristicValues { get; set; } = new List<BinaryCharacteristicValue>();
+    public virtual ICollection<BinaryCharacteristicValue> BinaryCharacteristicValues { get; set; } = [];
 }

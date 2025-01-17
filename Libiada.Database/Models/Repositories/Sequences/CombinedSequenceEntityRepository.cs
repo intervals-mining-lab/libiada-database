@@ -20,15 +20,15 @@ using SixLabors.ImageSharp.PixelFormats;
 /// <summary>
 /// The sequence repository.
 /// </summary>
-public class CommonSequenceRepository : SequenceImporter, ICommonSequenceRepository
+public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSequenceEntityRepository
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="CommonSequenceRepository"/> class.
+    /// Initializes a new instance of the <see cref="CombinedSequenceEntityRepository"/> class.
     /// </summary>
     /// <param name="dbFactory">
     /// Database context factory.
     /// </param>
-    public CommonSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
+    public CombinedSequenceEntityRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
     {
     }
 
@@ -43,7 +43,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     public Element[] GetElements(long sequenceId)
     {
-        long[] elementIds = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
+        long[] elementIds = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Alphabet;
         return ElementRepository.GetElements(elementIds);
     }
 
@@ -58,7 +58,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     public BaseChain GetLibiadaBaseChain(long sequenceId)
     {
-        int[] order = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Order;
+        int[] order = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Order;
         return new BaseChain(order, GetAlphabet(sequenceId), sequenceId);
     }
 
@@ -74,9 +74,9 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     public Chain GetLibiadaChain(long sequenceId)
     {
 
-        if (Db.CommonSequences.Any(s => s.Id == sequenceId))
+        if (Db.CombinedSequenceEntities.Any(s => s.Id == sequenceId))
         {
-            CommonSequence DBSequence = Db.CommonSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
+            CombinedSequenceEntity DBSequence = Db.CombinedSequenceEntities.Include(s => s.Matter).Single(s => s.Id == sequenceId);
             Matter matter = DBSequence.Matter;
             return new Chain(DBSequence.Order.ToArray(), GetAlphabet(sequenceId), sequenceId);
         }
@@ -112,7 +112,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     public string GetString(long sequenceId)
     {
-        int[] order = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Order;
+        int[] order = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Order;
         Alphabet alphabet = GetAlphabet(sequenceId);
         StringBuilder stringBuilder = new(order.Length);
         foreach (int element in order)
@@ -194,7 +194,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     {
         return notation.GetNature() switch
         {
-            Nature.Literature => Db.LiteratureSequences
+            Nature.Literature => Db.CombinedSequenceEntities
                                      .Where(l => matterIds.Contains(l.MatterId)
                                               && l.Notation == notation
                                               && l.Language == language
@@ -202,7 +202,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
                                      .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
                                      .Select(s => s.Id)
                                      .ToArray(),
-            Nature.Music => Db.MusicSequences
+            Nature.Music => Db.CombinedSequenceEntities
                                      .Where(m => matterIds.Contains(m.MatterId)
                                               && m.Notation == notation
                                               && m.PauseTreatment == pauseTreatment
@@ -217,7 +217,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
                                      .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
                                      .Select(s => s.Id)
                                      .ToArray(),
-            _ => Db.CommonSequences
+            _ => Db.CombinedSequenceEntities
                                      .Where(c => matterIds.Contains(c.MatterId) && c.Notation == notation)
                                      .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
                                      .Select(s => s.Id)
@@ -236,7 +236,7 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
     /// </returns>
     private Alphabet GetAlphabet(long sequenceId)
     {
-        long[] elements = Db.CommonSequences.Single(cs => cs.Id == sequenceId).Alphabet;
+        long[] elements = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Alphabet;
         return ElementRepository.ToLibiadaAlphabet(elements);
     }
 
@@ -286,5 +286,13 @@ public class CommonSequenceRepository : SequenceImporter, ICommonSequenceReposit
 
             Db.SaveChanges();
         }
+    }
+
+    public long Create(CombinedSequenceEntity sequence)
+    {
+        Db.CombinedSequenceEntities.Add(sequence);
+        Db.SaveChanges();
+
+        return sequence.Id;
     }
 }

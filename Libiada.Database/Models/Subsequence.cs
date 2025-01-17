@@ -9,41 +9,26 @@ using Microsoft.EntityFrameworkCore;
 /// Contains information on location and length of the fragments within complete sequences.
 /// </summary>
 [Table("subsequence")]
-[Index("SequenceId", "Feature", Name = "ix_subsequence_chain_feature")]
-[Index("SequenceId", Name = "ix_subsequence_chain_id")]
+[Index("SequenceId","Notation", "Feature", Name = "ix_subsequence_sequence_notation_feature")]
+[Index("SequenceId", Name = "ix_subsequence_sequence_id")]
 [Comment("Contains information on location and length of the fragments within complete sequences.")]
-public partial class Subsequence
+public partial class Subsequence : AbstractSequenceEntity
 {
-    /// <summary>
-    /// Unique internal identifier.
-    /// </summary>
-    [Key]
-    [Column("id")]
-    [Comment("Unique identifier.")]
-    public long Id { get; set; }
-
-    /// <summary>
-    /// Subsequence creation date and time (filled trough trigger).
-    /// </summary>
-    [Column("created")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    [Comment("Subsequence creation date and time (filled trough trigger).")]
-    public DateTimeOffset Created { get; private set; }
-
-    /// <summary>
-    /// Record last change date and time (updated trough trigger).
-    /// </summary>
-    [Column("modified")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    [Comment("Record last change date and time (updated trough trigger).")]
-    public DateTimeOffset Modified { get; private set; }
-
     /// <summary>
     /// Parent sequence id.
     /// </summary>
-    [Column("chain_id")]
+    [Column("sequence_id")]
+    [Display(Name = "Parent sequence")]
     [Comment("Parent sequence id.")]
     public long SequenceId { get; set; }
+
+    /// <summary>
+    /// Notation of the subsequence (words, letters, notes, nucleotides, etc.).
+    /// </summary>
+    [Column("notation")]
+    [Display(Name = "Notation of elements in the subsequence")]
+    [Comment("Notation of the subsequence (nucleotides, triplets or aminoacids).")]
+    public Notation Notation { get; set; }
 
     /// <summary>
     /// Index of the fragment beginning (from zero).
@@ -73,17 +58,14 @@ public partial class Subsequence
     [Comment("Flag indicating whether subsequence is partial or complete.")]
     public bool Partial { get; set; }
 
-    /// <summary>
-    /// Id of the subsequence in the remote database (ncbi or same as paren sequence remote db).
-    /// </summary>
-    [Column("remote_id")]
-    [StringLength(255)]
-    [Comment("Id of the subsequence in the remote database (ncbi or same as paren sequence remote db).")]
-    public string? RemoteId { get; set; }
+    [ForeignKey(nameof(SequenceId))]
+    [DeleteBehavior(DeleteBehavior.Cascade)]
+    [InverseProperty("Subsequences")]
+    public virtual AbstractSequenceEntity ParentSequence { get; set; } = null!;
 
     [InverseProperty("Subsequence")]
-    public virtual ICollection<Position> Position { get; set; } = new List<Position>();
+    public virtual ICollection<Position> Position { get; set; } = [];
 
-    [InverseProperty("Subsequence")]
-    public virtual ICollection<SequenceAttribute> SequenceAttribute { get; set; } = new List<SequenceAttribute>();
+    [InverseProperty("Sequence")]
+    public virtual ICollection<SequenceAttribute> SequenceAttribute { get; set; } = [];
 }

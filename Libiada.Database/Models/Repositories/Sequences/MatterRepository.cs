@@ -124,20 +124,20 @@ public class MatterRepository : IMatterRepository
     /// <summary>
     /// Creates new matter or extracts existing matter from database.
     /// </summary>
-    /// <param name="commonSequence">
-    /// The common sequence to be used for matter creation or extraction.
+    /// <param name="sequence">
+    /// The sequence to be used for matter creation or extraction.
     /// </param>
-    public void CreateOrExtractExistingMatterForSequence(CommonSequence commonSequence)
+    public void CreateOrExtractExistingMatterForSequence(CombinedSequenceEntity sequence)
     {
-        Matter matter = commonSequence.Matter;
+        Matter matter = sequence.Matter;
         if (matter != null)
         {
-            matter.Sequence = new Collection<CommonSequence>();
-            commonSequence.MatterId = SaveToDatabase(matter);
+            matter.Sequences = new Collection<CombinedSequenceEntity>();
+            sequence.MatterId = SaveToDatabase(matter);
         }
         else
         {
-            commonSequence.Matter = db.Matters.Single(m => m.Id == commonSequence.MatterId);
+            sequence.Matter = db.Matters.Single(m => m.Id == sequence.MatterId);
         }
     }
 

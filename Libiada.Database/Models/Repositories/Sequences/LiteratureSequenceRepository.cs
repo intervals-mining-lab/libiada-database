@@ -25,8 +25,8 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// <summary>
     /// Creates literature sequence in database.
     /// </summary>
-    /// <param name="commonSequence">
-    /// The common sequence.
+    /// <param name="sequence">
+    /// The literature sequence to create in database.
     /// </param>
     /// <param name="sequenceStream">
     /// The sequence stream.
@@ -43,11 +43,11 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// <param name="dropPunctuation">
     /// Flag indicating if punctuation should be removed from text.
     /// </param>
-    public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator, bool dropPunctuation = false)
+    public void Create(LiteratureSequence sequence, Stream sequenceStream, bool dropPunctuation = false)
     {
         string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
         BaseChain chain;
-        if (commonSequence.Notation == Notation.Letters)
+        if (sequence.Notation == Notation.Letters)
         {
             stringSequence = stringSequence.ToUpper();
             if (dropPunctuation)
@@ -60,16 +60,18 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
         {
             // file always contains empty string at the end
             // TODO: rewrite this, add empty string check at the end or write a normal trim
-            string[] text = stringSequence.Split(new[] { '\n', '\r', ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] text = stringSequence.Split(['\n', '\r', ' ', '\t'], StringSplitOptions.RemoveEmptyEntries);
             chain = new BaseChain(text.Select(e => (ValueString)e).ToList());
         }
 
-        MatterRepository.CreateOrExtractExistingMatterForSequence(commonSequence);
+        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        commonSequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
-        commonSequence.Order = chain.Order;
+        MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
 
-        Create(commonSequence, original, language, translator);
+        sequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
+        sequence.Order = chain.Order;
+
+        Create(sequence);
     }
 
     /// <summary>
@@ -93,24 +95,12 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// <param name="order">
     /// The order.
     /// </param>
-    public void Create(CommonSequence sequence, bool original, Language language, Translator translator)
+    public void Create(LiteratureSequence sequence)
     {
-        LiteratureSequence literatureSequence = new()
-        {
-            MatterId = sequence.MatterId,
-            Alphabet = sequence.Alphabet,
-            Order = sequence.Order,
-            Notation = sequence.Notation,
-            Description = sequence.Description,
-            RemoteDb = sequence.RemoteDb,
-            RemoteId = sequence.RemoteId,
-            Language = language,
-            Translator = translator,
-            Original = original
-        };
+        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        Db.LiteratureSequences.Add(literatureSequence);
+        Db.CombinedSequenceEntities.Add(dbSequence);
         Db.SaveChanges();
-        sequence.Id = literatureSequence.Id;
+        sequence.Id = dbSequence.Id;
     }
 }

@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore;
 public class CongenericSequencesCharacteristicsCalculator : ICongenericSequencesCharacteristicsCalculator
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private readonly ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory;
+    private readonly ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory;
     private readonly ICongenericCharacteristicRepository characteristicTypeLinkRepository;
 
     public CongenericSequencesCharacteristicsCalculator(IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
-                                              ICommonSequenceRepositoryFactory commonSequenceRepositoryFactory,
+                                              ICombinedSequenceEntityRepositoryFactory sequenceRepositoryFactory,
                                               ICongenericCharacteristicRepository characteristicTypeLinkRepository)
     {
         this.dbFactory = dbFactory;
-        this.commonSequenceRepositoryFactory = commonSequenceRepositoryFactory;
+        this.sequenceRepositoryFactory = sequenceRepositoryFactory;
         this.characteristicTypeLinkRepository = characteristicTypeLinkRepository;
     }
 
@@ -56,8 +56,8 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
 
         long[] sequenceIds = chainCharacteristicsIds.Keys.ToArray();
         using var db = dbFactory.CreateDbContext();
-        var dbAlphabets = db.CommonSequences.Where(cs => sequenceIds.Contains(cs.Id)).ToDictionary(cs => cs.Id, cs => cs.Alphabet);
-        using var commonSequenceRepository = commonSequenceRepositoryFactory.Create();
+        var dbAlphabets = db.CombinedSequenceEntities.Where(cs => sequenceIds.Contains(cs.Id)).ToDictionary(cs => cs.Id, cs => cs.Alphabet);
+        using var sequenceRepository = sequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
             long[] dbAlphabet = dbAlphabets[sequenceId];
@@ -70,7 +70,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
 
             if (characteristics.Count < sequenceCharacteristicLinkIds.Length * dbAlphabet.Length)
             {
-                Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
+                Chain sequence = sequenceRepository.GetLibiadaChain(sequenceId);
                 // TODO: add ids to IBaseObject to avoid duplicate enumeration
                 Alphabet alphabet = sequence.Alphabet;
 

@@ -78,5 +78,5 @@ public partial class CalculationTask
     public virtual AspNetUser AspNetUser { get; set; } = null!;
 
     [InverseProperty("Task")]
-    public virtual ICollection<TaskResult> TaskResult { get; set; } = new List<TaskResult>();
+    public virtual ICollection<TaskResult> TaskResult { get; set; } = [];
 }

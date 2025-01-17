@@ -82,4 +82,12 @@ public partial class AccordanceCharacteristicValue
     [ForeignKey(nameof(SecondElementId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public virtual Element SecondElement { get; set; } = null!;
+
+    [ForeignKey(nameof(FirstSequenceId))]
+    [DeleteBehavior(DeleteBehavior.Cascade)]
+    public virtual AbstractSequenceEntity FirstSequence { get; set; } = null!;
+
+    [ForeignKey(nameof(SecondSequenceId))]
+    [DeleteBehavior(DeleteBehavior.Cascade)]
+    public virtual AbstractSequenceEntity SecondSequence { get; set; } = null!;
 }

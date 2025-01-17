@@ -26,7 +26,7 @@ public class DataSequenceRepository : SequenceImporter
     /// Create data sequence and matter.
     /// </summary>
     /// <param name="sequence">
-    /// The common sequence.
+    /// The data sequence to create in database.
     /// </param>
     /// <param name="sequenceStream">
     /// The sequence stream.
@@ -34,11 +34,11 @@ public class DataSequenceRepository : SequenceImporter
     /// <param name="precision">
     /// Precision of data sequence.
     /// </param>
-    public void Create(CommonSequence sequence, Stream sequenceStream, int precision)
+    public void Create(DataSequence sequence, Stream sequenceStream, int precision)
     {
         string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
 
-        string[] text = stringSequence.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] text = stringSequence.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 
        string[] cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToArray();
 
@@ -62,23 +62,12 @@ public class DataSequenceRepository : SequenceImporter
 
         BaseChain chain = new(elements);
 
-        MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
-
         long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
-        DataSequence dataSequence = new()
-        {
-            Alphabet = alphabet,
-            Order = chain.Order,
-            Notation = sequence.Notation,
-            Description = sequence.Description,
-            MatterId = sequence.MatterId,
-            RemoteDb = sequence.RemoteDb,
-            RemoteId = sequence.RemoteId
-        };
+        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        Db.DataSequences.Add(dataSequence);
-        Db.SaveChanges();
-        sequence.Id = dataSequence.Id;
+        MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
+
+        Create(sequence);
     }
 
     /// <summary>
@@ -93,21 +82,12 @@ public class DataSequenceRepository : SequenceImporter
     /// <param name="order">
     /// The sequence's order.
     /// </param>
-    public void Create(CommonSequence sequence)
+    public void Create(DataSequence sequence)
     {
-        DataSequence dataSequence = new()
-        {
-            Alphabet = sequence.Alphabet,
-            Order = sequence.Order,
-            Notation = sequence.Notation,
-            Description = sequence.Description,
-            MatterId = sequence.MatterId,
-            RemoteDb = sequence.RemoteDb,
-            RemoteId = sequence.RemoteId
-        };
+        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        Db.DataSequences.Add(dataSequence);
+        Db.CombinedSequenceEntities.Add(dbSequence);
         Db.SaveChanges();
-        sequence.Id = dataSequence.Id;
+        sequence.Id = dbSequence.Id;
     }
 }

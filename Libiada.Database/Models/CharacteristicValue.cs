@@ -49,4 +49,8 @@ public partial class CharacteristicValue
     [DeleteBehavior(DeleteBehavior.NoAction)]
     [InverseProperty("CharacteristicValues")]
     public virtual FullCharacteristicLink FullCharacteristicLink { get; set; } = null!;
+
+    [ForeignKey(nameof(SequenceId))]
+    [DeleteBehavior(DeleteBehavior.Cascade)]
+    public virtual AbstractSequenceEntity Sequence { get; set; } = null!;
 }

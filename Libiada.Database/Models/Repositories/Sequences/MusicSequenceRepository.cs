@@ -52,7 +52,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// <exception cref="Exception">
     /// Thrown if congeneric tracks count not equals 1 (track is not monophonic).
     /// </exception>
-    public void Create(CommonSequence sequence, Stream sequenceStream)
+    public void Create(MusicSequence sequence, Stream sequenceStream)
     {
         string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
         XmlDocument doc = new();
@@ -67,7 +67,9 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
             throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
         }
 
-        MatterRepository.CreateOrExtractExistingMatterForSequence(sequence);
+        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
+
+        MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
 
         BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
         long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
@@ -93,43 +95,40 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
         }
 
 
-        MusicSequence musicSequence = new()
+        CombinedSequenceEntity musicSequence = new()
         {
             MatterId = sequence.MatterId,
             RemoteDb = sequence.RemoteDb,
             RemoteId = sequence.RemoteId,
-            Description = sequence.Description,
             Order = notesSequence.Order,
             Alphabet = notesAlphabet,
             Notation = Notation.Notes,
             PauseTreatment = PauseTreatment.NotApplicable,
             SequentialTransfer = false
         };
-        Db.MusicSequences.Add(musicSequence);
+        Db.CombinedSequenceEntities.Add(musicSequence);
 
 
-        musicSequence = new MusicSequence
+        musicSequence = new CombinedSequenceEntity
         {
             MatterId = sequence.MatterId,
             RemoteDb = sequence.RemoteDb,
             RemoteId = sequence.RemoteId,
-            Description = sequence.Description,
             Order = measuresSequence.Order,
             Alphabet = measuresAlphabet,
             Notation = Notation.Measures,
             PauseTreatment = PauseTreatment.NotApplicable,
             SequentialTransfer = false
         };
-        Db.MusicSequences.Add(musicSequence);
+        Db.CombinedSequenceEntities.Add(musicSequence);
 
         for (int i = 0; i < pauseTreatments.Length; i++)
         {
             PauseTreatment pauseTreatment = pauseTreatments[i];
 
-            musicSequence = new MusicSequence
+            musicSequence = new CombinedSequenceEntity
             {
                 MatterId = sequence.MatterId,
-                Description = sequence.Description,
                 RemoteDb = sequence.RemoteDb,
                 RemoteId = sequence.RemoteId,
                 Order = fmotifsSequences[i].Order,
@@ -138,12 +137,11 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
                 PauseTreatment = pauseTreatment,
                 SequentialTransfer = false
             };
-            Db.MusicSequences.Add(musicSequence);
+            Db.CombinedSequenceEntities.Add(musicSequence);
 
-            musicSequence = new MusicSequence
+            musicSequence = new CombinedSequenceEntity
             {
                 MatterId = sequence.MatterId,
-                Description = sequence.Description,
                 RemoteDb = sequence.RemoteDb,
                 RemoteId = sequence.RemoteId,
                 Order = fmotifsSequencesWithSequentialTransfer[i].Order,
@@ -152,14 +150,14 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
                 PauseTreatment = pauseTreatment,
                 SequentialTransfer = true
             };
-            Db.MusicSequences.Add(musicSequence);
+            Db.CombinedSequenceEntities.Add(musicSequence);
         }
     }
 
     /// <summary>
     /// The insert.
     /// </summary>
-    /// <param name="commonSequence">
+    /// <param name="sequence">
     /// The sequence.
     /// </param>
     /// <param name="alphabet">
@@ -168,23 +166,14 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// <param name="order">
     /// The order.
     /// </param>
-    public void Create(CommonSequence commonSequence, PauseTreatment pauseTreatment = PauseTreatment.NotApplicable, bool sequentialTransfer = false)
+    public void Create(MusicSequence sequence)
     {
-        MusicSequence musicSequence = new()
-        {
-            MatterId = commonSequence.MatterId,
-            Order = commonSequence.Order,
-            Alphabet = commonSequence.Alphabet,
-            Description = commonSequence.Description,
-            Notation = commonSequence.Notation,
-            RemoteDb = commonSequence.RemoteDb,
-            RemoteId = commonSequence.RemoteId,
-            PauseTreatment = pauseTreatment,
-            SequentialTransfer = sequentialTransfer
-        };
+        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        Db.MusicSequences.Add(musicSequence);
+        Db.CombinedSequenceEntities.Add(dbSequence);
         Db.SaveChanges();
+
+        sequence.Id = dbSequence.Id;
     }
 
     /// <summary>

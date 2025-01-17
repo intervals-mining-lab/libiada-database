@@ -40,5 +40,5 @@ public partial class AccordanceCharacteristicLink
     public Link Link { get; set; }
 
     [InverseProperty("AccordanceCharacteristicLink")]
-    public virtual ICollection<AccordanceCharacteristicValue> AccordanceCharacteristicValues { get; set; } = new List<AccordanceCharacteristicValue>();
+    public virtual ICollection<AccordanceCharacteristicValue> AccordanceCharacteristicValues { get; set; } = [];
 }

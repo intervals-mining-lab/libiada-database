@@ -22,9 +22,9 @@ public class SubsequenceExtractor
     private readonly LibiadaDatabaseEntities db;
 
     /// <summary>
-    /// The common sequence repository.
+    /// The sequence repository.
     /// </summary>
-    private readonly ICommonSequenceRepository commonSequenceRepository;
+    private readonly ICombinedSequenceEntityRepository sequenceRepository;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubsequenceExtractor"/> class.
@@ -32,10 +32,10 @@ public class SubsequenceExtractor
     /// <param name="db">
     /// Database context.
     /// </param>
-    public SubsequenceExtractor(LibiadaDatabaseEntities db, ICommonSequenceRepository commonSequenceRepository)
+    public SubsequenceExtractor(LibiadaDatabaseEntities db, ICombinedSequenceEntityRepository sequenceRepository)
     {
         this.db = db;
-        this.commonSequenceRepository = commonSequenceRepository;
+        this.sequenceRepository = sequenceRepository;
     }
 
     /// <summary>
@@ -175,7 +175,7 @@ public class SubsequenceExtractor
                          .ToArray();
         sequences = GetSubsequencesSequences(subsequences);
         long[] parentIds = subsequences.Select(s => s.SequenceId).ToArray();
-        mattersNames = db.DnaSequences
+        mattersNames = db.CombinedSequenceEntities
                          .Include(ds => ds.Matter)
                          .Where(ds => parentIds.Contains(ds.Id))
                          .ToDictionary(ds => ds.Id, ds => ds.Matter.Name);
@@ -227,7 +227,7 @@ public class SubsequenceExtractor
     /// </returns>
     private Sequence GetDotNetBioSequence(long sequenceId)
     {
-        string parentChain = commonSequenceRepository.GetString(sequenceId);
+        string parentChain = sequenceRepository.GetString(sequenceId);
         return new Sequence(Alphabets.DNA, parentChain);
     }
 

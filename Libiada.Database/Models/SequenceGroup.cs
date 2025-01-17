@@ -97,5 +97,5 @@ public partial class SequenceGroup
 
     [ForeignKey("GroupId")]
     [InverseProperty("Groups")]
-    public virtual ICollection<Matter> Matters { get; set; } = new List<Matter>();
+    public virtual ICollection<Matter> Matters { get; set; } = [];
 }

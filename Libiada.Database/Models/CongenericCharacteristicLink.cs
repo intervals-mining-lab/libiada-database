@@ -47,5 +47,5 @@ public partial class CongenericCharacteristicLink
     public ArrangementType ArrangementType { get; set; }
 
     [InverseProperty("CongenericCharacteristicLink")]
-    public virtual ICollection<CongenericCharacteristicValue> CongenericCharacteristicValues { get; set; } = new List<CongenericCharacteristicValue>();
+    public virtual ICollection<CongenericCharacteristicValue> CongenericCharacteristicValues { get; set; } = [];
 }
