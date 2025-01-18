@@ -4975,4 +4975,68 @@ ALTER TABLE note RENAME CONSTRAINT note_new_pkey TO pk_note;
 ALTER TABLE fmotif RENAME CONSTRAINT fmotif_new_pkey TO pk_fmotif;
 ALTER TABLE measure RENAME CONSTRAINT measure_new_pkey TO pk_measure;
 
+-- 18.01.2025
+-- Refactoring check constraints.
+
+ALTER TABLE accordance_characteristic_link DROP CONSTRAINT accordance_characteristic_check;
+ALTER TABLE accordance_characteristic_link ADD CONSTRAINT chk_accordance_characteristic CHECK (accordance_characteristic IN (1, 2));
+
+ALTER TABLE accordance_characteristic_link DROP CONSTRAINT accordance_characteristic_link_check;
+ALTER TABLE accordance_characteristic_link ADD CONSTRAINT chk_accordance_characteristic_link CHECK (link IN (2, 3, 6, 7));
+
+ALTER TABLE binary_characteristic_link DROP CONSTRAINT binary_characteristic_check;
+ALTER TABLE binary_characteristic_link ADD CONSTRAINT chk_binary_characteristic CHECK (binary_characteristic IN (1, 2, 3, 4, 5, 6));
+
+ALTER TABLE binary_characteristic_link DROP CONSTRAINT binary_characteristic_link_check;
+ALTER TABLE binary_characteristic_link ADD CONSTRAINT chk_binary_characteristic_link CHECK (link IN (2, 3, 4));
+
+ALTER TABLE element ADD CONSTRAINT chk_element_notation CHECK (notation IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13));
+
+ALTER TABLE fmotif ADD CONSTRAINT chk_fmotif_type CHECK (fmotif_type IN (1, 2, 3, 4, 5));
+
+ALTER TABLE matter ADD CONSTRAINT chk_research_object_nature CHECK (nature IN (1, 2, 3, 4, 5));
+
+ALTER TABLE matter ADD CONSTRAINT chk_research_object_sequence_type CHECK (sequence_type IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
+
+ALTER TABLE multisequence RENAME CONSTRAINT multisequence_pkey TO pk_multisequence;
+
+ALTER TABLE multisequence ADD CONSTRAINT chk_multisequence_nature CHECK (nature IN (1, 2, 3, 4, 5));
+
+ALTER TABLE note ADD CONSTRAINT chk_note_tie CHECK (tie IN (0, 1, 2, 3));
+
+ALTER TABLE pitch ADD CONSTRAINT chk_pitch_accidental CHECK (accidental IN (-2, -1, 0, 1, 2));
+
+ALTER TABLE pitch ADD CONSTRAINT chk_pitch_note_symbol CHECK (note_symbol IN (0, 2, 4, 5, 7, 9, 11));
+
+ALTER TABLE sequence_attribute ADD CONSTRAINT chk_sequence_attribute_attribute CHECK (attribute IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+                                                                                                    11, 12, 13, 14, 15, 16 ,17 ,18 ,19, 20, 
+                                                                                                    21, 22, 23, 24, 25 ,26, 27, 28, 29, 30, 
+                                                                                                    31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 
+                                                                                                    41, 42, 43, 44, 45, 46, 47, 48));
+
+ALTER TABLE sequence_group_research_object RENAME CONSTRAINT sequence_group_matter_pkey TO pk_sequence_group_research_object;
+
+ALTER TABLE sequence_group ADD CONSTRAINT chk_sequence_group_nature CHECK (nature IN (1, 2, 3, 4, 5));
+
+ALTER TABLE sequence_group ADD CONSTRAINT chk_sequence_group_type CHECK (sequence_group_type IN (1, 2, 3, 4, 5));
+
+ALTER TABLE sequence_group ADD CONSTRAINT chk_sequence_group_sequence_type CHECK (sequence_type IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
+
+ALTER TABLE sequence_group ADD CONSTRAINT chk_sequence_group_group CHECK ("group" IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+
+ALTER TABLE subsequence ADD CONSTRAINT chk_subsequence_notation CHECK (notation IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13));
+
+ALTER TABLE subsequence ADD CONSTRAINT chk_subsequence_feature CHECK (feature IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                                                                           10, 11, 12, 13, 14, 15, 16 ,17 ,18 ,19,
+                                                                           20, 21, 22, 23, 24, 25 ,26, 27, 28, 29,
+                                                                           30, 31, 32, 33, 34, 35, 36, 37, 38));
+
+ALTER TABLE task ADD CONSTRAINT chk_task_type CHECK (task_type IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+                                                                   11, 12, 13, 14, 15, 16 ,17 ,18 ,19, 20, 
+                                                                   21, 22, 23, 24, 25 ,26, 27, 28, 29, 30, 
+                                                                   31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 
+                                                                   41));
+
+ALTER TABLE task ADD CONSTRAINT chk_task_status CHECK (status IN (1, 2, 3, 4));
+
 COMMIT;

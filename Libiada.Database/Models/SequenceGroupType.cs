@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 using Libiada.Database.Attributes;
 
-public enum SequenceGroupType : short
+public enum SequenceGroupType : byte
 {
     [Display(Name = "Prose")]
     [Description("")]

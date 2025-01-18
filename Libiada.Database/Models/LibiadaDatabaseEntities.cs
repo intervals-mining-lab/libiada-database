@@ -1,10 +1,16 @@
 ﻿namespace Libiada.Database.Models;
 
+using Libiada.Core.Core;
+using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;
+using Libiada.Core.Core.Characteristics.Calculators.BinaryCalculators;
+using Libiada.Core.Core.SimpleTypes;
+using Libiada.Core.Extensions;
+
+using Libiada.Database.Tasks;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, IdentityRole<int>, int>
 {
@@ -71,28 +77,44 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
             .HasDefaultSchema("public")
             .HasAnnotation("Npgsql:PostgresExtension:public.pg_trgm", ",,1.6");
 
-        modelBuilder.Entity<AccordanceCharacteristicLink>(entity =>
+        modelBuilder.Entity<AbstractSequenceEntity>(entity =>
         {
+            entity.ToTable(t => t.HasCheckConstraint("chk_remote_id", "remote_db IS NULL AND remote_id IS NULL OR remote_db IS NOT NULL AND remote_id IS NOT NULL"));
+
+            entity.Property(e => e.Created).HasDefaultValueSql("now()");
+            entity.Property(e => e.Modified).HasDefaultValueSql("now()");
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
-        modelBuilder.Entity<AbstractSequenceEntity>(entity =>
+        modelBuilder.Entity<AccordanceCharacteristicLink>(entity =>
         {
-            entity.Property(e => e.Created).HasDefaultValueSql("now()");
-            entity.Property(e => e.Modified).HasDefaultValueSql("now()");
-            //entity.UseTptMappingStrategy();
+            entity.ToTable(t => t.HasCheckConstraint("chk_accordance_characteristic",
+                @$"accordance_characteristic IN ({(byte)AccordanceCharacteristic.PartialComplianceDegree},
+                                                 {(byte)AccordanceCharacteristic.MutualComplianceDegree})"));
+
+            entity.ToTable(t => t.HasCheckConstraint("chk_accordance_characteristic_link", @$"link IN ({(byte)Link.Start},
+                                                                                                       {(byte)Link.End}, 
+                                                                                                       {(byte)Link.CycleStart}, 
+                                                                                                       {(byte)Link.CycleEnd})"));
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
         modelBuilder.Entity<AccordanceCharacteristicValue>(entity =>
         {
-            entity.HasIndex(e => e.FirstSequenceId, "ix_accordance_characteristic_first_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.FirstSequenceId, "ix_accordance_characteristic_first_sequence_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => e.SecondSequenceId, "ix_accordance_characteristic_second_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.SecondSequenceId, "ix_accordance_characteristic_second_sequence_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.FirstSequenceId, e.SecondSequenceId }, "ix_accordance_characteristic_sequences_ids_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => new { e.FirstSequenceId, e.SecondSequenceId }, "ix_accordance_characteristic_sequences_ids_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.FirstSequenceId, e.SecondSequenceId, e.CharacteristicLinkId }, "ix_accordance_characteristic_sequences_ids_characteristic_link_").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => new { e.FirstSequenceId, e.SecondSequenceId, e.CharacteristicLinkId },
+                "ix_accordance_characteristic_sequences_ids_characteristic_link_")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
@@ -110,35 +132,61 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<BinaryCharacteristicLink>(entity =>
         {
+            entity.ToTable(t => t.HasCheckConstraint("chk_binary_characteristic",
+                @$"binary_characteristic IN ({(byte)BinaryCharacteristic.GeometricMean},
+                                             {(byte)BinaryCharacteristic.InvolvedPartialDependenceCoefficient},
+                                             {(byte)BinaryCharacteristic.MutualDependenceCoefficient},
+                                             {(byte)BinaryCharacteristic.NormalizedPartialDependenceCoefficient},
+                                             {(byte)BinaryCharacteristic.PartialDependenceCoefficient},
+                                             {(byte)BinaryCharacteristic.Redundancy})"));
+
+            entity.ToTable(t => t.HasCheckConstraint("chk_binary_characteristic_link", @$"link IN ({(byte)Link.Start},
+                                                                                                   {(byte)Link.End},
+                                                                                                   {(byte)Link.Both})"));
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
         modelBuilder.Entity<BinaryCharacteristicValue>(entity =>
         {
-            entity.HasIndex(e => e.SequenceId, "ix_binary_characteristic_first_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.SequenceId, "ix_binary_characteristic_first_sequence_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.SequenceId, e.CharacteristicLinkId }, "ix_binary_characteristic_sequence_id_characteristic_link_id_bri").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => new { e.SequenceId, e.CharacteristicLinkId }, "ix_binary_characteristic_sequence_id_characteristic_link_id_bri")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
         modelBuilder.Entity<CalculationTask>(entity =>
         {
+            var taskTypesIds = EnumExtensions.ToArray<TaskType>().Select(n => (byte)n);
+            string taskTypesIdsString = string.Join(", ", taskTypesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_task_type", $"task_type IN ({taskTypesIdsString})"));
+
+            var taskStatusesIds = EnumExtensions.ToArray<TaskState>().Select(n => (byte)n);
+            string taskStatusesIdsString = string.Join(", ", taskStatusesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_task_status", $"status IN ({taskStatusesIdsString})"));
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             entity.Property(e => e.Created).HasDefaultValueSql("now()");
         });
 
         modelBuilder.Entity<CharacteristicValue>(entity =>
         {
-            entity.HasIndex(e => e.CharacteristicLinkId, "ix_full_characteristic_characteristic_link_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.CharacteristicLinkId, "ix_full_characteristic_characteristic_link_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => e.SequenceId, "ix_full_characteristic_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.SequenceId, "ix_full_characteristic_sequence_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
         modelBuilder.Entity<CombinedSequenceEntity>(entity =>
         {
+            // TODO: add check constraints
+
             entity.HasIndex(e => e.Alphabet, "ix_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
             entity.HasOne(s => s.Matter)
@@ -155,34 +203,34 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<CongenericCharacteristicLink>(entity =>
         {
-            entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+            // TODO: try to formulate check constraints including arrangement type
+
+            // entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
         modelBuilder.Entity<CongenericCharacteristicValue>(entity =>
         {
-            entity.HasIndex(e => e.CharacteristicLinkId, "ix_congeneric_characteristic_characteristic_link_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.CharacteristicLinkId, "ix_congeneric_characteristic_characteristic_link_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => e.SequenceId, "ix_congeneric_characteristic_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.SequenceId, "ix_congeneric_characteristic_sequence_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.SequenceId, e.CharacteristicLinkId }, "ix_congeneric_characteristic_sequence_id_characteristic_link_id").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => new { e.SequenceId, e.CharacteristicLinkId }, "ix_congeneric_characteristic_sequence_id_characteristic_link_id")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
-            entity.HasIndex(e => new { e.SequenceId, e.ElementId }, "ix_congeneric_characteristic_sequence_id_element_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => new { e.SequenceId, e.ElementId }, "ix_congeneric_characteristic_sequence_id_element_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
-        //modelBuilder.Entity<DataSequence>(entity =>
-        //{
-        //});
-
-        //modelBuilder.Entity<DnaSequence>(entity =>
-        //{
-        //    entity.Property(e => e.Partial).HasDefaultValue(false);
-        //});
-
         modelBuilder.Entity<Element>(entity =>
         {
-            entity.UseTptMappingStrategy();
+            var notationsIds = EnumExtensions.ToArray<Notation>().Select(n => (byte)n);
+            string notationsIdsString = string.Join(", ", notationsIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_element_notation", $"notation IN ({notationsIdsString})"));
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             entity.Property(e => e.Created).HasDefaultValueSql("now()");
             entity.Property(e => e.Modified).HasDefaultValueSql("now()");
@@ -190,7 +238,13 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Fmotif>(entity =>
         {
-            entity.HasIndex(e => e.Alphabet, "ix_fmotif_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
+            var fmotifTypesIds = EnumExtensions.ToArray<FmotifType>().Select(n => (byte)n);
+            string fmotifTypesIdsString = string.Join(", ", fmotifTypesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_fmotif_type", $"fmotif_type IN ({fmotifTypesIdsString})"));
+
+
+            entity.HasIndex(e => e.Alphabet, "ix_fmotif_alphabet")
+                  .HasAnnotation("Npgsql:IndexMethod", "gin");
         });
 
         modelBuilder.Entity<FullCharacteristicLink>(entity =>
@@ -202,13 +256,20 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
         {
         });
 
-        //modelBuilder.Entity<LiteratureSequence>(entity =>
-        //{
-        //    entity.Property(e => e.Original).HasDefaultValue(true);
-        //});
-
         modelBuilder.Entity<Matter>(entity =>
         {
+            entity.ToTable(t => t.HasCheckConstraint("chk_multisequence_reference",
+                "(multisequence_id IS NULL AND multisequence_number IS NULL) OR (multisequence_id IS NOT NULL AND multisequence_number IS NOT NULL)"));
+
+            var naturesIds = EnumExtensions.ToArray<Nature>().Select(n => (byte)n);
+            string naturesIdsString = string.Join(", ", naturesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_research_object_nature", $"nature IN ({naturesIdsString})"));
+
+
+            var sequenceTypesIds = EnumExtensions.ToArray<SequenceType>().Select(n => (byte)n);
+            string sequenceTypesIdsString = string.Join(", ", sequenceTypesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_research_object_sequence_type", $"sequence_type IN ({sequenceTypesIdsString})"));
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             entity.Property(e => e.Created).HasDefaultValueSql("now()");
             entity.Property(e => e.Modified).HasDefaultValueSql("now()");
@@ -216,21 +277,25 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Measure>(entity =>
         {
-            entity.HasIndex(e => e.Alphabet, "ix_measure_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
+            entity.HasIndex(e => e.Alphabet, "ix_measure_alphabet")
+                  .HasAnnotation("Npgsql:IndexMethod", "gin");
         });
 
         modelBuilder.Entity<Multisequence>(entity =>
         {
+            var naturesIds = EnumExtensions.ToArray<Nature>().Select(n => (byte)n);
+            string naturesIdsString = string.Join(", ", naturesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_multisequence_nature", $"nature IN ({naturesIdsString})"));
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
-        //modelBuilder.Entity<MusicSequence>(entity =>
-        //{
-        //    entity.Property(e => e.SequentialTransfer).HasDefaultValue(false);
-        //});
-
         modelBuilder.Entity<Note>(entity =>
-        {
+        {            
+            var tiesIds = EnumExtensions.ToArray<Tie>().Select(n => (byte)n);
+            string tiesIdsString = string.Join(", ", tiesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_note_tie", $"tie IN ({tiesIdsString})"));
+
             entity.HasMany(d => d.Pitches)
                   .WithMany(p => p.Notes)
                   .UsingEntity("note_pitch",
@@ -243,26 +308,56 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Pitch>(entity =>
         {
+            var accidentalsIds = EnumExtensions.ToArray<Accidental>().Select(n => (sbyte)n);
+            string accidentalsIdsString = string.Join(", ", accidentalsIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_pitch_accidental", $"accidental IN ({accidentalsIdsString})"));
+
+            var noteSymbolsIds = EnumExtensions.ToArray<NoteSymbol>().Select(n => (byte)n);
+            string noteSymbolsIdsString = string.Join(", ", noteSymbolsIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_pitch_note_symbol", $"note_symbol IN ({noteSymbolsIdsString})"));
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
         modelBuilder.Entity<Position>(entity =>
         {
-            entity.HasIndex(e => e.SubsequenceId, "ix_position_subsequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.SubsequenceId, "ix_position_subsequence_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
         modelBuilder.Entity<SequenceAttribute>(entity =>
         {
-            entity.HasIndex(e => e.SequenceId, "ix_sequence_attribute_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            var attributesIds = EnumExtensions.ToArray<AnnotationAttribute>().Select(n => (byte)n);
+            string attributesIdsString = string.Join(", ", attributesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_sequence_attribute_attribute", $"attribute IN ({attributesIdsString})"));
+
+            entity.HasIndex(e => e.SequenceId, "ix_sequence_attribute_sequence_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
         });
 
-        
+
         modelBuilder.Entity<SequenceGroup>(entity =>
         {
+            var naturesIds = EnumExtensions.ToArray<Nature>().Select(n => (byte)n);
+            string naturesIdsString = string.Join(", ", naturesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_sequence_group_nature", $"nature IN ({naturesIdsString})"));
+
+            var sequenceGroupTypesIds = EnumExtensions.ToArray<SequenceGroupType>().Select(n => (byte)n);
+            string sequenceGroupTypesString = string.Join(", ", sequenceGroupTypesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_sequence_group_type", $"sequence_group_type IN ({sequenceGroupTypesString})"));
+
+            var sequenceTypesIds = EnumExtensions.ToArray<SequenceType>().Select(n => (byte)n);
+            string sequenceTypesIdsString = string.Join(", ", sequenceTypesIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_sequence_group_sequence_type", $"sequence_type IN ({sequenceTypesIdsString})"));
+
+            var groupsIds = EnumExtensions.ToArray<Group>().Select(n => (byte)n);
+            string groupsIdsString = string.Join(", ", groupsIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_sequence_group_group", $"group IN ({groupsIdsString})"));
+
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
             entity.Property(e => e.Created).HasDefaultValueSql("now()");
             entity.Property(e => e.Modified).HasDefaultValueSql("now()");
@@ -279,11 +374,22 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Subsequence>(entity =>
         {
-            entity.HasIndex(e => e.Feature, "ix_subsequence_feature_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            var featuresIds = EnumExtensions.ToArray<Feature>().Select(n => (byte)n);
+            string featuresIdsString = string.Join(", ", featuresIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_subsequence_feature", $"feature IN ({featuresIdsString})"));
 
-            entity.HasIndex(e => e.SequenceId, "ix_subsequence_sequence_id_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            var notationsIds = EnumExtensions.ToArray<Notation>().Select(n => (byte)n);
+            string notationsIdsString = string.Join(", ", notationsIds);
+            entity.ToTable(t => t.HasCheckConstraint("chk_subsequence_notation", $"notation IN ({notationsIdsString})"));
 
-            entity.HasIndex(e => new { e.SequenceId, e.Notation, e.Feature }, "ix_subsequence_sequence_id_notation_feature_brin").HasAnnotation("Npgsql:IndexMethod", "brin");
+            entity.HasIndex(e => e.Feature, "ix_subsequence_feature_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
+
+            entity.HasIndex(e => e.SequenceId, "ix_subsequence_sequence_id_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
+
+            entity.HasIndex(e => new { e.SequenceId, e.Notation, e.Feature }, "ix_subsequence_sequence_id_notation_feature_brin")
+                  .HasAnnotation("Npgsql:IndexMethod", "brin");
 
             entity.Property(e => e.Partial).HasDefaultValue(false);
         });
