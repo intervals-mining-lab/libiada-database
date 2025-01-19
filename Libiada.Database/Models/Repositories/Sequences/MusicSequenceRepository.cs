@@ -94,64 +94,52 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
             fmotifsAlphabetsWithSequentialTransfer.Add(FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequencesWithSequentialTransfer[i].Alphabet));
         }
 
+        // creating notes and measures sequences
+        List<CombinedSequenceEntity> CombinedSequenceEntityToCreate = new(8);
 
-        CombinedSequenceEntity musicSequence = new()
-        {
-            MatterId = sequence.MatterId,
-            RemoteDb = sequence.RemoteDb,
-            RemoteId = sequence.RemoteId,
-            Order = notesSequence.Order,
-            Alphabet = notesAlphabet,
-            Notation = Notation.Notes,
-            PauseTreatment = PauseTreatment.NotApplicable,
-            SequentialTransfer = false
-        };
-        Db.CombinedSequenceEntities.Add(musicSequence);
+        CombinedSequenceEntity musicSequence = sequence.ToCombinedSequence();
+        musicSequence.Order = notesSequence.Order;
+        musicSequence.Alphabet = notesAlphabet;
+        musicSequence.Notation = Notation.Notes;
+        musicSequence.PauseTreatment = PauseTreatment.NotApplicable;
+        musicSequence.SequentialTransfer = false;
 
+        CombinedSequenceEntityToCreate.Add(musicSequence);
 
-        musicSequence = new CombinedSequenceEntity
-        {
-            MatterId = sequence.MatterId,
-            RemoteDb = sequence.RemoteDb,
-            RemoteId = sequence.RemoteId,
-            Order = measuresSequence.Order,
-            Alphabet = measuresAlphabet,
-            Notation = Notation.Measures,
-            PauseTreatment = PauseTreatment.NotApplicable,
-            SequentialTransfer = false
-        };
-        Db.CombinedSequenceEntities.Add(musicSequence);
+        musicSequence = sequence.ToCombinedSequence();
+        musicSequence.Order = measuresSequence.Order;
+        musicSequence.Alphabet = measuresAlphabet;
+        musicSequence.Notation = Notation.Measures;
+        musicSequence.PauseTreatment = PauseTreatment.NotApplicable;
+        musicSequence.SequentialTransfer = false;
 
+        CombinedSequenceEntityToCreate.Add(musicSequence);
+
+        // creating fmotif sequences
         for (int i = 0; i < pauseTreatments.Length; i++)
         {
             PauseTreatment pauseTreatment = pauseTreatments[i];
 
-            musicSequence = new CombinedSequenceEntity
-            {
-                MatterId = sequence.MatterId,
-                RemoteDb = sequence.RemoteDb,
-                RemoteId = sequence.RemoteId,
-                Order = fmotifsSequences[i].Order,
-                Alphabet = fmotifsAlphabets[i],
-                Notation = Notation.FormalMotifs,
-                PauseTreatment = pauseTreatment,
-                SequentialTransfer = false
-            };
-            Db.CombinedSequenceEntities.Add(musicSequence);
+            musicSequence = sequence.ToCombinedSequence();
+            musicSequence.Order = fmotifsSequences[i].Order;
+            musicSequence.Alphabet = fmotifsAlphabets[i];
+            musicSequence.Notation = Notation.FormalMotifs;
+            musicSequence.PauseTreatment = pauseTreatment;
+            musicSequence.SequentialTransfer = false;
 
-            musicSequence = new CombinedSequenceEntity
-            {
-                MatterId = sequence.MatterId,
-                RemoteDb = sequence.RemoteDb,
-                RemoteId = sequence.RemoteId,
-                Order = fmotifsSequencesWithSequentialTransfer[i].Order,
-                Alphabet = fmotifsAlphabetsWithSequentialTransfer[i],
-                Notation = Notation.FormalMotifs,
-                PauseTreatment = pauseTreatment,
-                SequentialTransfer = true
-            };
-            Db.CombinedSequenceEntities.Add(musicSequence);
+            CombinedSequenceEntityToCreate.Add(musicSequence);
+
+            musicSequence = sequence.ToCombinedSequence();
+            musicSequence.Order = fmotifsSequencesWithSequentialTransfer[i].Order;
+            musicSequence.Alphabet = fmotifsAlphabetsWithSequentialTransfer[i];
+            musicSequence.Notation = Notation.FormalMotifs;
+            musicSequence.PauseTreatment = pauseTreatment;
+            musicSequence.SequentialTransfer = true;
+
+            CombinedSequenceEntityToCreate.Add(musicSequence);
         }
+
+        Db.SaveChanges();
     }
 
     /// <summary>
