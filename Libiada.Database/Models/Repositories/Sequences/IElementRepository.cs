@@ -1,8 +1,13 @@
-namespace Libiada.Database.Models.Repositories.Sequences;
+﻿using Libiada.Core.Core;
 
-/// <summary>
-/// The ElementRepository interface.
-/// </summary>
-public interface IElementRepository : IDisposable
+namespace Libiada.Database.Models.Repositories.Sequences
 {
+    public interface IElementRepository
+    {
+        bool ElementsInDb(Alphabet alphabet, Notation notation);
+        Element[] GetElements(long[] elementIds);
+        long[] GetOrCreateNotesInDb(Alphabet alphabet);
+        long[] ToDbElements(Alphabet alphabet, Notation notation, bool createElements);
+        Alphabet ToLibiadaAlphabet(long[] elementIds);
+    }
 }

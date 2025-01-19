@@ -2,6 +2,7 @@ namespace Libiada.Database.Models.Repositories.Sequences;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// The element repository.
@@ -32,7 +33,17 @@ public class ElementRepository : IElementRepository
     /// <summary>
     /// Gets the cached elements.
     /// </summary>
-    private Element[] CachedElements => lazyCache ??= db.Elements.Where(e => StaticCollections.StaticNotations.Contains(e.Notation)).ToArray();
+    private Element[] CachedElements => lazyCache ??= db.Elements
+                                                        .Where(e => StaticCollections.StaticNotations.Contains(e.Notation))
+                                                        .Select(e => new Element() // dirty hack to prevent redundant joins in db
+                                                        {
+                                                            Id = e.Id,
+                                                            Value = e.Value,
+                                                            Name = e.Name,
+                                                            Notation = e.Notation,
+                                                            Description = e.Description
+                                                        })
+                                                        .ToArray();
 
     /// <summary>
     /// The dispose.
@@ -151,10 +162,15 @@ public class ElementRepository : IElementRepository
         bool staticNotation = StaticCollections.StaticNotations.Contains(notation);
 
         string[] stringElements = alphabet.Select(e => e.ToString()).ToArray();
-
         Element[] elements = staticNotation ?
                         CachedElements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToArray() :
-                        db.Elements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToArray();
+                        db.Elements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).Select(e => new Element() // dirty hack to prevent redundant joins in db
+                        {
+                            Id = e.Id,
+                            Value = e.Value,
+                            Name = e.Name,
+                            Notation = e.Notation
+                        }).ToArray();
 
         return (from stringElement in stringElements
                 join element in elements
@@ -194,9 +210,17 @@ public class ElementRepository : IElementRepository
     /// The <see cref="Element[]"/>.
     /// </returns>
     public Element[] GetElements(long[] elementIds) => db.Elements
-                                                             .Where(e => elementIds.Contains(e.Id))
-                                                             .OrderBy(e => Array.IndexOf(elementIds, e.Id))
-                                                             .ToArray();
+                                                         .Where(e => elementIds.Contains(e.Id))
+                                                         .OrderBy(e => Array.IndexOf(elementIds, e.Id))
+                                                         .Select(e => new Element() // dirty hack to prevent redundant joins in db
+                                                         {
+                                                             Id = e.Id,
+                                                             Value = e.Value,
+                                                             Name = e.Name,
+                                                             Notation = e.Notation,
+                                                             Description = e.Description
+                                                         })
+                                                         .ToArray();
 
     /// <summary>
     /// The get or create pitches in db.
@@ -267,11 +291,11 @@ public class ElementRepository : IElementRepository
 
         var newElements = elements.Where(e => !existingElements.Contains(e));
         db.Elements.AddRange(newElements.Select(e => new Element
-                                                            {
-                                                                Value = e,
-                                                                Name = e,
-                                                                Notation = notation
-                                                            }));
+        {
+            Value = e,
+            Name = e,
+            Notation = notation
+        }));
         db.SaveChanges();
     }
 }
