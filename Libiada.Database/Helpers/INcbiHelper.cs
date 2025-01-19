@@ -1,12 +1,11 @@
 ﻿namespace Libiada.Database.Helpers;
 
-using Bio;
 using Bio.IO.GenBank;
 using Libiada.Database.Models.NcbiSequencesData;
 
 public interface INcbiHelper
 {
-    ISequence DownloadGenBankSequence(string accession);
+    Bio.ISequence DownloadGenBankSequence(string accession);
     (string, string) ExecuteEPostRequest(string ids);
     (string, string) ExecuteESearchRequest(string searchTerm);
     List<NuccoreObject> ExecuteESummaryRequest(string searchTerm, bool includePartial);

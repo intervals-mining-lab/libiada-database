@@ -1,6 +1,5 @@
 ﻿namespace Libiada.Database.Models.Calculators;
 
-using Bio;
 using Bio.Extensions;
 
 using Libiada.Core.Core;
@@ -194,8 +193,8 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
                 Chain sequence = (Chain)sequences[sequenceId].Clone();
                 if (complementary)
                 {
-                    Sequence sourceSequence = new(Alphabets.DNA, sequence.ToString());
-                    ISequence complementarySequence = sourceSequence.GetReverseComplementedSequence();
+                    Bio.Sequence sourceSequence = new(Bio.Alphabets.DNA, sequence.ToString());
+                    Bio.ISequence complementarySequence = sourceSequence.GetReverseComplementedSequence();
                     sequence = new Chain(complementarySequence.ConvertToString());
                 }
 

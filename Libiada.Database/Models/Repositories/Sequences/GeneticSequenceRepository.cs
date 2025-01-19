@@ -1,6 +1,5 @@
 namespace Libiada.Database.Models.Repositories.Sequences;
 
-using Bio;
 using Bio.Extensions;
 
 using Libiada.Core.Core;
@@ -61,7 +60,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// Thrown if at least one element of new sequence is missing in db
     /// or if sequence is empty or invalid.
     /// </exception>
-    public void Create(DnaSequence sequence, ISequence fastaSequence)
+    public void Create(DnaSequence sequence, Bio.ISequence fastaSequence)
     {
         if (fastaSequence.ID.Contains("Resource temporarily unavailable"))
         {

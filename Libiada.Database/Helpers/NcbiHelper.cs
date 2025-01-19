@@ -7,7 +7,6 @@ using System.Xml;
 using System;
 using System.Text;
 
-using Bio;
 using Bio.IO;
 using Bio.IO.FastA;
 using Bio.IO.GenBank;
@@ -76,7 +75,7 @@ public class NcbiHelper : INcbiHelper
     /// <exception cref="Exception">
     /// Thrown if metadata is absent.
     /// </exception>
-    public static GenBankMetadata GetMetadata(ISequence sequence)
+    public static GenBankMetadata GetMetadata(Bio.ISequence sequence)
     {
         return sequence.Metadata["GenBank"] as GenBankMetadata ?? throw new Exception("GenBank file metadata is empty.");
     }
@@ -90,10 +89,10 @@ public class NcbiHelper : INcbiHelper
     /// <returns>
     /// The <see cref="ISequence"/>.
     /// </returns>
-    public static ISequence GetFastaSequence(Stream fastaFileStream)
+    public static Bio.ISequence GetFastaSequence(Stream fastaFileStream)
     {
         FastAParser fastaParser = new();
-        ISequence result = fastaParser.ParseOne(fastaFileStream);
+        Bio.ISequence result = fastaParser.ParseOne(fastaFileStream);
         fastaFileStream.Dispose();
         return result;
     }
@@ -122,7 +121,7 @@ public class NcbiHelper : INcbiHelper
     /// <returns>
     /// The <see cref="Stream"/>.
     /// </returns>
-    public ISequence DownloadGenBankSequence(string accession)
+    public Bio.ISequence DownloadGenBankSequence(string accession)
     {
         ISequenceParser parser = new GenBankParser();
         string url = GetEfetchParamsString("gbwithparts", accession);
