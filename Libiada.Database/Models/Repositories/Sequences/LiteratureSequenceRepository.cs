@@ -46,7 +46,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     public void Create(LiteratureSequence sequence, Stream sequenceStream, bool dropPunctuation = false)
     {
         string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
-        BaseChain chain;
+        Sequence libiadSequence;
         if (sequence.Notation == Notation.Letters)
         {
             stringSequence = stringSequence.ToUpper();
@@ -54,22 +54,22 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
             {
                 stringSequence = new string(stringSequence.Where(c => !char.IsPunctuation(c)).ToArray());
             }
-            chain = new BaseChain(stringSequence);
+            libiadSequence = new Sequence(stringSequence);
         }
         else
         {
             // file always contains empty string at the end
             // TODO: rewrite this, add empty string check at the end or write a normal trim
             string[] text = stringSequence.Split(['\n', '\r', ' ', '\t'], StringSplitOptions.RemoveEmptyEntries);
-            chain = new BaseChain(text.Select(e => (ValueString)e).ToList());
+            libiadSequence = new Sequence(text.Select(e => (ValueString)e).ToList());
         }
 
         CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
 
-        sequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
-        sequence.Order = chain.Order;
+        sequence.Alphabet = ElementRepository.ToDbElements(libiadSequence.Alphabet, sequence.Notation, true);
+        sequence.Order = libiadSequence.Order;
 
         Create(sequence);
     }

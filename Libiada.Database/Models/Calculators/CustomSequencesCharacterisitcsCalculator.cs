@@ -19,10 +19,10 @@ public class CustomSequencesCharacterisitcsCalculator
         }
     }
 
-    public IEnumerable<double[]> Calculate(IEnumerable<Chain> sequences)
+    public IEnumerable<double[]> Calculate(IEnumerable<ComposedSequence> sequences)
     {
         List<double[]> result = [];
-        foreach(Chain sequence in sequences)
+        foreach(ComposedSequence sequence in sequences)
         {
             result.Add(Calculate(sequence));
         }
@@ -30,7 +30,7 @@ public class CustomSequencesCharacterisitcsCalculator
         return result;
     }
 
-    public double[] Calculate(Chain sequence)
+    public double[] Calculate(ComposedSequence sequence)
     {
         double[] characteristics = new double[calculators.Length];
 

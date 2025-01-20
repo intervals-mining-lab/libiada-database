@@ -55,7 +55,7 @@ public class NcbiHelper : INcbiHelper
     /// Accession id of the sequence in ncbi (remote id).
     /// </param>
     /// <returns>
-    /// The <see cref="List{FeatureItem}"/>.
+    /// The <see cref="List{Bio.IO.GenBank.FeatureItem}"/>.
     /// </returns>
     public List<FeatureItem> GetFeatures(string accession)
     {

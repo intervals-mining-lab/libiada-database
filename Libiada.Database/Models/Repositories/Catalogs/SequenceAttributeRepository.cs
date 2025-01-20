@@ -92,7 +92,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// The subsequences ids.
     /// </param>
     /// <returns>
-    /// The <see cref="T:Dictionary{Int64, AttributeValue[]}"/>.
+    /// The <see cref="T:Dictionary{long, Libiada.Database.Models.CalculatorsData.AttributeValue[]}"/>.
     /// </returns>
     public Dictionary<long, AttributeValue[]> GetAttributes(IEnumerable<long> subsequenceIds)
     {
@@ -127,7 +127,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// Thrown if qualifier has more than one value.
     /// </exception>
     /// <returns>
-    /// The <see cref="List{SequenceAttribute}"/>.
+    /// The <see cref="List{Libiada.Database.Models.SequenceAttribute}"/>.
     /// </returns>
     public List<SequenceAttribute> Create(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
     {
@@ -239,7 +239,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// The subsequence.
     /// </param>
     /// <returns>
-    /// The <see cref="List{SequenceAttribute}"/>.
+    /// The <see cref="List{Libiada.Database.Models.SequenceAttribute}"/>.
     /// </returns>
     private List<SequenceAttribute> CreateComplementJoinPartialAttributes(bool complement, bool complementJoin, Subsequence subsequence)
     {

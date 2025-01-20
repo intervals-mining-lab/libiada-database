@@ -47,9 +47,9 @@ public class SubsequenceExtractor
     /// The subsequences.
     /// </param>
     /// <returns>
-    /// The <see cref="List{Chain}"/>.
+    /// The <see cref="Dictionary{long, Libiada.Core.Core.ComposedSequence}"/>.
     /// </returns>
-    public Dictionary<long, Chain> GetSubsequencesSequences(Subsequence[] subsequences)
+    public Dictionary<long, ComposedSequence> GetSubsequencesSequences(Subsequence[] subsequences)
     {
         long[] parentSequenceIds = subsequences.Select(s => s.SequenceId).Distinct().ToArray();
         Dictionary<long, BioSequence> parentSequences = [];
@@ -58,11 +58,11 @@ public class SubsequenceExtractor
             parentSequences[id] = GetDotNetBioSequence(id);
         }
 
-        Dictionary<long, Chain> result = [];
+        Dictionary<long, ComposedSequence> result = [];
 
         foreach (Subsequence subsequence in subsequences)
         {
-            Chain sequence = GetSequence(parentSequences[subsequence.SequenceId], subsequence);
+            ComposedSequence sequence = GetSequence(parentSequences[subsequence.SequenceId], subsequence);
             result[subsequence.Id] = sequence;
         }
 
@@ -76,7 +76,7 @@ public class SubsequenceExtractor
     /// Subsequence to be extracted from database.
     /// </param>
     /// <returns></returns>
-    public Chain GetSubsequenceSequence(Subsequence subsequence)
+    public ComposedSequence GetSubsequenceSequence(Subsequence subsequence)
     {
         BioSequence sourceSequence = GetDotNetBioSequence(subsequence.SequenceId);
         return GetSequence(sourceSequence, subsequence);
@@ -92,7 +92,7 @@ public class SubsequenceExtractor
     /// The feature ids.
     /// </param>
     /// <returns>
-    /// The <see cref="List{Subsequence}"/>.
+    /// The <see cref="List{Libiada.Database.Models.Subsequence}"/>.
     /// </returns>
     public Subsequence[] GetSubsequences(long sequenceId, IReadOnlyList<Feature> features)
     {
@@ -169,7 +169,7 @@ public class SubsequenceExtractor
     public IBioSequence[] GetBioSequencesForFastaConverter(long[] subsequencesIds)
     {
         Subsequence[] subsequences;
-        Dictionary<long, Chain> sequences;
+        Dictionary<long, ComposedSequence> sequences;
         Dictionary<long, string> mattersNames;
         subsequences = db.Subsequences.Where(s => subsequencesIds.Contains(s.Id))
                          .Include(s => s.Position)
@@ -204,9 +204,9 @@ public class SubsequenceExtractor
     /// Subsequence to be extracted from parent sequence.
     /// </param>
     /// <returns>
-    /// Extracted from given position sequence as <see cref="Chain"/>.
+    /// Extracted from given position sequence as <see cref="ComposedSequence"/>.
     /// </returns>
-    private Chain GetSequence(BioSequence source, Subsequence subsequence)
+    private ComposedSequence GetSequence(BioSequence source, Subsequence subsequence)
     {
         if (subsequence.Position.Count == 0)
         {
@@ -229,8 +229,8 @@ public class SubsequenceExtractor
     /// </returns>
     private BioSequence GetDotNetBioSequence(long sequenceId)
     {
-        string parentChain = sequenceRepository.GetString(sequenceId);
-        return new BioSequence(Bio.Alphabets.DNA, parentChain);
+        string parentSequence = sequenceRepository.GetString(sequenceId);
+        return new BioSequence(Bio.Alphabets.DNA, parentSequence);
     }
 
     /// <summary>
@@ -269,9 +269,9 @@ public class SubsequenceExtractor
     /// The subsequence.
     /// </param>
     /// <returns>
-    /// The <see cref="Chain"/>.
+    /// The <see cref="ComposedSequence"/>.
     /// </returns>
-    private Chain GetSimpleSubsequence(BioSequence sourceSequence, Subsequence subsequence)
+    private ComposedSequence GetSimpleSubsequence(BioSequence sourceSequence, Subsequence subsequence)
     {
         IBioSequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
 
@@ -280,7 +280,7 @@ public class SubsequenceExtractor
             bioSequence = bioSequence.GetReverseComplementedSequence();
         }
 
-        return new Chain(bioSequence.ConvertToString());
+        return new ComposedSequence(bioSequence.ConvertToString());
     }
 
     /// <summary>
@@ -293,9 +293,9 @@ public class SubsequenceExtractor
     /// The subsequence.
     /// </param>
     /// <returns>
-    /// The <see cref="Chain"/>.
+    /// The <see cref="ComposedSequence"/>.
     /// </returns>
-    private Chain GetJoinedSubsequence(BioSequence sourceSequence, Subsequence subsequence)
+    private ComposedSequence GetJoinedSubsequence(BioSequence sourceSequence, Subsequence subsequence)
     {
         if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == AnnotationAttribute.Complement))
         {
@@ -317,9 +317,9 @@ public class SubsequenceExtractor
     /// The subsequence.
     /// </param>
     /// <returns>
-    /// The <see cref="Chain"/>.
+    /// The <see cref="ComposedSequence"/>.
     /// </returns>
-    private Chain GetJoinedSubsequenceWithoutComplement(BioSequence sourceSequence, Subsequence subsequence)
+    private ComposedSequence GetJoinedSubsequenceWithoutComplement(BioSequence sourceSequence, Subsequence subsequence)
     {
         string joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ConvertToString();
 
@@ -330,7 +330,7 @@ public class SubsequenceExtractor
             joinedSequence += sourceSequence.GetSubSequence(position.Start, position.Length).ConvertToString();
         }
 
-        return new Chain(joinedSequence);
+        return new ComposedSequence(joinedSequence);
     }
 
     /// <summary>
@@ -343,9 +343,9 @@ public class SubsequenceExtractor
     /// The subsequence.
     /// </param>
     /// <returns>
-    /// The <see cref="Chain"/>.
+    /// The <see cref="ComposedSequence"/>.
     /// </returns>
-    private Chain GetJoinedSubsequenceWithComplement(BioSequence sourceSequence, Subsequence subsequence)
+    private ComposedSequence GetJoinedSubsequenceWithComplement(BioSequence sourceSequence, Subsequence subsequence)
     {
         IBioSequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
         Position[] positions = subsequence.Position.ToArray();
@@ -372,6 +372,6 @@ public class SubsequenceExtractor
             }
         }
 
-        return new Chain(resultSequence);
+        return new ComposedSequence(resultSequence);
     }
 }

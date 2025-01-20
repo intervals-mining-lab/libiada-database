@@ -60,9 +60,9 @@ public class DataSequenceRepository : SequenceImporter
             elements.Add(new ValueInt(intElement));
         }
 
-        BaseChain chain = new(elements);
+        Sequence libiadaSequence = new(elements);
 
-        long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
+        long[] alphabet = ElementRepository.ToDbElements(libiadaSequence.Alphabet, sequence.Notation, true);
         CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);

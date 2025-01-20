@@ -34,8 +34,8 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// <summary>
     /// Calculation method.
     /// </summary>
-    /// <param name="chainIds">
-    /// The chains ids.
+    /// <param name="sequenceIds">
+    /// The sequences ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristicLink ids.
@@ -43,29 +43,29 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// <returns>
     /// The <see cref="T:double[][]"/>.
     /// </returns>
-    public double[][] Calculate(long[][] chainIds, short[] characteristicLinkIds)
+    public double[][] Calculate(long[][] sequenceIds, short[] characteristicLinkIds)
     {
-        Dictionary<long, short[]> chainCharacteristicsIds = ToSequenceCharacteristicsIdsDictionary(chainIds, characteristicLinkIds);
+        Dictionary<long, short[]> chainCharacteristicsIds = ToSequenceCharacteristicsIdsDictionary(sequenceIds, characteristicLinkIds);
         Dictionary<long, Dictionary<short, double>> result = Calculate(chainCharacteristicsIds);
-        return ExtractCharacteristicsValues(result, chainIds, characteristicLinkIds);
+        return ExtractCharacteristicsValues(result, sequenceIds, characteristicLinkIds);
     }
 
     /// <summary>
     /// Calculation method.
     /// </summary>
-    /// <param name="chainCharacteristicsIds">
-    /// Dictionary with chain ids as a key
+    /// <param name="sequenceCharacteristicsIds">
+    /// Dictionary with sequence ids as a key
     /// and characteristicLink ids array as value.
     /// </param>
     /// <returns>
     /// The <see cref="T:double[][]"/>.
     /// </returns>
-    public Dictionary<long, Dictionary<short, double>> Calculate(Dictionary<long, short[]> chainCharacteristicsIds)
+    public Dictionary<long, Dictionary<short, double>> Calculate(Dictionary<long, short[]> sequenceCharacteristicsIds)
     {
         List<CharacteristicValue> newCharacteristics = [];
         Dictionary<long, Dictionary<short, double>> allCharacteristics = [];
 
-        var characteristicLinkIds = chainCharacteristicsIds.SelectMany(c => c.Value).Distinct();
+        var characteristicLinkIds = sequenceCharacteristicsIds.SelectMany(c => c.Value).Distinct();
         var calculators = new Dictionary<short, LinkedFullCalculator>();
         foreach (short characteristicLinkId in characteristicLinkIds)
         {
@@ -74,11 +74,11 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
             calculators.Add(characteristicLinkId, new LinkedFullCalculator(characteristic, link));
         }
         using var db = dbFactory.CreateDbContext();
-        var sequenceIds = chainCharacteristicsIds.Keys;
+        var sequenceIds = sequenceCharacteristicsIds.Keys;
         using var sequenceRepository = sequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
-            short[] sequenceCharacteristicLinkIds = chainCharacteristicsIds[sequenceId];
+            short[] sequenceCharacteristicLinkIds = sequenceCharacteristicsIds[sequenceId];
             Dictionary<short, double> characteristics = db.CharacteristicValues
                                                           .Where(c => sequenceId == c.SequenceId && sequenceCharacteristicLinkIds.Contains(c.CharacteristicLinkId))
                                                           .ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value);
@@ -87,7 +87,7 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
 
             if (characteristics.Count < sequenceCharacteristicLinkIds.Length)
             {
-                Chain sequence = sequenceRepository.GetLibiadaChain(sequenceId);
+                ComposedSequence sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
 
                 foreach (short sequenceCharacteristicLinkId in sequenceCharacteristicLinkIds)
                 {
@@ -118,8 +118,8 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// <summary>
     /// Calculation method.
     /// </summary>
-    /// <param name="chainIds">
-    /// The chains ids.
+    /// <param name="sequenceIds">
+    /// The sequences ids.
     /// </param>
     /// <param name="characteristicLinkId">
     /// The characteristicLink id.
@@ -127,16 +127,16 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// <returns>
     /// The <see cref="T:double[]"/>.
     /// </returns>
-    public double[] Calculate(long[] chainIds, short characteristicLinkId)
+    public double[] Calculate(long[] sequenceIds, short characteristicLinkId)
     {
-        Dictionary<long, short[]> chainCharacteristicsIds = chainIds.ToDictionary(c => c, c => new[] { characteristicLinkId });
+        Dictionary<long, short[]> chainCharacteristicsIds = sequenceIds.ToDictionary(c => c, c => new[] { characteristicLinkId });
 
         Dictionary<long, Dictionary<short, double>> dictionaryResult = Calculate(chainCharacteristicsIds);
 
-        double[] result = new double[chainIds.Length];
+        double[] result = new double[sequenceIds.Length];
         for (int i = 0; i < dictionaryResult.Count; i++)
         {
-            result[i] = dictionaryResult[chainIds[i]][characteristicLinkId];
+            result[i] = dictionaryResult[sequenceIds[i]][characteristicLinkId];
         }
 
         return result;
@@ -145,8 +145,8 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// <summary>
     /// Calculation method.
     /// </summary>
-    /// <param name="chainIds">
-    /// The chains ids.
+    /// <param name="sequenceIds">
+    /// The sequences ids.
     /// </param>
     /// <param name="characteristicLinkIds">
     /// The characteristic type link ids.
@@ -163,17 +163,17 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
     /// <returns>
     /// The <see cref="T:double[][]"/>.
     /// </returns>
-    public double[][] Calculate(long[][] chainIds, short[] characteristicLinkIds, bool rotate, bool complementary, uint? rotationLength)
+    public double[][] Calculate(long[][] sequenceIds, short[] characteristicLinkIds, bool rotate, bool complementary, uint? rotationLength)
     {
         Link[] links = new Link[characteristicLinkIds.Length];
         IFullCalculator[] calculators = new IFullCalculator[characteristicLinkIds.Length];
-        double[][] characteristics = new double[chainIds.Length][];
-        IEnumerable<long> sequenceIds = chainIds.SelectMany(c => c).Distinct();
-        Dictionary<long, Chain> sequences = [];
+        double[][] characteristics = new double[sequenceIds.Length][];
+        IEnumerable<long> distinctSequenceIds = sequenceIds.SelectMany(c => c).Distinct();
+        Dictionary<long, ComposedSequence> sequences = [];
         using var sequenceRepository = sequenceRepositoryFactory.Create();
-        foreach (long sequenceId in sequenceIds)
+        foreach (long sequenceId in distinctSequenceIds)
         {
-            sequences.Add(sequenceId, sequenceRepository.GetLibiadaChain(sequenceId));
+            sequences.Add(sequenceId, sequenceRepository.GetLibiadaComposedSequence(sequenceId));
         }
 
         for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -183,26 +183,26 @@ public class SequencesCharacteristicsCalculator : ISequencesCharacteristicsCalcu
             calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
         }
 
-        for (int i = 0; i < chainIds.Length; i++)
+        for (int i = 0; i < sequenceIds.Length; i++)
         {
             characteristics[i] = new double[calculators.Length];
 
             for (int j = 0; j < calculators.Length; j++)
             {
-                long sequenceId = chainIds[i][j];
-                Chain sequence = (Chain)sequences[sequenceId].Clone();
+                long sequenceId = sequenceIds[i][j];
+                ComposedSequence sequence = (ComposedSequence)sequences[sequenceId].Clone();
                 if (complementary)
                 {
                     Bio.Sequence sourceSequence = new(Bio.Alphabets.DNA, sequence.ToString());
                     Bio.ISequence complementarySequence = sourceSequence.GetReverseComplementedSequence();
-                    sequence = new Chain(complementarySequence.ConvertToString());
+                    sequence = new ComposedSequence(complementarySequence.ConvertToString());
                 }
 
                 if (rotate)
                 {
                     int[] order = sequence.Order.Rotate(rotationLength ?? 0);
                     List<IBaseObject> newSequence = order.Select(t => new ValueInt(t)).ToList<IBaseObject>();
-                    sequence = new Chain(newSequence);
+                    sequence = new ComposedSequence(newSequence);
                 }
 
                 characteristics[i][j] = calculators[j].Calculate(sequence, links[j]);

@@ -77,7 +77,7 @@ public class SubsequencesCharacteristicsCalculator : ISubsequencesCharacteristic
         long parentSequenceId,
         string[]? filters = null)
     {
-        Dictionary<long, Chain> sequences;
+        Dictionary<long, ComposedSequence> sequences;
         long[] subsequenceIds;
         SubsequenceData[] subsequenceData;
         Dictionary<long, Dictionary<short, double>> characteristics;

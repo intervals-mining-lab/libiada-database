@@ -187,7 +187,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
         {
             // TODO: add check constraints
 
-            entity.HasIndex(e => e.Alphabet, "ix_chain_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
+            entity.HasIndex(e => e.Alphabet, "ix_sequence_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
             entity.HasOne(s => s.Matter)
                   .WithMany(r => r.Sequences)

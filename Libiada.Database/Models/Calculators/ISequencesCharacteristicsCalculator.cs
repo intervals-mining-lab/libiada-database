@@ -2,7 +2,7 @@
 
 public interface ISequencesCharacteristicsCalculator
 {
-    Dictionary<long, Dictionary<short, double>> Calculate(Dictionary<long, short[]> chainCharacteristicsIds);
+    Dictionary<long, Dictionary<short, double>> Calculate(Dictionary<long, short[]> sequenceCharacteristicsIds);
     double[] Calculate(long[] chainIds, short characteristicLinkId);
     double[][] Calculate(long[][] chainIds, short[] characteristicLinkIds);
     double[][] Calculate(long[][] chainIds, short[] characteristicLinkIds, bool rotate, bool complementary, uint? rotationLength);

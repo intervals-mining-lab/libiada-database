@@ -207,7 +207,7 @@ public class ElementRepository : IElementRepository
     /// The element ids.
     /// </param>
     /// <returns>
-    /// The <see cref="Element[]"/>.
+    /// The <see cref="T:Element[]"/>.
     /// </returns>
     public Element[] GetElements(long[] elementIds) => db.Elements
                                                          .Where(e => elementIds.Contains(e.Id))

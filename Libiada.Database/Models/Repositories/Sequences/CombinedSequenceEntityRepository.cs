@@ -39,7 +39,7 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// The sequence id.
     /// </param>
     /// <returns>
-    /// The <see cref="element[]"/>.
+    /// The <see cref="T:Element[]"/>.
     /// </returns>
     public Element[] GetElements(long sequenceId)
     {
@@ -48,37 +48,37 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     }
 
     /// <summary>
-    /// Loads sequence by id from db and converts it to <see cref="BaseChain"/>.
+    /// Loads sequence by id from db and converts it to <see cref="Sequence"/>.
     /// </summary>
     /// <param name="sequenceId">
     /// The sequence id.
     /// </param>
     /// <returns>
-    /// The sequence as <see cref="BaseChain"/>.
+    /// The sequence as <see cref="Sequence"/>.
     /// </returns>
-    public BaseChain GetLibiadaBaseChain(long sequenceId)
+    public Sequence GetLibiadaSequence(long sequenceId)
     {
         int[] order = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Order;
-        return new BaseChain(order, GetAlphabet(sequenceId), sequenceId);
+        return new Sequence(order, GetAlphabet(sequenceId), sequenceId);
     }
 
     /// <summary>
-    /// Loads sequence by id from db and converts it to <see cref="Chain"/>.
+    /// Loads sequence by id from db and converts it to <see cref="ComposedSequence"/>.
     /// </summary>
     /// <param name="sequenceId">
     /// The sequence id.
     /// </param>
     /// <returns>
-    /// The sequence as <see cref="Chain"/>.
+    /// The sequence as <see cref="ComposedSequence"/>.
     /// </returns>
-    public Chain GetLibiadaChain(long sequenceId)
+    public ComposedSequence GetLibiadaComposedSequence(long sequenceId)
     {
 
         if (Db.CombinedSequenceEntities.Any(s => s.Id == sequenceId))
         {
             CombinedSequenceEntity DBSequence = Db.CombinedSequenceEntities.Include(s => s.Matter).Single(s => s.Id == sequenceId);
             Matter matter = DBSequence.Matter;
-            return new Chain(DBSequence.Order.ToArray(), GetAlphabet(sequenceId), sequenceId);
+            return new ComposedSequence(DBSequence.Order.ToArray(), GetAlphabet(sequenceId), sequenceId);
         }
 
         // if it is not "real" sequence , then it must be image "sequence" 
@@ -90,7 +90,7 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
 
         Image<Rgba32> image = Image.Load<Rgba32>(imageSequence.Matter.Source);
         Type orderExtractor = imageSequence.OrderExtractor.GetAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>().Value;
-        BaseChain sequence = ImageProcessor.ProcessImage(image, [], [], (IImageOrderExtractor)Activator.CreateInstance(orderExtractor));
+        Sequence sequence = ImageProcessor.ProcessImage(image, [], [], (IImageOrderExtractor)Activator.CreateInstance(orderExtractor));
         Alphabet alphabet = [NullValue.Instance()];
         Alphabet incompleteAlphabet = sequence.Alphabet;
         for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
@@ -98,7 +98,7 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
             alphabet.Add(incompleteAlphabet[j]);
         }
 
-        return new Chain(sequence.Order, alphabet);
+        return new ComposedSequence(sequence.Order, alphabet);
     }
 
     /// <summary>

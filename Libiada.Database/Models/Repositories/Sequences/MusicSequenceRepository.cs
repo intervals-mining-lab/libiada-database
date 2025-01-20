@@ -71,26 +71,26 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
 
-        BaseChain notesSequence = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
+        Sequence notesSequence = ConvertCongenericScoreTrackToNotesSequence(tempTrack.CongenericScoreTracks[0]);
         long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);
 
-        BaseChain measuresSequence = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
+        Sequence measuresSequence = ConvertCongenericScoreTrackToMeasuresSequence(tempTrack.CongenericScoreTracks[0]);
         long[] measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
 
         var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable).ToArray();
-        List<BaseChain> fmotifsSequences = new(pauseTreatments.Length);
+        List<Sequence> fmotifsSequences = new(pauseTreatments.Length);
         List<long[]> fmotifsAlphabets = new(pauseTreatments.Length);
-        List<BaseChain> fmotifsSequencesWithSequentialTransfer = new(pauseTreatments.Length);
+        List<Sequence> fmotifsSequencesWithSequentialTransfer = new(pauseTreatments.Length);
         List<long[]> fmotifsAlphabetsWithSequentialTransfer = new(pauseTreatments.Length);
 
         for (int i = 0; i < pauseTreatments.Length; i++)
         {
             PauseTreatment pauseTreatment = pauseTreatments[i];
 
-            fmotifsSequences.Add(ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, false));
+            fmotifsSequences.Add(ConvertCongenericScoreTrackToFormalMotifsSequence(tempTrack.CongenericScoreTracks[0], pauseTreatment, false));
             fmotifsAlphabets[i] = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequences[i].Alphabet);
 
-            fmotifsSequencesWithSequentialTransfer.Add(ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0], pauseTreatment, true));
+            fmotifsSequencesWithSequentialTransfer.Add(ConvertCongenericScoreTrackToFormalMotifsSequence(tempTrack.CongenericScoreTracks[0], pauseTreatment, true));
             fmotifsAlphabetsWithSequentialTransfer.Add(FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequencesWithSequentialTransfer[i].Alphabet));
         }
 
@@ -165,48 +165,48 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     }
 
     /// <summary>
-    /// Converts congeneric score track to base chain with notes as elements.
+    /// Converts congeneric score track to sequence with notes as elements.
     /// </summary>
     /// <param name="scoreTrack">
     /// The score track.
     /// </param>
     /// <returns>
-    /// The <see cref="BaseChain"/>.
+    /// The <see cref="Sequence"/>.
     /// </returns>
-    private BaseChain ConvertCongenericScoreTrackToNotesBaseChain(CongenericScoreTrack scoreTrack)
+    private Sequence ConvertCongenericScoreTrackToNotesSequence(CongenericScoreTrack scoreTrack)
     {
         List<ValueNote> notes = scoreTrack.GetNotes();
-        return new BaseChain(((IEnumerable<IBaseObject>)notes).ToList());
+        return new Sequence(((IEnumerable<IBaseObject>)notes).ToList());
     }
 
     /// <summary>
-    /// Convert congeneric score track to measures base chain.
+    /// Convert congeneric score track to measures sequence.
     /// </summary>
     /// <param name="scoreTrack">
     /// The score track.
     /// </param>
     /// <returns>
-    /// The <see cref="BaseChain"/>.
+    /// The <see cref="Sequence"/>.
     /// </returns>
-    private BaseChain ConvertCongenericScoreTrackToMeasuresBaseChain(CongenericScoreTrack scoreTrack)
+    private Sequence ConvertCongenericScoreTrackToMeasuresSequence(CongenericScoreTrack scoreTrack)
     {
         List<Measure> measures = scoreTrack.MeasureOrder();
-        return new BaseChain(((IEnumerable<IBaseObject>)measures).ToList());
+        return new Sequence(((IEnumerable<IBaseObject>)measures).ToList());
     }
 
     /// <summary>
-    /// Converts congeneric score track to formal motifs base chain.
+    /// Converts congeneric score track to formal motifs sequence.
     /// </summary>
     /// <param name="scoreTrack">
     /// The score track.
     /// </param>
     /// <returns>
-    /// The <see cref="BaseChain"/>.
+    /// The <see cref="Sequence"/>.
     /// </returns>
-    private BaseChain ConvertCongenericScoreTrackToFormalMotifsBaseChain(CongenericScoreTrack scoreTrack, PauseTreatment pauseTreatment, bool sequentialTransfer)
+    private Sequence ConvertCongenericScoreTrackToFormalMotifsSequence(CongenericScoreTrack scoreTrack, PauseTreatment pauseTreatment, bool sequentialTransfer)
     {
         BorodaDivider borodaDivider = new();
-        FmotifChain fmotifChain = borodaDivider.Divide(scoreTrack, pauseTreatment, sequentialTransfer);
-        return new BaseChain(((IEnumerable<IBaseObject>)fmotifChain.FmotifsList).ToList());
+        FmotifSequence fmotifSequence = borodaDivider.Divide(scoreTrack, pauseTreatment, sequentialTransfer);
+        return new Sequence(((IEnumerable<IBaseObject>)fmotifSequence.FmotifsList).ToList());
     }
 }

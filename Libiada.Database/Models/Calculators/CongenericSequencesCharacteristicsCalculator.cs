@@ -26,26 +26,26 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
 
     public Dictionary<long, Dictionary<(short, long), double>> Calculate(long[][] sequenceIds, short[] characteristicLinkIds)
     {
-        Dictionary<long, short[]> chainCharacteristicsIds = ToSequenceCharacteristicsIdsDictionary(sequenceIds, characteristicLinkIds);
-        return Calculate(chainCharacteristicsIds);
+        Dictionary<long, short[]> sequenceCharacteristicsIds = ToSequenceCharacteristicsIdsDictionary(sequenceIds, characteristicLinkIds);
+        return Calculate(sequenceCharacteristicsIds);
     }
 
     /// <summary>
     /// Calculation method.
     /// </summary>
-    /// <param name="chainCharacteristicsIds">
-    /// Dictionary with chain ids as a key
+    /// <param name="sequenceCharacteristicsIds">
+    /// Dictionary with sequence ids as a key
     /// and characteristicLink ids array as value.
     /// </param>
     /// <returns>
     /// The <see cref="T:double[][]"/>.
     /// </returns>
-    public Dictionary<long, Dictionary<(short, long), double>> Calculate(Dictionary<long, short[]> chainCharacteristicsIds)
+    public Dictionary<long, Dictionary<(short, long), double>> Calculate(Dictionary<long, short[]> sequenceCharacteristicsIds)
     {
         List<CongenericCharacteristicValue> newCharacteristics = [];
         Dictionary<long, Dictionary<(short, long), double>> allCharacteristics = [];
 
-        var characteristicLinkIds = chainCharacteristicsIds.SelectMany(c => c.Value).Distinct();
+        var characteristicLinkIds = sequenceCharacteristicsIds.SelectMany(c => c.Value).Distinct();
         var calculators = new Dictionary<short, LinkedCongenericCalculator>();
         foreach (short characteristicLinkId in characteristicLinkIds)
         {
@@ -54,14 +54,14 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
             calculators.Add(characteristicLinkId, new LinkedCongenericCalculator(characteristic, link));
         }
 
-        long[] sequenceIds = chainCharacteristicsIds.Keys.ToArray();
+        long[] sequenceIds = sequenceCharacteristicsIds.Keys.ToArray();
         using var db = dbFactory.CreateDbContext();
         var dbAlphabets = db.CombinedSequenceEntities.Where(cs => sequenceIds.Contains(cs.Id)).ToDictionary(cs => cs.Id, cs => cs.Alphabet);
         using var sequenceRepository = sequenceRepositoryFactory.Create();
         foreach (long sequenceId in sequenceIds)
         {
             long[] dbAlphabet = dbAlphabets[sequenceId];
-            short[] sequenceCharacteristicLinkIds = chainCharacteristicsIds[sequenceId];
+            short[] sequenceCharacteristicLinkIds = sequenceCharacteristicsIds[sequenceId];
             Dictionary<(short, long), double> characteristics = db.CongenericCharacteristicValues
                                                           .Where(c => sequenceId == c.SequenceId && sequenceCharacteristicLinkIds.Contains(c.CharacteristicLinkId))
                                                           .ToDictionary(ct => (ct.CharacteristicLinkId, ct.ElementId), ct => ct.Value);
@@ -70,7 +70,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
 
             if (characteristics.Count < sequenceCharacteristicLinkIds.Length * dbAlphabet.Length)
             {
-                Chain sequence = sequenceRepository.GetLibiadaChain(sequenceId);
+                ComposedSequence sequence = sequenceRepository.GetLibiadaComposedSequence(sequenceId);
                 // TODO: add ids to IBaseObject to avoid duplicate enumeration
                 Alphabet alphabet = sequence.Alphabet;
 
@@ -84,7 +84,7 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
                         if (!characteristics.ContainsKey((sequenceCharacteristicLinkId, elementId)))
                         {
 
-                            double characteristicValue = calculator.Calculate(sequence.CongenericChain(i));
+                            double characteristicValue = calculator.Calculate(sequence.CongenericSequence(i));
                             CongenericCharacteristicValue characteristic = new()
                             {
                                 SequenceId = sequenceId,

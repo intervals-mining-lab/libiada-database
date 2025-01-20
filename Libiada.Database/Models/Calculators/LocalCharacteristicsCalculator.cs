@@ -47,26 +47,21 @@ public class LocalCharacteristicsCalculator
         int windowSize,
         int step)
     {
-        Chain chain;
-        IFullCalculator calculator;
-        Link link;
-
-        FullCharacteristic characteristic =
-            characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-        calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-        link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
+        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
+        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
+        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
         SubsequenceExtractor subsequenceExtractor = new(db, sequenceRepository);
 
         Subsequence subsequence = db.Subsequences.Single(s => s.Id == subsequenceId);
-        chain = subsequenceExtractor.GetSubsequenceSequence(subsequence);
+        ComposedSequence sequence = subsequenceExtractor.GetSubsequenceSequence(subsequence);
 
 
-        CutRule cutRule = new SimpleCutRule(chain.Length, step, windowSize);
+        CutRule cutRule = new SimpleCutRule(sequence.Length, step, windowSize);
 
         CutRuleIterator iterator = cutRule.GetIterator();
 
-        List<Chain> fragments = [];
+        List<ComposedSequence> fragments = [];
 
         while (iterator.Next())
         {
@@ -76,10 +71,10 @@ public class LocalCharacteristicsCalculator
             List<IBaseObject> fragment = [];
             for (int k = 0; start + k < end; k++)
             {
-                fragment.Add(chain[start + k]);
+                fragment.Add(sequence[start + k]);
             }
 
-            fragments.Add(new Chain(fragment));
+            fragments.Add(new ComposedSequence(fragment));
         }
 
         double[] characteristics = new double[fragments.Count];

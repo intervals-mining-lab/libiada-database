@@ -38,13 +38,13 @@ public class OrderTransformer
     private OrderTransformationResult TransformOrder(OrderTransformation transformationType, int id)
     {
         OrderTransformationResult transformationResult = new();
-        Chain chain = transformationType == OrderTransformation.Dissimilar
-                          ? DissimilarChainFactory.Create(new BaseChain(Orders[id]))
-                          : HighOrderFactory.Create(new Chain(Orders[id]), transformationType.GetLink());
+        ComposedSequence sequence = transformationType == OrderTransformation.Dissimilar
+                          ? DissimilarSequenceFactory.Create(new Sequence(Orders[id]))
+                          : HighOrderFactory.Create(new ComposedSequence(Orders[id]), transformationType.GetLink());
 
         for (int i = 0; i < Orders.Count; i++)
         {
-            if (Orders[i].SequenceEqual(chain.Order))
+            if (Orders[i].SequenceEqual(sequence.Order))
             {
                 transformationResult.OrderId = i;
                 transformationResult.Transformation = transformationType.GetDisplayValue();

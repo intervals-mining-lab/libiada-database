@@ -55,8 +55,8 @@ public class FmotifRepository : IFmotifRepository
     /// </returns>
     public long CreateFmotif(Fmotif fmotif)
     {
-        BaseChain notesChain = new(fmotif.NoteList.ToList());
-        long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(notesChain.Alphabet);
+        Sequence notesSequence = new(fmotif.NoteList.ToList());
+        long[] notes = new ElementRepository(db).GetOrCreateNotesInDb(notesSequence.Alphabet);
 
         string localFmotifHash = fmotif.GetHashCode().ToString();
         List<Models.Fmotif> dbFmotifs = db.Fmotifs.Where(f => f.Value == localFmotifHash).ToList();
@@ -68,7 +68,7 @@ public class FmotifRepository : IFmotifRepository
                 if (notes.SequenceEqual(dbAlphabet))
                 {
                     int[] dbOrder = dbFmotif.Order;
-                    if (notesChain.Order.SequenceEqual(dbOrder))
+                    if (notesSequence.Order.SequenceEqual(dbOrder))
                     {
                         if (fmotif.Type != dbFmotif.FmotifType)
                         {
@@ -87,7 +87,7 @@ public class FmotifRepository : IFmotifRepository
             Value = fmotif.GetHashCode().ToString(),
             FmotifType = fmotif.Type,
             Alphabet = notes,
-            Order = notesChain.Order
+            Order = notesSequence.Order
         };
 
         db.Fmotifs.Add(result);

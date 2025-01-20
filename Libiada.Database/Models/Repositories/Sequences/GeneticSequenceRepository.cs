@@ -69,9 +69,9 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
 
         string stringSequence = fastaSequence.ConvertToString().ToUpper();
 
-        BaseChain chain = new(stringSequence);
+        Sequence libiadaSequence = new(stringSequence);
 
-        if (!ElementRepository.ElementsInDb(chain.Alphabet, sequence.Notation))
+        if (!ElementRepository.ElementsInDb(libiadaSequence.Alphabet, sequence.Notation))
         {
             throw new Exception("At least one element of new sequence is invalid (not A, C, T, G or U).");
         }
@@ -79,8 +79,8 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
         CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
         MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
-        sequence.Alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
-        sequence.Order = chain.Order;
+        sequence.Alphabet = ElementRepository.ToDbElements(libiadaSequence.Alphabet, sequence.Notation, false);
+        sequence.Order = libiadaSequence.Order;
 
         Create(sequence);
     }
@@ -111,7 +111,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// </returns>
     public long[] GetNucleotideSequenceIds(long[] matterIds)
     {
-        long[] chains = new long[matterIds.Length];
+        long[] sequencesIds = new long[matterIds.Length];
         CombinedSequenceEntity[] sequences = Db.CombinedSequenceEntities
                                                .Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides)
                                                .ToArray();
@@ -119,9 +119,9 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
         // TODO: use orderby insted of cycle
         for (int i = 0; i < matterIds.Length; i++)
         {
-            chains[i] = sequences.Single(c => c.MatterId == matterIds[i]).Id;
+            sequencesIds[i] = sequences.Single(c => c.MatterId == matterIds[i]).Id;
         }
 
-        return chains;
+        return sequencesIds;
     }
 }

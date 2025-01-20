@@ -314,7 +314,7 @@ public class SubsequenceImporter
     /// The subsequence id.
     /// </param>
     /// <returns>
-    /// The <see cref="List{Position}"/>.
+    /// The <see cref="List{Libiada.Database.Models.Position}"/>.
     /// </returns>
     private List<Position> CreateAdditionalPositions(List<ILocation> leafLocations, long subsequenceId)
     {
@@ -338,7 +338,7 @@ public class SubsequenceImporter
     /// Creates non coding subsequences.
     /// </summary>
     /// <returns>
-    /// The <see cref="List{Subsequence}"/>.
+    /// The <see cref="List{Libiada.Database.Models.Subsequence}"/>.
     /// </returns>
     private List<Subsequence> CreateNonCodingSubsequences()
     {
@@ -376,7 +376,7 @@ public class SubsequenceImporter
     /// from filled positions map.
     /// </summary>
     /// <returns>
-    /// The <see cref="T:List{NonCodingPosition}"/>.
+    /// The <see cref="List{Libiada.Database.Models.SubsequenceImporter.NonCodingPosition}"/>.
     /// </returns>
     private List<NonCodingPosition> ExtractNonCodingSubsequencesPositions()
     {

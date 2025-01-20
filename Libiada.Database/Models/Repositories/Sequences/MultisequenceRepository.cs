@@ -68,13 +68,13 @@ public class MultisequenceRepository
     }
 
     /// <summary>
-    /// Identifies chain number.
+    /// Identifies sequence number.
     /// </summary>
     /// <param name="matterName">
     /// The matter name.
     /// </param>
     /// <returns>
-    /// Returns chain number.
+    /// Returns sequence number.
     /// </returns>
     public static int GetSequenceNumberByName(string matterName)
     {

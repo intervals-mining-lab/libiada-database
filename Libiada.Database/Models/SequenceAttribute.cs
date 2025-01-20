@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 /// <summary>
-/// Contains chains' attributes and their values.
+/// Contains sequences' attributes and their values.
 /// </summary>
 [Table("sequence_attribute")]
 [Index("SequenceId", "Attribute", "Value", Name = "uk_sequence_attribute", IsUnique = true)] // for value md5 hash is calculated
