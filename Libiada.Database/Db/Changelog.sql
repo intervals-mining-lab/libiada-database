@@ -4580,12 +4580,16 @@ ALTER TABLE binary_characteristic DROP CONSTRAINT fk_binary_characteristic_chain
 ALTER TABLE congeneric_characteristic DROP CONSTRAINT fk_congeneric_characteristic_chain_key;
 ALTER TABLE full_characteristic DROP CONSTRAINT fk_characterisric_chain_key;
 ALTER TABLE "position" DROP CONSTRAINT fk_position_subsequence;
+DROP INDEX uk_sequence_attribute;
+
+
 
 UPDATE sequence_attribute SET sequence_id = s.id FROM abstract_sequence s WHERE s.old_id = sequence_id;
 UPDATE subsequence_new SET sequence_id = s.id FROM abstract_sequence s WHERE s.old_id = sequence_id;
 UPDATE "position" SET subsequence_id = s.id FROM abstract_sequence s WHERE s.old_id = subsequence_id;
 DELETE FROM full_characteristic;
 
+CREATE UNIQUE INDEX uk_sequence_attribute ON sequence_attribute USING btree (sequence_id, attribute, md5(value));
 ALTER TABLE "position" ADD CONSTRAINT fk_position_subsequence FOREIGN KEY (subsequence_id) REFERENCES subsequence_new (id) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE congeneric_characteristic ADD CONSTRAINT fk_congeneric_characteristic_abstract_sequence FOREIGN KEY (sequence_id) REFERENCES abstract_sequence (id) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE binary_characteristic ADD CONSTRAINT fk_binary_characteristic_abstract_sequence FOREIGN KEY (sequence_id) REFERENCES abstract_sequence (id) ON UPDATE CASCADE ON DELETE CASCADE;
