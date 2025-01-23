@@ -5043,4 +5043,13 @@ ALTER TABLE task ADD CONSTRAINT chk_task_type CHECK (task_type IN (1, 2, 3, 4, 5
 
 ALTER TABLE task ADD CONSTRAINT chk_task_status CHECK (status IN (1, 2, 3, 4));
 
+-- 23.01.2025
+-- Dropping sequences that aren't used anymore and renaming others to match tables names.
+
+ALTER SEQUENCE chain_attribute_id_seq RENAME TO sequence_attribute_id_seq;
+
+ALTER SEQUENCE element_new_id_seq RENAME TO element_id_seq;
+
+DROP SEQUENCE elements_id_seq;
+
 COMMIT;
