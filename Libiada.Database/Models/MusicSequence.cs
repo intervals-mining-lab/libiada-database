@@ -28,6 +28,7 @@ public class MusicSequence :  AbstractCombinedSequence
         Id = Id,
         Alphabet = Alphabet,
         Order = Order,
+        Nature = Nature.Music,
         Notation = Notation,
         MatterId = MatterId,
         RemoteDb = RemoteDb,

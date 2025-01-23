@@ -124,7 +124,7 @@ public class CombinedSequenceEntity : AbstractSequenceEntity
         PauseTreatment = PauseTreatment ?? throw new Exception("Music sequence pause treatment is not present in form data")
     };
 
-    public DnaSequence ToGeneticSequence() => new()
+    public GeneticSequence ToGeneticSequence() => new()
     {
         Id = Id,
         Alphabet = Alphabet,

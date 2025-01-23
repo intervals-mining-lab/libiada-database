@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 /// Contains sequences that represent genetic texts (DNA, RNA, gene sequecnes, etc).
 /// </summary>
 [NotMapped]
-public class DnaSequence : AbstractCombinedSequence
+public class GeneticSequence : AbstractCombinedSequence
 {
     /// <summary>
     /// Flag indicating whether sequence is partial or complete.
@@ -20,6 +20,7 @@ public class DnaSequence : AbstractCombinedSequence
         Id = Id,
         Alphabet = Alphabet,
         Order = Order,
+        Nature = Nature.Genetic,
         Notation = Notation,
         MatterId = MatterId,
         RemoteDb = RemoteDb,

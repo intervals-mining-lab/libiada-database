@@ -7,7 +7,7 @@ using Libiada.Core.Core;
 using Microsoft.EntityFrameworkCore;
 
 /// <summary>
-/// The DNA sequence repository.
+/// The genetic sequence repository.
 /// </summary>
 public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepository
 {
@@ -45,7 +45,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     }
 
     /// <summary>
-    /// The create DNA sequence.
+    /// The create genetic sequence.
     /// </summary>
     /// <param name="sequence">
     /// The genetic sequence to create in database.
@@ -60,7 +60,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// Thrown if at least one element of new sequence is missing in db
     /// or if sequence is empty or invalid.
     /// </exception>
-    public void Create(DnaSequence sequence, Bio.ISequence fastaSequence)
+    public void Create(GeneticSequence sequence, Bio.ISequence fastaSequence)
     {
         if (fastaSequence.ID.Contains("Resource temporarily unavailable"))
         {
@@ -91,7 +91,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// <param name="sequence">
     /// The sequence.
     /// </param>
-    public void Create(DnaSequence sequence)
+    public void Create(GeneticSequence sequence)
     {
         CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 

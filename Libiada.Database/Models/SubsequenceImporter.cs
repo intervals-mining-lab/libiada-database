@@ -54,7 +54,7 @@ public class SubsequenceImporter
     /// <param name="sequence">
     /// Dna sequence for which subsequences will be imported.
     /// </param>
-    public SubsequenceImporter(LibiadaDatabaseEntities db, DnaSequence sequence, INcbiHelper ncbiHelper) : this(db, ncbiHelper.GetFeatures(sequence.RemoteId), sequence.Id)
+    public SubsequenceImporter(LibiadaDatabaseEntities db, GeneticSequence sequence, INcbiHelper ncbiHelper) : this(db, ncbiHelper.GetFeatures(sequence.RemoteId), sequence.Id)
     {
     }
 

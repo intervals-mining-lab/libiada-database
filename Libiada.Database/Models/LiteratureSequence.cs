@@ -31,6 +31,7 @@ public class LiteratureSequence : AbstractCombinedSequence
         Id = Id,
         Alphabet = Alphabet,
         Order = Order,
+        Nature = Nature.Literature,
         Notation = Notation,
         MatterId = MatterId,
         RemoteDb = RemoteDb,
