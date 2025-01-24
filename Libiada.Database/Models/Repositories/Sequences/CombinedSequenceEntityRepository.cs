@@ -76,19 +76,19 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
 
         if (Db.CombinedSequenceEntities.Any(s => s.Id == sequenceId))
         {
-            CombinedSequenceEntity DBSequence = Db.CombinedSequenceEntities.Include(s => s.Matter).Single(s => s.Id == sequenceId);
-            Matter matter = DBSequence.Matter;
+            CombinedSequenceEntity DBSequence = Db.CombinedSequenceEntities.Include(s => s.ResearchObject).Single(s => s.Id == sequenceId);
+            ResearchObject researchObject = DBSequence.ResearchObject;
             return new ComposedSequence(DBSequence.Order.ToArray(), GetAlphabet(sequenceId), sequenceId);
         }
 
         // if it is not "real" sequence , then it must be image "sequence" 
-        ImageSequence imageSequence = Db.ImageSequences.Include(s => s.Matter).Single(s => s.Id == sequenceId);
-        if (imageSequence.Matter.Nature != Nature.Image)
+        ImageSequence imageSequence = Db.ImageSequences.Include(s => s.ResearchObject).Single(s => s.Id == sequenceId);
+        if (imageSequence.ResearchObject.Nature != Nature.Image)
         {
             throw new Exception("Cannot find sequence to return");
         }
 
-        Image<Rgba32> image = Image.Load<Rgba32>(imageSequence.Matter.Source);
+        Image<Rgba32> image = Image.Load<Rgba32>(imageSequence.ResearchObject.Source);
         Type orderExtractor = imageSequence.OrderExtractor.GetAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>().Value;
         Sequence sequence = ImageProcessor.ProcessImage(image, [], [], (IImageOrderExtractor)Activator.CreateInstance(orderExtractor));
         Alphabet alphabet = [NullValue.Instance()];
@@ -126,8 +126,8 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// <summary>
     /// Extracts sequences ids from database.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matters ids.
+    /// <param name="researchObjectIds">
+    /// The research objects ids.
     /// </param>
     /// <param name="notations">
     /// The notations ids.
@@ -148,7 +148,7 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// The sequences ids as <see cref="T:long[][]"/>.
     /// </returns>
     public long[][] GetSequenceIds(
-        long[] matterIds,
+        long[] researchObjectIds,
         Notation[] notations,
         Language[] languages,
         Translator[] translators,
@@ -158,23 +158,23 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     {
 
 
-        long[][] sequenceIds = new long[matterIds.Length][];
-        CreateMissingImageSequences(matterIds, notations, imageOrderExtractors);
+        long[][] sequenceIds = new long[researchObjectIds.Length][];
+        CreateMissingImageSequences(researchObjectIds, notations, imageOrderExtractors);
 
-        for (int i = 0; i < matterIds.Length; i++)
+        for (int i = 0; i < researchObjectIds.Length; i++)
         {
             sequenceIds[i] = new long[notations.Length];
         }
         for (int j = 0; j < notations.Length; j++)
         {
-            long[] sequenceIdsForOneNotation = GetSequenceIds(matterIds,
+            long[] sequenceIdsForOneNotation = GetSequenceIds(researchObjectIds,
                                                            notations[j],
                                                            languages.IsNullOrEmpty() ? null : languages[j],
                                                            translators.IsNullOrEmpty() ? null : translators[j],
                                                            pauseTreatments.IsNullOrEmpty() ? null : pauseTreatments[j],
                                                            sequentialTransfers.IsNullOrEmpty() ? null : sequentialTransfers[j],
                                                            imageOrderExtractors.IsNullOrEmpty() ? null : imageOrderExtractors[j]);
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
                 sequenceIds[i][j] = sequenceIdsForOneNotation[i];
 
@@ -184,7 +184,7 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
         return sequenceIds;
     }
 
-    public long[] GetSequenceIds(long[] matterIds,
+    public long[] GetSequenceIds(long[] researchObjectIds,
         Notation notation,
         Language? language,
         Translator? translator,
@@ -195,31 +195,31 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
         return notation.GetNature() switch
         {
             Nature.Literature => Db.CombinedSequenceEntities
-                                     .Where(l => matterIds.Contains(l.MatterId)
+                                     .Where(l => researchObjectIds.Contains(l.ResearchObjectId)
                                               && l.Notation == notation
                                               && l.Language == language
                                               && l.Translator == translator)
-                                     .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
+                                     .OrderBy(s => Array.IndexOf(researchObjectIds, s.ResearchObjectId))
                                      .Select(s => s.Id)
                                      .ToArray(),
             Nature.Music => Db.CombinedSequenceEntities
-                                     .Where(m => matterIds.Contains(m.MatterId)
+                                     .Where(m => researchObjectIds.Contains(m.ResearchObjectId)
                                               && m.Notation == notation
                                               && m.PauseTreatment == pauseTreatment
                                               && m.SequentialTransfer == sequentialTransfer)
-                                     .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
+                                     .OrderBy(s => Array.IndexOf(researchObjectIds, s.ResearchObjectId))
                                      .Select(s => s.Id)
                                      .ToArray(),
             Nature.Image => Db.ImageSequences
-                                     .Where(c => matterIds.Contains(c.MatterId)
+                                     .Where(c => researchObjectIds.Contains(c.ResearchObjectId)
                                               && c.Notation == notation
                                               && c.OrderExtractor == imageOrderExtractor)
-                                     .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
+                                     .OrderBy(s => Array.IndexOf(researchObjectIds, s.ResearchObjectId))
                                      .Select(s => s.Id)
                                      .ToArray(),
             _ => Db.CombinedSequenceEntities
-                                     .Where(c => matterIds.Contains(c.MatterId) && c.Notation == notation)
-                                     .OrderBy(s => Array.IndexOf(matterIds, s.MatterId))
+                                     .Where(c => researchObjectIds.Contains(c.ResearchObjectId) && c.Notation == notation)
+                                     .OrderBy(s => Array.IndexOf(researchObjectIds, s.ResearchObjectId))
                                      .Select(s => s.Id)
                                      .ToArray(),
         };
@@ -244,8 +244,8 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// Creates image sequences for given order reading trajectories
     /// if they are missing in database.
     /// </summary>
-    /// <param name="matterIds">
-    /// Matters ids.
+    /// <param name="researchObjectIds">
+    /// Research objects ids.
     /// </param>
     /// <param name="notations">
     /// notations of images.
@@ -253,27 +253,27 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// <param name="imageOrderExtractors">
     /// Reading trajectories.
     /// </param>
-    private void CreateMissingImageSequences(long[] matterIds, Notation[] notations, ImageOrderExtractor[] imageOrderExtractors)
+    private void CreateMissingImageSequences(long[] researchObjectIds, Notation[] notations, ImageOrderExtractor[] imageOrderExtractors)
     {
         if (notations[0].GetNature() == Nature.Image)
         {
             List<ImageSequence> existingSequences = Db.ImageSequences
-                .Where(s => matterIds.Contains(s.MatterId)
+                .Where(s => researchObjectIds.Contains(s.ResearchObjectId)
                          && notations.Contains(s.Notation)
                          && imageOrderExtractors.Contains(s.OrderExtractor))
                 .ToList();
 
-            for (int i = 0; i < matterIds.Length; i++)
+            for (int i = 0; i < researchObjectIds.Length; i++)
             {
                 for (int j = 0; j < notations.Length; j++)
                 {
-                    if (!existingSequences.Any(s => s.MatterId == matterIds[i]
+                    if (!existingSequences.Any(s => s.ResearchObjectId == researchObjectIds[i]
                                                  && s.Notation == notations[j]
                                                  && s.OrderExtractor == imageOrderExtractors[j]))
                     {
                         ImageSequence newImageSequence = new()
                         {
-                            MatterId = matterIds[i],
+                            ResearchObjectId = researchObjectIds[i],
                             Notation = notations[j],
                             OrderExtractor = imageOrderExtractors.IsNullOrEmpty() ? ImageOrderExtractor.LineLeftToRightTopToBottom : imageOrderExtractors[j]
                         };

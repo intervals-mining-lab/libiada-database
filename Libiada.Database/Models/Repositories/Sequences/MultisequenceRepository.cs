@@ -55,31 +55,31 @@ public class MultisequenceRepository
     /// <summary>
     /// Discards excess parts.
     /// </summary>
-    /// <param name="matterName">
-    /// The matter name.
+    /// <param name="researchObjectName">
+    /// The research object name.
     /// </param>
     /// <returns>
-    /// Returns matter name without excess parts.
+    /// Returns research object name without excess parts.
     /// </returns>
-    public static string GetMatterNameSplit(string matterName)
+    public static string GetResearchObjectNameSplit(string researchObjectName)
     {
-        string[] splitName = matterName.Split('|');
+        string[] splitName = researchObjectName.Split('|');
         return splitName.Length > 2 ? splitName[1].Trim() : splitName[0].Trim();
     }
 
     /// <summary>
     /// Identifies sequence number.
     /// </summary>
-    /// <param name="matterName">
-    /// The matter name.
+    /// <param name="researchObjectName">
+    /// The research object name.
     /// </param>
     /// <returns>
     /// Returns sequence number.
     /// </returns>
-    public static int GetSequenceNumberByName(string matterName)
+    public static int GetSequenceNumberByName(string researchObjectName)
     {
-        List<string> splitName = matterName.Split(' ').ToList();
-        if (matterName.Contains("chromosome"))
+        List<string> splitName = researchObjectName.Split(' ').ToList();
+        if (researchObjectName.Contains("chromosome"))
         {
             int chromosomeWordIndex = splitName.IndexOf("chromosome");
             if (splitName.IndexOf("chromosome") < splitName.Count - 1)
@@ -98,7 +98,7 @@ public class MultisequenceRepository
                 return 0;
             }
         }
-        else if (matterName.Contains("segment"))
+        else if (researchObjectName.Contains("segment"))
         {
             int segmentWordIndex = splitName.IndexOf("segment");
             if (splitName[segmentWordIndex + 1].Contains("RNA"))
@@ -114,7 +114,7 @@ public class MultisequenceRepository
                 return Convert.ToChar(splitName[segmentWordIndex + 1]) - 64;
             }
         }
-        else if (matterName.Contains("plasmid"))
+        else if (researchObjectName.Contains("plasmid"))
         {
             int plasmidWordIndex = splitName.IndexOf("plasmid");
             if (splitName[plasmidWordIndex + 1].Length > 1 && !splitName[plasmidWordIndex + 1].All(char.IsDigit))
@@ -150,20 +150,20 @@ public class MultisequenceRepository
     }
 
     /// <summary>
-    /// Sets multisequence numbers to matter array.
+    /// Sets multisequence numbers to research object array.
     /// </summary>
-    /// <param name="matters">
-    /// The array of matters.
+    /// <param name="researchObjects">
+    /// The array of research objects.
     /// </param>
-    public static void SetSequenceNumbers(Matter[] matters)
+    public static void SetSequenceNumbers(ResearchObject[] researchObjects)
     {
         short counter = 1;
 
-        foreach (Matter matter in matters)
+        foreach (ResearchObject researchObject in researchObjects)
         {
-            if (SequenceTypesFilter.Contains(matter.SequenceType))
+            if (SequenceTypesFilter.Contains(researchObject.SequenceType))
             {
-                matter.MultisequenceNumber = counter++;
+                researchObject.MultisequenceNumber = counter++;
             }
         }
     }

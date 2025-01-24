@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 /// <summary>
 /// Contains research objects, samples, texts, etc (one research object may be represented by several sequences).
 /// </summary>
-[Table("matter")]
-[Index("Nature", Name = "ix_matter_nature")]
-[Index("Name", "Nature", Name = "uk_matter", IsUnique = true)]
-[Index("Id", "Nature", Name = "uk_matter_nature", IsUnique = true)]
-[Index("MultisequenceId", "MultisequenceNumber", Name = "uk_matter_multisequence", IsUnique = true)]
+[Table("research_object")]
+[Index("Nature", Name = "ix_research_object_nature")]
+[Index("Name", "Nature", Name = "uk_research_object", IsUnique = true)]
+[Index("Id", "Nature", Name = "uk_research_object_nature", IsUnique = true)]
+[Index("MultisequenceId", "MultisequenceNumber", Name = "uk_research_object_multisequence", IsUnique = true)]
 [Comment("Contains research objects, samples, texts, etc (one research object may be represented by several sequences).")]
-public partial class Matter
+public partial class ResearchObject
 {
     /// <summary>
     /// Unique internal identifier of the research object.
@@ -124,11 +124,11 @@ public partial class Matter
 
     [ForeignKey(nameof(MultisequenceId))]
     [DeleteBehavior(DeleteBehavior.SetNull)]
-    [InverseProperty("Matters")]
+    [InverseProperty("ResearchObjects")]
     public virtual Multisequence? Multisequence { get; set; }
 
-    [ForeignKey("MatterId")]
-    [InverseProperty("Matters")]
+    [ForeignKey("ResearchObjectId")]
+    [InverseProperty("ResearchObjects")]
     public virtual ICollection<SequenceGroup> Groups { get; set; } = [];
 
     public virtual ICollection<CombinedSequenceEntity> Sequences { get; set; } = [];

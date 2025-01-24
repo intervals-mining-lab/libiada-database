@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 [NotMapped]
 public class LiteratureSequence : AbstractCombinedSequence
 {
-    
+
     /// <summary>
     /// Flag indicating if this sequence is in original language or was translated.
     /// </summary>
@@ -33,13 +33,13 @@ public class LiteratureSequence : AbstractCombinedSequence
         Order = Order,
         Nature = Nature.Literature,
         Notation = Notation,
-        MatterId = MatterId,
+        ResearchObjectId = ResearchObjectId,
         RemoteDb = RemoteDb,
         RemoteId = RemoteId,
-        Matter = Matter,
+        ResearchObject = ResearchObject,
         CreatorId = CreatorId,
         ModifierId = ModifierId,
-        Original =  Original,
+        Original = Original,
         Language = Language,
         Translator = Translator
     };

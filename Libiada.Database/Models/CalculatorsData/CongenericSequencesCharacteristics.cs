@@ -5,9 +5,9 @@ using Libiada.Core.Core;
 public record struct CongenericSequencesCharacteristics
 {
     /// <summary>
-    /// The matter name.
+    /// The research object name.
     /// </summary>
-    public string MatterName;
+    public string ResearchObjectName;
 
     /// <summary>
     /// The elements of the sequence.

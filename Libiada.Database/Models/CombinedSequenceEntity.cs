@@ -13,12 +13,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 /// Base table for all sequences that are stored in the database as alphabet and order.
 /// </summary>
 [Table("sequence")]
-[Index("MatterId", Name = "ix_sequence_research_object_id")]
+[Index(nameof(ResearchObjectId), Name = "ix_sequence_research_object_id")]
 [Index("Notation", Name = "ix_sequence_notation_id")]
-[Index("MatterId", "Language", Name = "ix_sequence_research_object_id_language")]
+[Index(nameof(ResearchObjectId), "Language", Name = "ix_sequence_research_object_id_language")]
 
 // TODO: add separate indexes with filters
-[Index("MatterId", "Notation", "PauseTreatment", "SequentialTransfer", "Language", "Translator", Name = "uk_sequence", IsUnique = true)]
+[Index(nameof(ResearchObjectId), "Notation", "PauseTreatment", "SequentialTransfer", "Language", "Translator", Name = "uk_sequence", IsUnique = true)]
 [Comment("Base table for all sequences that are stored in the database as alphabet and order.")]
 public class CombinedSequenceEntity : AbstractSequenceEntity
 {
@@ -28,7 +28,7 @@ public class CombinedSequenceEntity : AbstractSequenceEntity
     [Column("research_object_id")]
     [Display(Name = "Research object to which the sequence belongs")]
     [Comment("Id of the research object to which the sequence belongs.")]
-    public long MatterId { get; set; }
+    public long ResearchObjectId { get; set; }
 
     /// <summary>
     /// Sequence nature enum numeric value.
@@ -106,7 +106,7 @@ public class CombinedSequenceEntity : AbstractSequenceEntity
     public bool? SequentialTransfer { get; set; }
 
     [DeleteBehavior(DeleteBehavior.NoAction)]
-    public virtual Matter Matter { get; set; } = null!;
+    public virtual ResearchObject ResearchObject { get; set; } = null!;
 
     public MusicSequence ToMusicSequence() => new()
     {
@@ -114,10 +114,10 @@ public class CombinedSequenceEntity : AbstractSequenceEntity
         Alphabet = Alphabet,
         Order = Order,
         Notation = Notation,
-        MatterId = MatterId,
+        ResearchObjectId = ResearchObjectId,
         RemoteDb = RemoteDb,
         RemoteId = RemoteId,
-        Matter = Matter,
+        ResearchObject = ResearchObject,
         CreatorId = CreatorId,
         ModifierId = ModifierId,
         SequentialTransfer = SequentialTransfer ?? throw new Exception("Music sequence sequential transfer is not present in form data"),
@@ -130,10 +130,10 @@ public class CombinedSequenceEntity : AbstractSequenceEntity
         Alphabet = Alphabet,
         Order = Order,
         Notation = Notation,
-        MatterId = MatterId,
+        ResearchObjectId = ResearchObjectId,
         RemoteDb = RemoteDb,
         RemoteId = RemoteId,
-        Matter = Matter,
+        ResearchObject = ResearchObject,
         CreatorId = CreatorId,
         ModifierId = ModifierId,
         Partial = Partial ?? throw new Exception("Genetic sequence partial flag is not present in form data")
@@ -145,10 +145,10 @@ public class CombinedSequenceEntity : AbstractSequenceEntity
         Alphabet = Alphabet,
         Order = Order,
         Notation = Notation,
-        MatterId = MatterId,
+        ResearchObjectId = ResearchObjectId,
         RemoteDb = RemoteDb,
         RemoteId = RemoteId,
-        Matter = Matter,
+        ResearchObject = ResearchObject,
         CreatorId = CreatorId,
         ModifierId = ModifierId,
         Original = Original ?? throw new Exception("Literature sequence original flag is not present in form data"),

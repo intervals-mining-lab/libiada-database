@@ -23,7 +23,7 @@ public class DataSequenceRepository : SequenceImporter
     }
 
     /// <summary>
-    /// Create data sequence and matter.
+    /// Create data sequence and research object.
     /// </summary>
     /// <param name="sequence">
     /// The data sequence to create in database.
@@ -40,7 +40,7 @@ public class DataSequenceRepository : SequenceImporter
 
         string[] text = stringSequence.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
 
-       string[] cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToArray();
+        string[] cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToArray();
 
         List<IBaseObject> elements = new(cleanedSequence.Length);
 
@@ -65,7 +65,7 @@ public class DataSequenceRepository : SequenceImporter
         long[] alphabet = ElementRepository.ToDbElements(libiadaSequence.Alphabet, sequence.Notation, true);
         CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
+        ResearchObjectRepository.CreateOrExtractExistingResearchObjectForSequence(dbSequence);
 
         Create(sequence);
     }

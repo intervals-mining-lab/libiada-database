@@ -11,9 +11,9 @@ using Libiada.Core.Extensions;
 using Libiada.Database.Models.Repositories.Catalogs;
 
 /// <summary>
-/// The matter repository.
+/// The research object repository.
 /// </summary>
-public class MatterRepository : IMatterRepository
+public class ResearchObjectRepository : IResearchObjectRepository
 {
     /// <summary>
     /// GenBank date formats.
@@ -27,25 +27,25 @@ public class MatterRepository : IMatterRepository
     private readonly Cache cache;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MatterRepository"/> class.
+    /// Initializes a new instance of the <see cref="ResearchObjectRepository"/> class.
     /// </summary>
     /// <param name="db">
     /// Database context.
     /// </param>
-    public MatterRepository(LibiadaDatabaseEntities db, Cache cache)
+    public ResearchObjectRepository(LibiadaDatabaseEntities db, Cache cache)
     {
         this.db = db;
         this.cache = cache;
     }
 
     /// <summary>
-    /// Determines group and sequence type params for matter.
+    /// Determines group and sequence type parameters for a research object.
     /// </summary>
     /// <param name="name">
-    /// The matter's name.
+    /// The research object's name.
     /// </param>
     /// <param name="nature">
-    /// Nature of the matter.
+    /// Nature of the research object.
     /// </param>
     /// <returns>
     /// Tuple of <see cref="Group"/> and <see cref="SequenceType"/>.
@@ -122,35 +122,35 @@ public class MatterRepository : IMatterRepository
     }
 
     /// <summary>
-    /// Creates new matter or extracts existing matter from database.
+    /// Creates new researchoObject or extracts existing research object from database.
     /// </summary>
     /// <param name="sequence">
-    /// The sequence to be used for matter creation or extraction.
+    /// The sequence to be used for research object creation or extraction.
     /// </param>
-    public void CreateOrExtractExistingMatterForSequence(CombinedSequenceEntity sequence)
+    public void CreateOrExtractExistingResearchObjectForSequence(CombinedSequenceEntity sequence)
     {
-        Matter matter = sequence.Matter;
-        if (matter != null)
+        ResearchObject researchObject = sequence.ResearchObject;
+        if (researchObject != null)
         {
-            matter.Sequences = new Collection<CombinedSequenceEntity>();
-            sequence.MatterId = SaveToDatabase(matter);
+            researchObject.Sequences = new Collection<CombinedSequenceEntity>();
+            sequence.ResearchObjectId = SaveToDatabase(researchObject);
         }
         else
         {
-            sequence.Matter = db.Matters.Single(m => m.Id == sequence.MatterId);
+            sequence.ResearchObject = db.ResearchObjects.Single(m => m.Id == sequence.ResearchObjectId);
         }
     }
 
     /// <summary>
-    /// Creates matter from genBank metadata.
+    /// Creates research object from genBank metadata.
     /// </summary>
     /// <param name="metadata">
     /// The metadata.
     /// </param>
     /// <returns>
-    /// The <see cref="Matter"/>.
+    /// The <see cref="ResearchObject"/>.
     /// </returns>
-    public Matter CreateMatterFromGenBankMetadata(GenBankMetadata metadata)
+    public ResearchObject CreateResearchObjectFromGenBankMetadata(GenBankMetadata metadata)
     {
         FeatureItem[] sources = metadata.Features.All.Where(f => f.Key == "source").ToArray();
         string collectionCountry = SequenceAttributeRepository.GetAttributeSingleValue(sources, "country");
@@ -167,35 +167,35 @@ public class MatterRepository : IMatterRepository
         string commonName = metadata.Source.CommonName;
         string definition = metadata.Definition;
 
-        Matter matter = new()
+        ResearchObject researchObject = new()
         {
-            Name = $"{ExtractMatterName(species, commonName, definition)} | {metadata.Version.CompoundAccession}",
+            Name = $"{ExtractResearchObjectName(species, commonName, definition)} | {metadata.Version.CompoundAccession}",
             Nature = Nature.Genetic,
             CollectionCountry = collectionCountry,
             CollectionLocation = collectionCoordinates,
             CollectionDate = hasCollectionDate ? DateOnly.FromDateTime(collectionDate) : null
         };
 
-        (matter.Group, matter.SequenceType) = GetGroupAndSequenceType($"{species} {commonName} {definition}", matter.Nature);
+        (researchObject.Group, researchObject.SequenceType) = GetGroupAndSequenceType($"{species} {commonName} {definition}", researchObject.Nature);
 
-        return matter;
+        return researchObject;
     }
 
     /// <summary>
-    /// Adds given matter to database.
+    /// Adds given research object to database.
     /// </summary>
-    /// <param name="matter">
-    /// The matter.
+    /// <param name="researchObject">
+    /// The research object.
     /// </param>
     /// <returns>
     /// The <see cref="long"/>.
     /// </returns>
-    public long SaveToDatabase(Matter matter)
+    public long SaveToDatabase(ResearchObject researchObject)
     {
-        db.Matters.Add(matter);
+        db.ResearchObjects.Add(researchObject);
         db.SaveChanges();
         cache.Clear();
-        return matter.Id;
+        return researchObject.Id;
     }
 
     /// <summary>
@@ -234,7 +234,7 @@ public class MatterRepository : IMatterRepository
     /// <exception cref="Exception">
     /// Thrown if all name fields are contradictory.
     /// </exception>
-    private static string ExtractMatterName(string species, string commonName, string definition)
+    private static string ExtractResearchObjectName(string species, string commonName, string definition)
     {
         species = RemoveSequenceTypeFromName(species.GetLargestRepeatingSubstring());
         commonName = RemoveSequenceTypeFromName(commonName);

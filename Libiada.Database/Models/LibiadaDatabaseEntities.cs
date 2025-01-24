@@ -49,7 +49,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
     public virtual DbSet<ImageSequence> ImageSequences { get; set; }
 
-    public virtual DbSet<Matter> Matters { get; set; }
+    public virtual DbSet<ResearchObject> ResearchObjects { get; set; }
 
     public virtual DbSet<Measure> Measures { get; set; }
 
@@ -189,9 +189,9 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
             entity.HasIndex(e => e.Alphabet, "ix_sequence_alphabet").HasAnnotation("Npgsql:IndexMethod", "gin");
 
-            entity.HasOne(s => s.Matter)
+            entity.HasOne(s => s.ResearchObject)
                   .WithMany(r => r.Sequences)
-                  .HasForeignKey(s => new { s.MatterId, s.Nature })
+                  .HasForeignKey(s => new { s.ResearchObjectId, s.Nature })
                   .HasPrincipalKey(r => new { r.Id, r.Nature });
 
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -256,7 +256,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
         {
         });
 
-        modelBuilder.Entity<Matter>(entity =>
+        modelBuilder.Entity<ResearchObject>(entity =>
         {
             entity.ToTable(t => t.HasCheckConstraint("chk_multisequence_reference",
                 "(multisequence_id IS NULL AND multisequence_number IS NULL) OR (multisequence_id IS NOT NULL AND multisequence_number IS NOT NULL)"));
@@ -362,12 +362,12 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
             entity.Property(e => e.Created).HasDefaultValueSql("now()");
             entity.Property(e => e.Modified).HasDefaultValueSql("now()");
 
-            entity.HasMany(d => d.Matters)
+            entity.HasMany(d => d.ResearchObjects)
                   .WithMany(p => p.Groups)
                   .UsingEntity("sequence_group_research_object",
                                j =>
                                  {
-                                     j.Property("MatterId").HasColumnName("research_object_id");
+                                     j.Property("ResearchObjectId").HasColumnName("research_object_id");
                                      j.Property("GroupId").HasColumnName("group_id");
                                  });
         });

@@ -72,7 +72,7 @@ public class TaskTypeTests
     [TestCase((TaskType)21, "OrderTransformer")]
     [TestCase((TaskType)22, "SequenceCheck")]
     [TestCase((TaskType)23, "SequencesUpload")]
-    [TestCase((TaskType)24, "MattersImport")]
+    [TestCase((TaskType)24, "ResearchObjectImport")]
     [TestCase((TaskType)25, "SequencePrediction")]
     [TestCase((TaskType)26, "BatchPoemsImport")]
     [TestCase((TaskType)27, "OrderCalculation")]

@@ -33,7 +33,7 @@ public class MultisequenceRepositoryTests
         string[] names = testData[testDataIndex];
         for (int i = 0; i < names.Length; i++)
         {
-            int result = MultisequenceRepository.GetSequenceNumberByName(MultisequenceRepository.GetMatterNameSplit(names[i]));
+            int result = MultisequenceRepository.GetSequenceNumberByName(MultisequenceRepository.GetResearchObjectNameSplit(names[i]));
             Assert.That(expectedResults[i], Is.EqualTo(result));
         }
     }

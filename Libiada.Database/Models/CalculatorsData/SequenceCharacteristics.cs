@@ -6,12 +6,12 @@
 public readonly record struct SequenceCharacteristics
 {
     /// <summary>
-    /// The matter name.
+    /// The research object name.
     /// </summary>
-    public readonly string MatterName { get; init; }
+    public readonly string ResearchObjectName { get; init; }
 
     /// <summary>
-    /// Id of the sequence group the matter belongs to.
+    /// Id of the sequence group the research object belongs to.
     /// </summary>
     /// <value>
     /// The sequence group id as <see cref="int"/>.

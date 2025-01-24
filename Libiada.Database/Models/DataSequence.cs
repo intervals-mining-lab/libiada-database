@@ -15,10 +15,10 @@ public class DataSequence : AbstractCombinedSequence
         Alphabet = Alphabet,
         Order = Order,
         Notation = Notation,
-        MatterId = MatterId,
+        ResearchObjectId = ResearchObjectId,
         RemoteDb = RemoteDb,
         RemoteId = RemoteId,
-        Matter = Matter,
+        ResearchObject = ResearchObject,
         CreatorId = CreatorId,
         ModifierId = ModifierId
     };

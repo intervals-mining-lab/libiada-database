@@ -44,7 +44,7 @@ public enum TaskType : byte
     CustomSequenceOrderTransformationCalculation = 6,
 
     /// <summary>
-    /// Matter creation and sequence import task.
+    /// Research object creation and sequence import task.
     /// </summary>
     [Display(Name = "Music files processing")]
     MusicFiles = 7,
@@ -140,16 +140,16 @@ public enum TaskType : byte
     SequenceCheck = 22,
 
     /// <summary>
-    /// Sequences import for existing matter.
+    /// Sequences import for existing research object.
     /// </summary>
     [Display(Name = "Sequence upload")]
     SequencesUpload = 23,
 
     /// <summary>
-    /// Matter creation and sequence import task.
+    /// Research object creation and sequence import task.
     /// </summary>
     [Display(Name = "Sequence import")]
-    MattersImport = 24,
+    ResearchObjectImport = 24,
 
     /// <summary>
     /// The sequence prediction task.

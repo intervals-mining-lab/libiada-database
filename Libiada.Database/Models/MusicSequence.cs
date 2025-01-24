@@ -9,7 +9,7 @@ using Libiada.Core.Music;
 /// Contains sequences that represent musical works in form of note, fmotive or measure sequences.
 /// </summary>
 [NotMapped]
-public class MusicSequence :  AbstractCombinedSequence
+public class MusicSequence : AbstractCombinedSequence
 {
     /// <summary>
     /// Pause treatment enum numeric value.
@@ -30,10 +30,10 @@ public class MusicSequence :  AbstractCombinedSequence
         Order = Order,
         Nature = Nature.Music,
         Notation = Notation,
-        MatterId = MatterId,
+        ResearchObjectId = ResearchObjectId,
         RemoteDb = RemoteDb,
         RemoteId = RemoteId,
-        Matter = Matter,
+        ResearchObject = ResearchObject,
         CreatorId = CreatorId,
         ModifierId = ModifierId,
         SequentialTransfer = SequentialTransfer,

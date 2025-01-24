@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 /// Contains information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables.
 /// </summary>
 [Table("image_sequence")]
-[Index("MatterId", Name = "ix_image_sequence_research_object_id")]
+[Index(nameof(ResearchObjectId), Name = "ix_image_sequence_research_object_id")]
 [Comment("Contains information on image transformations and order extraction. Does not store an actual order of image and used for reference by characteristics tables.")]
 public partial class ImageSequence : AbstractSequenceEntity
 {
@@ -45,9 +45,9 @@ public partial class ImageSequence : AbstractSequenceEntity
     /// </summary>
     [Column("research_object_id")]
     [Comment("Id of the research object (image) to which the sequence belongs.")]
-    public long MatterId { get; set; }
+    public long ResearchObjectId { get; set; }
 
-    [ForeignKey(nameof(MatterId))]
+    [ForeignKey(nameof(ResearchObjectId))]
     [DeleteBehavior(DeleteBehavior.NoAction)]
-    public virtual Matter Matter { get; set; } = null!;
+    public virtual ResearchObject ResearchObject { get; set; } = null!;
 }

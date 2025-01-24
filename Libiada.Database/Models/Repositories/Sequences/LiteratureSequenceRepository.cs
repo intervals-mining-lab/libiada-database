@@ -66,7 +66,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
 
         CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
+        ResearchObjectRepository.CreateOrExtractExistingResearchObjectForSequence(dbSequence);
 
         sequence.Alphabet = ElementRepository.ToDbElements(libiadSequence.Alphabet, sequence.Notation, true);
         sequence.Order = libiadSequence.Order;

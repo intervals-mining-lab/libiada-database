@@ -3,39 +3,39 @@
 using Microsoft.EntityFrameworkCore;
 
 /// <summary>
-/// Custom cache for storing matter table data.
+/// Custom cache for storing research objects table data.
 /// </summary>
 public class Cache
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
-    private List<Matter>? matters;
+    private List<ResearchObject>? researchObjects;
     private readonly object syncRoot = new();
 
     /// <summary>
-    /// The list of matters.
+    /// The list of research objects.
     /// </summary>
-    public List<Matter> Matters 
+    public List<ResearchObject> ResearchObjects
     {
         get
         {
-            if(matters == null)
+            if (researchObjects == null)
             {
                 lock (syncRoot)
                 {
-                    if (matters == null)
+                    if (researchObjects == null)
                     {
                         using var db = dbFactory.CreateDbContext();
-                        matters = db.Matters.ToList();
+                        researchObjects = db.ResearchObjects.ToList();
                     }
                 }
             }
-            
-            return matters;
+
+            return researchObjects;
         }
     }
 
     /// <summary>
-    /// Initializes list of matters.
+    /// Initializes list of research objects.
     /// </summary>
     public Cache(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
     {
@@ -49,7 +49,7 @@ public class Cache
     {
         lock (syncRoot)
         {
-            matters = null;
+            researchObjects = null;
         }
     }
 }

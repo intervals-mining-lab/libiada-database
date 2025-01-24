@@ -50,7 +50,7 @@ public abstract class AbstractCombinedSequence
     /// Id of the research object to which the sequence belongs.
     /// </summary>
     [Display(Name = "Research object to which the sequence belongs")]
-    public long MatterId { get; set; }
+    public long ResearchObjectId { get; set; }
 
     /// <summary>
     /// Notation of the sequence (words, letters, notes, nucleotides, etc.).
@@ -68,5 +68,5 @@ public abstract class AbstractCombinedSequence
     /// </summary>
     public int[] Order { get; set; } = null!;
 
-    public virtual Matter Matter { get; set; } = null!;
+    public virtual ResearchObject ResearchObject { get; set; } = null!;
 }

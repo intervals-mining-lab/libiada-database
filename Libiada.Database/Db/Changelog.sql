@@ -5052,4 +5052,20 @@ ALTER SEQUENCE element_new_id_seq RENAME TO element_id_seq;
 
 DROP SEQUENCE elements_id_seq;
 
+
+--24.01.2025
+-- Renaming matter to research object.
+
+ALTER TABLE matter RENAME TO research_object;
+
+ALTER INDEX ix_matter_nature RENAME TO ix_research_object_nature;
+COMMENT ON INDEX ix_research_object_nature IS 'Index in nature column in research_object table.';
+ALTER TABLE research_object RENAME CONSTRAINT fk_matter_multisequence TO fk_research_object_multisequence;
+ALTER TABLE research_object RENAME CONSTRAINT pk_matter TO pk_research_object;
+ALTER TABLE research_object RENAME CONSTRAINT uk_matter TO uk_research_object;
+ALTER TABLE research_object RENAME CONSTRAINT uk_matter_multisequence TO uk_research_object_multisequence;
+ALTER TABLE research_object RENAME CONSTRAINT uk_matter_nature TO uk_research_object_nature;
+ALTER TRIGGER tgiu_matter_modified ON research_object RENAME TO tgiu_research_object_modified;
+COMMENT ON TRIGGER tgiu_research_object_modified ON research_object IS 'Trigger for rewriting created and modified fields with actual dates.';
+
 COMMIT;

@@ -69,7 +69,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
 
         CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
+        ResearchObjectRepository.CreateOrExtractExistingResearchObjectForSequence(dbSequence);
 
         Sequence notesSequence = ConvertCongenericScoreTrackToNotesSequence(tempTrack.CongenericScoreTracks[0]);
         long[] notesAlphabet = ElementRepository.GetOrCreateNotesInDb(notesSequence.Alphabet);

@@ -6,45 +6,24 @@
 /// <remarks>
 /// Initializes a new instance of the <see cref="SequenceData"/> struct.
 /// </remarks>
-/// <param name="matterId">
-/// The matter id.
+/// <param name="ResearchObjectId">
+/// The research object id.
 /// </param>
-/// <param name="matterName">
-/// The matter name.
+/// <param name="ResearchObjectName">
+/// The research object name.
 /// </param>
-/// <param name="remoteId">
+/// <param name="RemoteId">
 /// Sequence web api id.
 /// </param>
-/// <param name="characteristic">
+/// <param name="Characteristic">
 /// The characteristic.
 /// </param>
-/// <param name="subsequencesData">
+/// <param name="SubsequencesData">
 /// The genes data.
 /// </param>
-public readonly record struct SequenceData(long matterId, string matterName, string remoteId, double characteristic, SubsequenceData[] subsequencesData)
-{
-    /// <summary>
-    /// The matter id.
-    /// </summary>
-    public readonly long MatterId = matterId;
-
-    /// <summary>
-    /// The matter name.
-    /// </summary>
-    public readonly string MatterName = matterName;
-
-    /// <summary>
-    /// Sequence web api id.
-    /// </summary>
-    public readonly string RemoteId = remoteId;
-
-    /// <summary>
-    /// The characteristic.
-    /// </summary>
-    public readonly double Characteristic = characteristic;
-
-    /// <summary>
-    /// The genes data.
-    /// </summary>
-    public readonly SubsequenceData[] SubsequencesData = subsequencesData;
-}
+public readonly record struct SequenceData(
+    long ResearchObjectId,
+    string ResearchObjectName,
+    string RemoteId,
+    double Characteristic,
+    SubsequenceData[] SubsequencesData);

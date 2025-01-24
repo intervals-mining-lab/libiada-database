@@ -78,7 +78,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
 
         CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
 
-        MatterRepository.CreateOrExtractExistingMatterForSequence(dbSequence);
+        ResearchObjectRepository.CreateOrExtractExistingResearchObjectForSequence(dbSequence);
         sequence.Alphabet = ElementRepository.ToDbElements(libiadaSequence.Alphabet, sequence.Notation, false);
         sequence.Order = libiadaSequence.Order;
 
@@ -103,23 +103,23 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// <summary>
     /// Extracts nucleotide sequences ids from database.
     /// </summary>
-    /// <param name="matterIds">
-    /// The matter ids.
+    /// <param name="researchObjectIds">
+    /// The research object ids.
     /// </param>
     /// <returns>
     /// The <see cref="T:long[]"/>.
     /// </returns>
-    public long[] GetNucleotideSequenceIds(long[] matterIds)
+    public long[] GetNucleotideSequenceIds(long[] researchObjectIds)
     {
-        long[] sequencesIds = new long[matterIds.Length];
+        long[] sequencesIds = new long[researchObjectIds.Length];
         CombinedSequenceEntity[] sequences = Db.CombinedSequenceEntities
-                                               .Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides)
+                                               .Where(c => researchObjectIds.Contains(c.ResearchObjectId) && c.Notation == Notation.Nucleotides)
                                                .ToArray();
-        
+
         // TODO: use orderby insted of cycle
-        for (int i = 0; i < matterIds.Length; i++)
+        for (int i = 0; i < researchObjectIds.Length; i++)
         {
-            sequencesIds[i] = sequences.Single(c => c.MatterId == matterIds[i]).Id;
+            sequencesIds[i] = sequences.Single(c => c.ResearchObjectId == researchObjectIds[i]).Id;
         }
 
         return sequencesIds;

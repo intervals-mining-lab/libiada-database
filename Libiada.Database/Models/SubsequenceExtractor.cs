@@ -170,24 +170,26 @@ public class SubsequenceExtractor
     {
         Subsequence[] subsequences;
         Dictionary<long, ComposedSequence> sequences;
-        Dictionary<long, string> mattersNames;
+        Dictionary<long, string> researchObjectsNames;
         subsequences = db.Subsequences.Where(s => subsequencesIds.Contains(s.Id))
                          .Include(s => s.Position)
                          .Include(s => s.SequenceAttribute)
                          .ToArray();
         sequences = GetSubsequencesSequences(subsequences);
         long[] parentIds = subsequences.Select(s => s.SequenceId).ToArray();
-        mattersNames = db.CombinedSequenceEntities
-                         .Include(ds => ds.Matter)
+        researchObjectsNames = db.CombinedSequenceEntities
+                         .Include(ds => ds.ResearchObject)
                          .Where(ds => parentIds.Contains(ds.Id))
-                         .ToDictionary(ds => ds.Id, ds => ds.Matter.Name);
+                         .ToDictionary(ds => ds.Id, ds => ds.ResearchObject.Name);
 
         IBioSequence[] bioSequences = new IBioSequence[subsequences.Length];
         for (int i = 0; i < subsequences.Length; i++)
         {
             Subsequence subsequence = subsequences[i];
-            BioSequence bioSequence = new(Bio.Alphabets.DNA, sequences[subsequence.Id].ToString());
-            bioSequence.ID = $"{mattersNames[subsequence.SequenceId].Replace(' ', '_')}?from={subsequence.Start}to={subsequence.Start + subsequence.Length}";
+            BioSequence bioSequence = new(Bio.Alphabets.DNA, sequences[subsequence.Id].ToString())
+            {
+                ID = $"{researchObjectsNames[subsequence.SequenceId].Replace(' ', '_')}?from={subsequence.Start}to={subsequence.Start + subsequence.Length}"
+            };
             bioSequences[i] = bioSequence;
         }
 

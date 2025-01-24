@@ -3,10 +3,10 @@
 using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
-/// The matter repository tests.
+/// The research object repository tests.
 /// </summary>
 [TestFixture]
-public class MatterRepositoryTests
+public class ResearchObjectRepositoryTests
 {
     /// <summary>
     /// Determining of group and sequence type from name test.
@@ -38,7 +38,7 @@ public class MatterRepositoryTests
     public void GetGroupAndSequenceTypeTest(string name, Nature nature, Group expectedGroup, SequenceType expectedSequenceType)
     {
 
-        (Group group, SequenceType sequenceType) = MatterRepository.GetGroupAndSequenceType(name, nature);
+        (Group group, SequenceType sequenceType) = ResearchObjectRepository.GetGroupAndSequenceType(name, nature);
 
         Assert.That(group, Is.EqualTo(expectedGroup));
         Assert.That(sequenceType, Is.EqualTo(expectedSequenceType));

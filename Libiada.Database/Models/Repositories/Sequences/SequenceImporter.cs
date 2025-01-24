@@ -13,9 +13,9 @@ public abstract class SequenceImporter : IDisposable
     protected readonly LibiadaDatabaseEntities Db;
 
     /// <summary>
-    /// The matters repository.
+    /// The research objects repository.
     /// </summary>
-    protected readonly MatterRepository MatterRepository;
+    protected readonly ResearchObjectRepository ResearchObjectRepository;
 
     /// <summary>
     /// The elements repository.
@@ -31,7 +31,7 @@ public abstract class SequenceImporter : IDisposable
     protected SequenceImporter(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache)
     {
         Db = dbFactory.CreateDbContext();
-        MatterRepository = new MatterRepository(Db, cache);
+        ResearchObjectRepository = new ResearchObjectRepository(Db, cache);
         ElementRepository = new ElementRepository(Db);
     }
 

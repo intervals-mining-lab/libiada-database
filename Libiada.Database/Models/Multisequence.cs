@@ -37,5 +37,5 @@ public partial class Multisequence
     public Nature Nature { get; set; }
 
     [InverseProperty("Multisequence")]
-    public virtual ICollection<Matter> Matters { get; set; } = [];
+    public virtual ICollection<ResearchObject> ResearchObjects { get; set; } = [];
 }
