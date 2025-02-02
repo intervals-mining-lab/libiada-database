@@ -2,10 +2,10 @@
 
 namespace Libiada.Database.Models.Repositories.Sequences;
 
-public class CombinedSequenceEntityRepositoryFactory(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ResearchObjectsCache cache) : ICombinedSequenceEntityRepositoryFactory
+public class CombinedSequenceEntityRepositoryFactory(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, IResearchObjectsCache cache) : ICombinedSequenceEntityRepositoryFactory
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory = dbFactory;
-    private readonly ResearchObjectsCache cache = cache;
+    private readonly IResearchObjectsCache cache = cache;
 
     public ICombinedSequenceEntityRepository Create() => new CombinedSequenceEntityRepository(dbFactory, cache);
 }
