@@ -1,15 +1,19 @@
-﻿namespace Libiada.Database.Models;
+﻿namespace Libiada.Database.Models.Repositories.Sequences;
 
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 /// <summary>
 /// Custom cache for storing research objects table data.
 /// </summary>
-public class Cache
+/// <remarks>
+/// Initializes list of research objects.
+/// </remarks>
+public class ResearchObjectsCache(IDbContextFactory<LibiadaDatabaseEntities> dbFactory) : IResearchObjectsCache
 {
-    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory;
+    private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory = dbFactory;
     private List<ResearchObject>? researchObjects;
-    private readonly object syncRoot = new();
+    private readonly Lock syncRoot = new();
 
     /// <summary>
     /// The list of research objects.
@@ -32,14 +36,6 @@ public class Cache
 
             return researchObjects;
         }
-    }
-
-    /// <summary>
-    /// Initializes list of research objects.
-    /// </summary>
-    public Cache(IDbContextFactory<LibiadaDatabaseEntities> dbFactory)
-    {
-        this.dbFactory = dbFactory;
     }
 
     /// <summary>

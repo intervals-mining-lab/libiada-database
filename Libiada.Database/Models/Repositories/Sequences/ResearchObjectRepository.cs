@@ -24,7 +24,7 @@ public class ResearchObjectRepository : IResearchObjectRepository
     /// Database context.
     /// </summary>
     private readonly LibiadaDatabaseEntities db;
-    private readonly Cache cache;
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ResearchObjectRepository"/> class.
@@ -32,7 +32,7 @@ public class ResearchObjectRepository : IResearchObjectRepository
     /// <param name="db">
     /// Database context.
     /// </param>
-    public ResearchObjectRepository(LibiadaDatabaseEntities db, Cache cache)
+    public ResearchObjectRepository(LibiadaDatabaseEntities db, IResearchObjectsCache cache)
     {
         this.db = db;
         this.cache = cache;

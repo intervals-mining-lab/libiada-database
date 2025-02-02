@@ -5052,7 +5052,6 @@ ALTER SEQUENCE element_new_id_seq RENAME TO element_id_seq;
 
 DROP SEQUENCE elements_id_seq;
 
-
 --24.01.2025
 -- Renaming matter to research object.
 

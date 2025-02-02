@@ -18,7 +18,7 @@ public class DataSequenceRepository : SequenceImporter
     /// <param name="dbFactory">
     /// Database context factory.
     /// </param>
-    public DataSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
+    public DataSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ResearchObjectsCache cache) : base(dbFactory, cache)
     {
     }
 

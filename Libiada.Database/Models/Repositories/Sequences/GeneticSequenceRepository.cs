@@ -17,7 +17,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// <param name="dbFactory">
     /// Database context factory.
     /// </param>
-    public GeneticSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
+    public GeneticSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ResearchObjectsCache cache) : base(dbFactory, cache)
     {
     }
 

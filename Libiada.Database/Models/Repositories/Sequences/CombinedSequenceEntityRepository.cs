@@ -28,7 +28,7 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// <param name="dbFactory">
     /// Database context factory.
     /// </param>
-    public CombinedSequenceEntityRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
+    public CombinedSequenceEntityRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, IResearchObjectsCache cache) : base(dbFactory, cache)
     {
     }
 

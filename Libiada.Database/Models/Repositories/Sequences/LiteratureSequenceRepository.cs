@@ -18,7 +18,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// <param name="dbFactory">
     /// Database context factory.
     /// </param>
-    public LiteratureSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
+    public LiteratureSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ResearchObjectsCache cache) : base(dbFactory, cache)
     {
     }
 

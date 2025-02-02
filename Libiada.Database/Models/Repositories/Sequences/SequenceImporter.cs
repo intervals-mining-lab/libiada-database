@@ -28,7 +28,7 @@ public abstract class SequenceImporter : IDisposable
     /// <param name="dbFactory">
     /// Database context factory.
     /// </param>
-    protected SequenceImporter(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache)
+    protected SequenceImporter(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, IResearchObjectsCache cache)
     {
         Db = dbFactory.CreateDbContext();
         ResearchObjectRepository = new ResearchObjectRepository(Db, cache);

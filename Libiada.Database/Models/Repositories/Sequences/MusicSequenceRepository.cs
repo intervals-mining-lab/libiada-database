@@ -34,7 +34,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// <param name="dbFactory">
     /// Database context factory.
     /// </param>
-    public MusicSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, Cache cache) : base(dbFactory, cache)
+    public MusicSequenceRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, ResearchObjectsCache cache) : base(dbFactory, cache)
     {
         FmotifRepository = new FmotifRepository(Db);
         MeasureRepository = new MeasureRepository(Db);
