@@ -195,10 +195,6 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
                   .HasPrincipalKey(r => new { r.Id, r.Nature });
 
             //entity.Property(e => e.Id).HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-            entity.Property(e => e.Partial).HasDefaultValue(false);
-            entity.Property(e => e.Original).HasDefaultValue(true);
-            entity.Property(e => e.SequentialTransfer).HasDefaultValue(false);
         });
 
         modelBuilder.Entity<CongenericCharacteristicLink>(entity =>

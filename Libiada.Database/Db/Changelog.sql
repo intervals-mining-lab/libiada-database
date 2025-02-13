@@ -5052,7 +5052,7 @@ ALTER SEQUENCE element_new_id_seq RENAME TO element_id_seq;
 
 DROP SEQUENCE elements_id_seq;
 
---24.01.2025
+-- 24.01.2025
 -- Renaming matter to research object.
 
 ALTER TABLE matter RENAME TO research_object;
@@ -5066,5 +5066,14 @@ ALTER TABLE research_object RENAME CONSTRAINT uk_matter_multisequence TO uk_rese
 ALTER TABLE research_object RENAME CONSTRAINT uk_matter_nature TO uk_research_object_nature;
 ALTER TRIGGER tgiu_matter_modified ON research_object RENAME TO tgiu_research_object_modified;
 COMMENT ON TRIGGER tgiu_research_object_modified ON research_object IS 'Trigger for rewriting created and modified fields with actual dates.';
+
+-- 13.02.2025
+-- Drop some default values in sequece table because ef core insertrs them instead of NULLs.
+
+ALTER TABLE sequence ALTER COLUMN original DROP DEFAULT;
+ALTER TABLE sequence ALTER COLUMN translator DROP DEFAULT;
+ALTER TABLE sequence ALTER COLUMN pause_treatment DROP DEFAULT;
+ALTER TABLE sequence ALTER COLUMN sequential_transfer DROP DEFAULT;
+ALTER TABLE sequence ALTER COLUMN partial DROP DEFAULT;
 
 COMMIT;
