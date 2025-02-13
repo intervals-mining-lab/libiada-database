@@ -76,6 +76,7 @@ public abstract class AbstractSequenceEntity
     [ForeignKey(nameof(ModifierId))]
     public virtual AspNetUser Modifier { get; set; } = null!;
 
+    [InverseProperty("Sequence")]
     public virtual ICollection<SequenceAttribute> SequenceAttributes { get; set; } = [];
 
     [InverseProperty("ParentSequence")]

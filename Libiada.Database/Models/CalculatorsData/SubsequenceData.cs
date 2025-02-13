@@ -78,7 +78,7 @@ public record struct SubsequenceData
         RemoteId = subsequence.RemoteId;
         Partial = subsequence.Partial;
 
-        Position[] positions = subsequence.Position.ToArray();
+        Position[] positions = subsequence.Positions.ToArray();
 
         Starts = new int[positions.Length + 1];
         Starts[0] = subsequence.Start;

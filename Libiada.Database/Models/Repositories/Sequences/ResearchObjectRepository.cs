@@ -199,13 +199,6 @@ public class ResearchObjectRepository : IResearchObjectRepository
     }
 
     /// <summary>
-    /// The dispose.
-    /// </summary>
-    public void Dispose()
-    {
-    }
-
-    /// <summary>
     /// Removes sequence type from the the sequence name.
     /// </summary>
     /// <param name="name">The GenBank sequence name.</param>

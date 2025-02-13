@@ -64,8 +64,5 @@ public partial class Subsequence : AbstractSequenceEntity
     public virtual AbstractSequenceEntity ParentSequence { get; set; } = null!;
 
     [InverseProperty("Subsequence")]
-    public virtual ICollection<Position> Position { get; set; } = [];
-
-    [InverseProperty("Sequence")]
-    public virtual ICollection<SequenceAttribute> SequenceAttribute { get; set; } = [];
+    public virtual ICollection<Position> Positions { get; set; } = [];
 }

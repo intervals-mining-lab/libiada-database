@@ -2,7 +2,6 @@
 
 public record class AccessionUpdateSearchResult
 {
-
     public required string LocalAccession { get; init; }
     public string? RemoteName { get; set; }
     public required string Name { get; init; }

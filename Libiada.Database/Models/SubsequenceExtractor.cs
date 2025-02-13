@@ -100,8 +100,8 @@ public class SubsequenceExtractor
         if (allFeatures.Length == features.Count)
         {
             return db.Subsequences.Where(s => s.SequenceId == sequenceId)
-                .Include(s => s.Position)
-                .Include(s => s.SequenceAttribute)
+                .Include(s => s.Positions)
+                .Include(s => s.SequenceAttributes)
                 .ToArray();
         }
 
@@ -110,14 +110,14 @@ public class SubsequenceExtractor
             Feature exceptFeature = allFeatures.Except(features).Single();
 
             return db.Subsequences.Where(s => s.SequenceId == sequenceId && s.Feature != exceptFeature)
-                .Include(s => s.Position)
-                .Include(s => s.SequenceAttribute)
+                .Include(s => s.Positions)
+                .Include(s => s.SequenceAttributes)
                 .ToArray();
         }
 
         return db.Subsequences.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
-                             .Include(s => s.Position)
-                             .Include(s => s.SequenceAttribute)
+                             .Include(s => s.Positions)
+                             .Include(s => s.SequenceAttributes)
                              .ToArray();
     }
 
@@ -172,8 +172,8 @@ public class SubsequenceExtractor
         Dictionary<long, ComposedSequence> sequences;
         Dictionary<long, string> researchObjectsNames;
         subsequences = db.Subsequences.Where(s => subsequencesIds.Contains(s.Id))
-                         .Include(s => s.Position)
-                         .Include(s => s.SequenceAttribute)
+                         .Include(s => s.Positions)
+                         .Include(s => s.SequenceAttributes)
                          .ToArray();
         sequences = GetSubsequencesSequences(subsequences);
         long[] parentIds = subsequences.Select(s => s.SequenceId).ToArray();
@@ -210,7 +210,7 @@ public class SubsequenceExtractor
     /// </returns>
     private ComposedSequence GetSequence(BioSequence source, Subsequence subsequence)
     {
-        if (subsequence.Position.Count == 0)
+        if (subsequence.Positions.Count == 0)
         {
             return GetSimpleSubsequence(source, subsequence);
         }
@@ -252,9 +252,9 @@ public class SubsequenceExtractor
     /// </returns>
     private bool IsSubsequenceAttributePassesFilters(Subsequence subsequence, AnnotationAttribute attribute, string[] filters)
     {
-        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == attribute))
+        if (subsequence.SequenceAttributes.Any(sa => sa.Attribute == attribute))
         {
-            string value = subsequence.SequenceAttribute.Single(sa => sa.Attribute == attribute).Value.ToLowerInvariant();
+            string value = subsequence.SequenceAttributes.Single(sa => sa.Attribute == attribute).Value.ToLowerInvariant();
             return filters.Any(f => value.Contains(f));
         }
 
@@ -277,7 +277,7 @@ public class SubsequenceExtractor
     {
         IBioSequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
 
-        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == AnnotationAttribute.Complement))
+        if (subsequence.SequenceAttributes.Any(sa => sa.Attribute == AnnotationAttribute.Complement))
         {
             bioSequence = bioSequence.GetReverseComplementedSequence();
         }
@@ -299,7 +299,7 @@ public class SubsequenceExtractor
     /// </returns>
     private ComposedSequence GetJoinedSubsequence(BioSequence sourceSequence, Subsequence subsequence)
     {
-        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == AnnotationAttribute.Complement))
+        if (subsequence.SequenceAttributes.Any(sa => sa.Attribute == AnnotationAttribute.Complement))
         {
             return GetJoinedSubsequenceWithComplement(sourceSequence, subsequence);
         }
@@ -325,7 +325,7 @@ public class SubsequenceExtractor
     {
         string joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ConvertToString();
 
-        Position[] positions = subsequence.Position.ToArray();
+        Position[] positions = subsequence.Positions.ToArray();
 
         foreach (Position position in positions)
         {
@@ -350,10 +350,10 @@ public class SubsequenceExtractor
     private ComposedSequence GetJoinedSubsequenceWithComplement(BioSequence sourceSequence, Subsequence subsequence)
     {
         IBioSequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
-        Position[] positions = subsequence.Position.ToArray();
+        Position[] positions = subsequence.Positions.ToArray();
         string resultSequence;
 
-        if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == AnnotationAttribute.ComplementJoin))
+        if (subsequence.SequenceAttributes.Any(sa => sa.Attribute == AnnotationAttribute.ComplementJoin))
         {
             string joinedSequence = bioSequence.ConvertToString();
 

@@ -45,6 +45,6 @@ public partial class TaskResult
 
     [ForeignKey(nameof(TaskId))]
     [DeleteBehavior(DeleteBehavior.Cascade)]
-    [InverseProperty("TaskResult")]
+    [InverseProperty("TaskResults")]
     public virtual CalculationTask Task { get; set; } = null!;
 }

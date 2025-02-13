@@ -46,6 +46,6 @@ public partial class Position
 
     [ForeignKey(nameof(SubsequenceId))]
     [DeleteBehavior(DeleteBehavior.Cascade)]
-    [InverseProperty("Position")]
+    [InverseProperty("Positions")]
     public virtual Subsequence Subsequence { get; set; } = null!;
 }
