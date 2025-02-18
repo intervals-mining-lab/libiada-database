@@ -129,7 +129,10 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// <returns>
     /// The <see cref="List{Libiada.Database.Models.SequenceAttribute}"/>.
     /// </returns>
-    public List<SequenceAttribute> Create(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
+    public List<SequenceAttribute> Create(Dictionary<string, List<string>> qualifiers,
+                                          bool complement,
+                                          bool complementJoin,
+                                          Subsequence subsequence)
     {
         List<SequenceAttribute> result = new(qualifiers.Count);
 
@@ -154,7 +157,7 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
                     subsequence.RemoteId = remoteId;
                 }
 
-                result.Add(Create(key, CleanAttributeValue(value), subsequence.Id));
+                result.Add(Create(key, CleanAttributeValue(value), subsequence));
             }
         }
 
@@ -178,10 +181,10 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// <returns>
     /// The <see cref="SequenceAttribute"/>.
     /// </returns>
-    private SequenceAttribute Create(string attributeName, string attributeValue, long sequenceId)
+    private SequenceAttribute Create(string attributeName, string attributeValue, AbstractSequenceEntity sequence)
     {
         AnnotationAttribute attribute = attributeRepository.GetAttributeByName(attributeName);
-        return Create(attribute, attributeValue, sequenceId);
+        return Create(attribute, attributeValue, sequence);
     }
 
     /// <summary>
@@ -199,12 +202,12 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// <returns>
     /// The <see cref="SequenceAttribute"/>.
     /// </returns>
-    private SequenceAttribute Create(AnnotationAttribute attribute, string attributeValue, long sequenceId)
+    private SequenceAttribute Create(AnnotationAttribute attribute, string attributeValue, AbstractSequenceEntity sequence)
     {
         return new SequenceAttribute
         {
             Attribute = attribute,
-            SequenceId = sequenceId,
+            Sequence = sequence,
             Value = attributeValue
         };
     }
@@ -221,9 +224,9 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
     /// <returns>
     /// The <see cref="SequenceAttribute"/>.
     /// </returns>
-    private SequenceAttribute CreateSequenceAttribute(AnnotationAttribute attribute, long sequenceId)
+    private SequenceAttribute CreateSequenceAttribute(AnnotationAttribute attribute, AbstractSequenceEntity sequence)
     {
-        return Create(attribute, string.Empty, sequenceId);
+        return Create(attribute, string.Empty, sequence);
     }
 
     /// <summary>
@@ -246,17 +249,17 @@ public class SequenceAttributeRepository : ISequenceAttributeRepository
         List<SequenceAttribute> result = new(3);
         if (complement)
         {
-            result.Add(CreateSequenceAttribute(AnnotationAttribute.Complement, subsequence.Id));
+            result.Add(CreateSequenceAttribute(AnnotationAttribute.Complement, subsequence));
 
             if (complementJoin)
             {
-                result.Add(CreateSequenceAttribute(AnnotationAttribute.ComplementJoin, subsequence.Id));
+                result.Add(CreateSequenceAttribute(AnnotationAttribute.ComplementJoin, subsequence));
             }
         }
 
         if (subsequence.Partial)
         {
-            result.Add(CreateSequenceAttribute(AnnotationAttribute.Partial, subsequence.Id));
+            result.Add(CreateSequenceAttribute(AnnotationAttribute.Partial, subsequence));
         }
 
         return result;

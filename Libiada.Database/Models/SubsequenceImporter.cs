@@ -54,7 +54,9 @@ public class SubsequenceImporter
     /// <param name="sequence">
     /// Dna sequence for which subsequences will be imported.
     /// </param>
-    public SubsequenceImporter(LibiadaDatabaseEntities db, GeneticSequence sequence, INcbiHelper ncbiHelper) : this(db, ncbiHelper.GetFeatures(sequence.RemoteId), sequence.Id)
+    public SubsequenceImporter(LibiadaDatabaseEntities db,
+                               GeneticSequence sequence,
+                               INcbiHelper ncbiHelper) : this(db, ncbiHelper.GetFeatures(sequence.RemoteId), sequence.Id)
     {
     }
 
@@ -276,19 +278,20 @@ public class SubsequenceImporter
 
             Subsequence subsequence = new()
             {
-                Id = db.GetNewElementId(),
                 Feature = subsequenceFeature,
                 Partial = partial,
                 SequenceId = sequenceId,
                 Start = start,
                 Length = length,
-                RemoteId = location.Accession
+                RemoteId = location.Accession,
+                Notation = Notation.Nucleotides
             };
 
             codingSubsequences.Add(subsequence);
             AddPositionToMap(start, end);
-            newPositions.AddRange(CreateAdditionalPositions(leafLocations, subsequence.Id));
+            newPositions.AddRange(CreateAdditionalPositions(leafLocations, subsequence));
             List<SequenceAttribute> sequenceAttributes = sequenceAttributeRepository.Create(feature.Qualifiers, complement, complementJoin, subsequence);
+            subsequence.RemoteDb = subsequence.RemoteId is null ? null : RemoteDb.GenBank;
             newSequenceAttributes.AddRange(sequenceAttributes);
         }
 
@@ -316,7 +319,7 @@ public class SubsequenceImporter
     /// <returns>
     /// The <see cref="List{Libiada.Database.Models.Position}"/>.
     /// </returns>
-    private List<Position> CreateAdditionalPositions(List<ILocation> leafLocations, long subsequenceId)
+    private List<Position> CreateAdditionalPositions(List<ILocation> leafLocations, Subsequence subsequence)
     {
         List<Position> result = new(leafLocations.Count - 1);
 
@@ -327,7 +330,7 @@ public class SubsequenceImporter
             int leafEnd = leafLocation.LocationEnd - 1;
             int leafLength = leafEnd - leafStart + 1;
 
-            result.Add(new Position { SubsequenceId = subsequenceId, Start = leafStart, Length = leafLength });
+            result.Add(new Position { Subsequence = subsequence, Start = leafStart, Length = leafLength });
             AddPositionToMap(leafStart, leafEnd);
         }
 
@@ -345,12 +348,12 @@ public class SubsequenceImporter
         List<NonCodingPosition> positions = ExtractNonCodingSubsequencesPositions();
         return positions.ConvertAll(p => new Subsequence
         {
-            Id = db.GetNewElementId(),
             Feature = Feature.NonCodingSequence,
             Partial = false,
             SequenceId = sequenceId,
             Start = p.Start,
-            Length = p.Length
+            Length = p.Length,
+            Notation = Notation.Nucleotides
         });
     }
 
@@ -428,31 +431,14 @@ public class SubsequenceImporter
     /// <summary>
     /// The non coding position start and length.
     /// </summary>
-    private readonly struct NonCodingPosition
-    {
-        /// <summary>
-        /// The start.
-        /// </summary>
-        public readonly int Start;
-
-        /// <summary>
-        /// The length.
-        /// </summary>
-        public readonly int Length;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NonCodingPosition"/> structure.
-        /// </summary>
-        /// <param name="start">
-        /// The start.
-        /// </param>
-        /// <param name="length">
-        /// The length.
-        /// </param>
-        public NonCodingPosition(int start, int length)
-        {
-            Start = start;
-            Length = length;
-        }
-    }
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="NonCodingPosition"/> structure.
+    /// </remarks>
+    /// <param name="Start">
+    /// The start.
+    /// </param>
+    /// <param name="Length">
+    /// The length.
+    /// </param>
+    private readonly record struct NonCodingPosition(int Start, int Length);
 }

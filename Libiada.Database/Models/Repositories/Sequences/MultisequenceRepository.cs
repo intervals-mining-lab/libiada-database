@@ -37,6 +37,8 @@ public class MultisequenceRepository
         { 1  , "I" }
     };
 
+    public static readonly Func<ResearchObject, bool> ResearchObjectsFilter = new(m => SequenceTypesFilter.Contains(m.SequenceType) && m.MultisequenceId == null);
+
     /// <summary>
     /// Converts roman numbers to arabic.
     /// </summary>
