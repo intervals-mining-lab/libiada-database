@@ -87,9 +87,9 @@ public class MeasureRepository : IMeasureRepsitory
         string mode = measure.Attributes.Key.Mode;
         Models.Measure result = new()
         {
-            //Id = db.GetNewElementId(),
             Alphabet = notes,
             Order = measureSequence.Order,
+            Notation = Notation.Measures,
             Value = measure.GetHashCode().ToString(),
             Beats = measure.Attributes.Size.Beats,
             Beatbase = measure.Attributes.Size.BeatBase,

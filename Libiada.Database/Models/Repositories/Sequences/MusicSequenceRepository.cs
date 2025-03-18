@@ -88,7 +88,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
             PauseTreatment pauseTreatment = pauseTreatments[i];
 
             fmotifsSequences.Add(ConvertCongenericScoreTrackToFormalMotifsSequence(tempTrack.CongenericScoreTracks[0], pauseTreatment, false));
-            fmotifsAlphabets[i] = FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequences[i].Alphabet);
+            fmotifsAlphabets.Add(FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequences[i].Alphabet));
 
             fmotifsSequencesWithSequentialTransfer.Add(ConvertCongenericScoreTrackToFormalMotifsSequence(tempTrack.CongenericScoreTracks[0], pauseTreatment, true));
             fmotifsAlphabetsWithSequentialTransfer.Add(FmotifRepository.GetOrCreateFmotifsInDb(fmotifsSequencesWithSequentialTransfer[i].Alphabet));

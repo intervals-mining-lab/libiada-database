@@ -112,6 +112,7 @@ public class ElementRepository : IElementRepository
                 result[i] = new Note
                 {
                     Value = localStringNote,
+                    Notation = Notation.Notes,
                     Triplet = note.Triplet,
                     Denominator = note.Duration.Denominator,
                     Numerator = note.Duration.Numerator,
