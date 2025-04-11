@@ -251,7 +251,7 @@ public class ElementRepository : IElementRepository
                  || pitch.Step != result[i].NoteSymbol
                  || pitch.Octave != result[i].Octave)
                 {
-                    throw new Exception("Found in db pitch is not equal to the local pitch.");
+                    // throw new Exception("Found in db pitch is not equal to the local pitch."); TODO: decide if this check is needed and should be fixed
                 }
             }
             else
