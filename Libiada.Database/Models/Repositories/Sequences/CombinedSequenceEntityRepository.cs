@@ -58,8 +58,9 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// </returns>
     public Sequence GetLibiadaSequence(long sequenceId)
     {
-        int[] order = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Order;
-        return new Sequence(order, GetAlphabet(sequenceId), sequenceId);
+        CombinedSequenceEntity sequence = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId);
+        int[] order = sequence.Order;
+        return new Sequence(order, GetAlphabet(sequence), sequenceId);
     }
 
     /// <summary>
@@ -76,12 +77,13 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
 
         if (Db.CombinedSequenceEntities.Any(s => s.Id == sequenceId))
         {
-            CombinedSequenceEntity DBSequence = Db.CombinedSequenceEntities.Include(s => s.ResearchObject).Single(s => s.Id == sequenceId);
-            ResearchObject researchObject = DBSequence.ResearchObject;
-            return new ComposedSequence(DBSequence.Order.ToArray(), GetAlphabet(sequenceId), sequenceId);
+            CombinedSequenceEntity combinedSequence = Db.CombinedSequenceEntities
+                                                        .Include(s => s.ResearchObject)
+                                                        .Single(s => s.Id == sequenceId);
+            return new ComposedSequence(combinedSequence.Order, GetAlphabet(combinedSequence), sequenceId);
         }
 
-        // if it is not "real" sequence , then it must be image "sequence" 
+        // if it is not "real" sequence, then it must be image "sequence" 
         ImageSequence imageSequence = Db.ImageSequences.Include(s => s.ResearchObject).Single(s => s.Id == sequenceId);
         if (imageSequence.ResearchObject.Nature != Nature.Image)
         {
@@ -112,8 +114,9 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// </returns>
     public string GetString(long sequenceId)
     {
-        int[] order = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Order;
-        Alphabet alphabet = GetAlphabet(sequenceId);
+        CombinedSequenceEntity sequence = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId);
+        int[] order = sequence.Order;
+        Alphabet alphabet = GetAlphabet(sequence);
         StringBuilder stringBuilder = new(order.Length);
         foreach (int element in order)
         {
@@ -226,17 +229,17 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     }
 
     /// <summary>
-    /// The get alphabet.
+    /// Converts combined sequence's alphabet into libiada's alphabet.
     /// </summary>
-    /// <param name="sequenceId">
-    /// The sequence id.
+    /// <param name="sequence">
+    /// The database sequence.
     /// </param>
     /// <returns>
     /// The <see cref="Alphabet"/>.
     /// </returns>
-    private Alphabet GetAlphabet(long sequenceId)
+    private Alphabet GetAlphabet(CombinedSequenceEntity sequence)
     {
-        long[] elements = Db.CombinedSequenceEntities.Single(cs => cs.Id == sequenceId).Alphabet;
+        long[] elements = sequence.Alphabet;
         return ElementRepository.ToLibiadaAlphabet(elements);
     }
 

@@ -3,7 +3,7 @@
 using System.ComponentModel.DataAnnotations;
 
 /// <summary>
-/// The task type.
+/// Enum containing list of possible task types (and their ids).
 /// </summary>
 public enum TaskType : byte
 {
@@ -257,4 +257,10 @@ public enum TaskType : byte
     /// </summary>
     [Display(Name = "Custom sequence segmentation")]
     CustomSequenceSegmentation = 41,
+
+    /// <summary>
+    /// Task transforming genetic sequences to amino or triplet sequences.
+    /// </summary>
+    [Display(Name = "Genetic sequences transformation to amino or triplet sequences")]
+    GeneticSequencesTransformation = 42,
 }
