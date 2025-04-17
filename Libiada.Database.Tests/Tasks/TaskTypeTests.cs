@@ -15,7 +15,7 @@ public class TaskTypeTests
     /// <summary>
     /// The task types count.
     /// </summary>
-    private const int TaskTypesCount = 41;
+    private const int TaskTypesCount = 42;
 
     /// <summary>
     /// Array of all tasks types.
@@ -90,6 +90,7 @@ public class TaskTypeTests
     [TestCase((TaskType)39, "GenBankAccessionVersionUpdateChecker")]
     [TestCase((TaskType)40, "PoemSegmentation")]
     [TestCase((TaskType)41, "CustomSequenceSegmentation")]
+    [TestCase((TaskType)42, "GeneticSequencesTransformation")]
     public void TaskTypeNameTest(TaskType taskType, string name) => Assert.That(taskType.GetName(), Is.EqualTo(name));
 
     /// <summary>
