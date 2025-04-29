@@ -92,7 +92,7 @@ public class FmotifRepository : IFmotifRepository
 
         db.Fmotifs.Add(result);
         db.SaveChanges();
-        return fmotif.Id;
+        return result.Id;
     }
 
     /// <summary>

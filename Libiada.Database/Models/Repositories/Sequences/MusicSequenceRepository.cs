@@ -139,6 +139,8 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
             CombinedSequenceEntityToCreate.Add(musicSequence);
         }
 
+        Db.CombinedSequenceEntities.AddRange(CombinedSequenceEntityToCreate);
+
         Db.SaveChanges();
     }
 

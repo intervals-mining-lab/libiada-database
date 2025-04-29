@@ -3,6 +3,7 @@
 using Npgsql;
 
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 public static class LibiadaDatabaseEntitiesExtensions
 {
@@ -59,11 +60,11 @@ public static class LibiadaDatabaseEntitiesExtensions
     /// <summary>
     /// Gets a value indicating whether connection to db established or not.
     /// </summary>
-    public static bool IsConnectionSuccessful(this LibiadaDatabaseEntities db)
+    public static async Task<bool> IsConnectionSuccessful(this LibiadaDatabaseEntities db)
     {
         try
         {
-            return db.Database.CanConnect();
+            return await db.Database.CanConnectAsync();
         }
         catch
         {

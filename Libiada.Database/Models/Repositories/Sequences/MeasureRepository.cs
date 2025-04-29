@@ -99,7 +99,7 @@ public class MeasureRepository : IMeasureRepsitory
 
         db.Measures.Add(result);
         db.SaveChanges();
-        return measure.Id;
+        return result.Id;
     }
 
     /// <summary>
