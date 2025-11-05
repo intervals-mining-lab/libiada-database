@@ -132,7 +132,9 @@ public class SubsequenceExtractor
     /// </param>
     /// <param name="filters">
     /// Filters for the subsequences.
-    /// Filters are applied in "OR" logic (if subsequence corresponds to any filter it is added to calculation).
+    /// Filters are applied in "OR" logic 
+    /// (if subsequence corresponds to any filter it is added to calculation).
+    /// Product, Gene, Note and LocusTag fields are used.
     /// </param>
     /// <returns>
     /// Array of subsequences.
@@ -147,6 +149,7 @@ public class SubsequenceExtractor
         {
             if (IsSubsequenceAttributePassesFilters(subsequence, AnnotationAttribute.Product, filters)
              || IsSubsequenceAttributePassesFilters(subsequence, AnnotationAttribute.Gene, filters)
+             || IsSubsequenceAttributePassesFilters(subsequence, AnnotationAttribute.Note, filters)
              || IsSubsequenceAttributePassesFilters(subsequence, AnnotationAttribute.LocusTag, filters))
             {
                 result.Add(subsequence);
