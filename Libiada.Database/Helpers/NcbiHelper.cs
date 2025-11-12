@@ -1,22 +1,23 @@
 ﻿namespace Libiada.Database.Helpers;
 
-using System.Globalization;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System;
-using System.Text;
-
 using Bio.IO;
 using Bio.IO.FastA;
 using Bio.IO.GenBank;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
 using Libiada.Database.Models.NcbiSequencesData;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+using System;
+using System.Globalization;
+using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 /// <summary>
 /// The ncbi helper.
@@ -42,10 +43,16 @@ public class NcbiHelper : INcbiHelper
     /// </summary>
     private DateTimeOffset lastRequestDateTime = DateTimeOffset.Now;
 
-    public NcbiHelper(IConfiguration config, IHttpClientFactory httpClientFactory)
+    /// <summary>
+    /// The logger.
+    /// </summary>
+    private readonly ILogger logger;
+
+    public NcbiHelper(IConfiguration config, IHttpClientFactory httpClientFactory, ILogger<NcbiHelper> logger)
     {
         ApiKey = config["NcbiApiKey"] ?? throw new Exception($"NcbiApiKey is not found in confiuguration.");
         this.httpClientFactory = httpClientFactory;
+        this.logger = logger;
     }
 
     /// <summary>
@@ -192,6 +199,7 @@ public class NcbiHelper : INcbiHelper
     /// </returns>
     public List<NuccoreObject> ExecuteESummaryRequest(string searchTerm, bool includePartial)
     {
+        logger.LogInformation($"Executing ncbi ESummary request with search term: {searchTerm}", DateTime.UtcNow.ToLongTimeString());
         (string ncbiWebEnvironment, string queryKey) = ExecuteESearchRequest(searchTerm);
         return ExecuteESummaryRequest(ncbiWebEnvironment, queryKey, includePartial);
     }
@@ -262,6 +270,7 @@ public class NcbiHelper : INcbiHelper
     /// </returns>
     public (string, string) ExecuteESearchRequest(string searchTerm)
     {
+        logger.LogInformation($"Executing ncbi ESearch request  with search term: {searchTerm}", DateTime.UtcNow.ToLongTimeString());
         string urlEsearch = $"esearch.fcgi?db=nuccore&term={searchTerm}&usehistory=y&retmode=json";
         string esearchResponseString = GetResponceString(urlEsearch);
         ESearchResponce eSeqrchReasponce = JsonConvert.DeserializeObject<ESearchResponce>(esearchResponseString)
@@ -292,6 +301,7 @@ public class NcbiHelper : INcbiHelper
 
         WaitForRequest();
 
+        logger.LogInformation($"Executing ncbi post request {BaseAddress}{urlEPost} with data {data}", DateTime.UtcNow.ToLongTimeString());
         using HttpResponseMessage response = httpClient.PostAsync(urlEPost, postData)
             .ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode()).Result;
 
@@ -366,6 +376,7 @@ public class NcbiHelper : INcbiHelper
     /// </returns>
     private string GetResponceString(string url)
     {
+        logger.LogInformation($"Getting ncbi responce string {BaseAddress}{url}", DateTime.UtcNow.ToLongTimeString());
         using Stream response = GetResponseStream(url);
         using StreamReader reader = new(response);
         string responseText = reader.ReadToEnd();
@@ -416,7 +427,7 @@ public class NcbiHelper : INcbiHelper
 
         using HttpClient httpClient = httpClientFactory.CreateClient();
         httpClient.BaseAddress = BaseAddress;
-
+        logger.LogInformation($"Executing ncbi request {BaseAddress}{url}", DateTime.UtcNow.ToLongTimeString());
         using Stream stream = httpClient.GetStreamAsync(url).Result ?? throw new Exception("Response stream was null.");
         stream.CopyTo(memoryStream);
 
