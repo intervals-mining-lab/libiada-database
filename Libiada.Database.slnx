@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="../libiada-core/Libiada.Core.Tests/Libiada.Core.Tests.csproj" />
+  <Project Path="../libiada-core/Libiada.Core/Libiada.Core.csproj" />
+  <Project Path="../libiada-core/Libiada.SequenceGenerator.Tests/Libiada.SequenceGenerator.Tests.csproj" />
+  <Project Path="../libiada-core/Libiada.SequenceGenerator/Libiada.SequenceGenerator.csproj" />
+  <Project Path="Libiada.Database.Tests/Libiada.Database.Tests.csproj" />
+  <Project Path="Libiada.Database/Libiada.Database.csproj" />
+</Solution>
