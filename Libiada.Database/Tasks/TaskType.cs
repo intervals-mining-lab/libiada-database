@@ -143,13 +143,13 @@ public enum TaskType : byte
     /// Sequences import for existing research object.
     /// </summary>
     [Display(Name = "Sequence upload")]
-    SequencesUpload = 23,
+    CombinedSequencesEntity = 23,
 
     /// <summary>
     /// Research object creation and sequence import task.
     /// </summary>
     [Display(Name = "Sequence import")]
-    ResearchObjectImport = 24,
+    ResearchObjects = 24,
 
     /// <summary>
     /// The sequence prediction task.

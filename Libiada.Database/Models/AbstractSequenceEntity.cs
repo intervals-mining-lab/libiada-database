@@ -71,10 +71,10 @@ public abstract class AbstractSequenceEntity
     public int ModifierId { get; set; }
 
     [ForeignKey(nameof(CreatorId))]
-    public virtual AspNetUser Creator { get; set; } = null!;
+    public virtual AspNetUser? Creator { get; set; }
 
     [ForeignKey(nameof(ModifierId))]
-    public virtual AspNetUser Modifier { get; set; } = null!;
+    public virtual AspNetUser? Modifier { get; set; }
 
     [InverseProperty("Sequence")]
     public virtual ICollection<SequenceAttribute> SequenceAttributes { get; set; } = [];
