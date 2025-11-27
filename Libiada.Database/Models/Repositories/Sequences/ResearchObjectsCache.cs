@@ -13,6 +13,7 @@ public class ResearchObjectsCache(IDbContextFactory<LibiadaDatabaseEntities> dbF
 {
     private readonly IDbContextFactory<LibiadaDatabaseEntities> dbFactory = dbFactory;
     private List<ResearchObject>? researchObjects;
+    private List<long>? researchObjectsWithSubsequencesIds;
     private readonly Lock syncRoot = new();
 
     /// <summary>
@@ -35,6 +36,30 @@ public class ResearchObjectsCache(IDbContextFactory<LibiadaDatabaseEntities> dbF
             }
 
             return researchObjects;
+        }
+    }
+
+    public List<long> ResearchObjectsWithSubsequencesIds
+    {
+        get
+        {
+            if (researchObjectsWithSubsequencesIds == null)
+            {
+                lock (syncRoot)
+                {
+                    if (researchObjectsWithSubsequencesIds == null)
+                    {
+                        using var db = dbFactory.CreateDbContext();
+                        var sequenceIds = db.Subsequences.Select(s => s.SequenceId).Distinct();
+                        researchObjectsWithSubsequencesIds = db.CombinedSequenceEntities
+                                                               .Where(c => sequenceIds.Contains(c.Id))
+                                                               .Select(c => c.ResearchObjectId)
+                                                               .ToList();
+                    }
+                }
+            }
+
+            return researchObjectsWithSubsequencesIds;
         }
     }
 

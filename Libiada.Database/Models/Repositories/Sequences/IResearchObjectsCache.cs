@@ -3,7 +3,7 @@
     public interface IResearchObjectsCache
     {
         List<ResearchObject> ResearchObjects { get; }
-
+        List<long> ResearchObjectsWithSubsequencesIds { get; }
         void Clear();
     }
 }

@@ -7,6 +7,7 @@ using Libiada.Core.Extensions;
 using Libiada.Database.Extensions;
 using Libiada.Database.Helpers;
 using Libiada.Database.Models.Repositories.Catalogs;
+using Libiada.Database.Models.Repositories.Sequences;
 
 /// <summary>
 /// The subsequence importer.
@@ -27,6 +28,12 @@ public class SubsequenceImporter
     /// The sequence id.
     /// </summary>
     private readonly long sequenceId;
+
+    /// <summary>
+    /// The reserch objects cache.
+    /// Used to update list of ids of research objects with subsequences (annotations).
+    /// </summary>
+    private readonly IResearchObjectsCache cache;
 
     /// <summary>
     /// The features.
@@ -55,8 +62,13 @@ public class SubsequenceImporter
     /// Dna sequence for which subsequences will be imported.
     /// </param>
     public SubsequenceImporter(LibiadaDatabaseEntities db,
-                               GeneticSequence sequence,
-                               INcbiHelper ncbiHelper) : this(db, ncbiHelper.GetFeatures(sequence.RemoteId), sequence.Id)
+                               INcbiHelper ncbiHelper,
+                               IResearchObjectsCache cache,
+                               GeneticSequence sequence)
+        : this(db,
+               cache,
+               sequence.Id,
+               ncbiHelper.GetFeatures(sequence.RemoteId ?? throw new Exception("Cannot import subsequenes for research object without remote id")))
     {
     }
 
@@ -73,11 +85,13 @@ public class SubsequenceImporter
     /// thrown if length of sequence from database
     /// is not equal to the length of downloaded sequence.
     /// </exception>
-    public SubsequenceImporter(LibiadaDatabaseEntities db, List<FeatureItem> features, long sequenceId)
+    public SubsequenceImporter(LibiadaDatabaseEntities db, IResearchObjectsCache cache, long sequenceId, List<FeatureItem> features)
     {
         this.db = db;
-        this.features = features;
+        this.cache = cache;
         this.sequenceId = sequenceId;
+        this.features = features;
+
         sequenceAttributeRepository = new SequenceAttributeRepository(db);
 
         allNonGenesLeafLocations = features.Where(f => f.Key != gene)
@@ -303,6 +317,9 @@ public class SubsequenceImporter
         db.SequenceAttributes.AddRange(newSequenceAttributes);
 
         db.SaveChanges();
+
+        // adding current sequence id to the list of sequences with annotations
+        cache.ResearchObjectsWithSubsequencesIds.Add(db.CombinedSequenceEntities.Single(s => s.Id == sequenceId).ResearchObjectId);
 
         return (codingSubsequences.Count, nonCodingSubsequences.Count);
     }
