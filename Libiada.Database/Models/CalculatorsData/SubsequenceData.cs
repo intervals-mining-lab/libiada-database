@@ -31,9 +31,9 @@ public record struct SubsequenceData
     public readonly bool Partial;
 
     /// <summary>
-    /// Sequence remote id.
+    /// Subsequence remote id.
     /// </summary>
-    public readonly string RemoteId;
+    public readonly string? RemoteId;
 
     /// <summary>
     /// The characteristics.
