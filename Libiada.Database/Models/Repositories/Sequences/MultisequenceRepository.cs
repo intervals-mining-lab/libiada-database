@@ -12,6 +12,7 @@ public class MultisequenceRepository
     /// </summary>
     public static readonly SequenceType[] SequenceTypesFilter =
     [
+        // TODO: add literary works types
             SequenceType.CompleteGenome,
             SequenceType.MitochondrialGenome,
             SequenceType.ChloroplastGenome,

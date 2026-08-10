@@ -96,7 +96,6 @@ public class CongenericSequencesCharacteristicsCalculator : ICongenericSequences
                             characteristics.Add((sequenceCharacteristicLinkId, elementId), characteristicValue);
                             newCharacteristics.Add(characteristic);
                         }
-
                     }
                 }
             }
