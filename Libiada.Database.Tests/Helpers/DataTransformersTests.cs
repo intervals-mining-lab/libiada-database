@@ -1,7 +1,6 @@
 ﻿namespace Libiada.Web.Tests.Helpers;
 
 using Libiada.Database.Helpers;
-using Libiada.Database.Tests;
 
 [TestFixture(TestOf = typeof(DataTransformers))]
 public class DataTransformersTests

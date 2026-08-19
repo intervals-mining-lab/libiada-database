@@ -4,8 +4,6 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Extensions;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// Feature enum tests.
 /// </summary>
@@ -20,12 +18,12 @@ public class FeatureTests
     /// <summary>
     /// Array of all features.
     /// </summary>
-    private readonly Feature[] features = EnumExtensions.ToArray<Feature>();
+    private readonly Feature[] features = Enum.GetValues<Feature>();
 
     /// <summary>
     /// Array of all natures.
     /// </summary>
-    private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+    private readonly Nature[] natures = Enum.GetValues<Nature>();
 
     /// <summary>
     /// Tests count of features.

@@ -16,7 +16,7 @@ public class LanguageTests
     /// <summary>
     /// Array of all languages.
     /// </summary>
-    private readonly Language[] languages = EnumExtensions.ToArray<Language>();
+    private readonly Language[] languages = Enum.GetValues<Language>();
 
     /// <summary>
     /// Tests count of languages.

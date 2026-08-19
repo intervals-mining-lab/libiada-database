@@ -1,15 +1,13 @@
 namespace Libiada.Database.Models.Repositories.Catalogs;
 
-using Libiada.Core.Extensions;
-
-using FeatureExtensions = Extensions.FeatureExtensions;
+using Libiada.Database.Extensions;
 
 /// <summary>
 /// The feature repository.
 /// </summary>
 public static class FeatureRepository
 {
-    private static readonly Dictionary<string, Feature> featuresDictionary = EnumExtensions.ToArray<Feature>()
+    private static readonly Dictionary<string, Feature> featuresDictionary = Enum.GetValues<Feature>()
                                                                                            .ToDictionary(FeatureExtensions.GetGenBankName);
 
     /// <summary>

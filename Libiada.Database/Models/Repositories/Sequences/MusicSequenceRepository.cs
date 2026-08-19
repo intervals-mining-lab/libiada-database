@@ -5,7 +5,6 @@ using System.Xml;
 
 using Libiada.Core.Core;
 using Libiada.Core.Core.SimpleTypes;
-using Libiada.Core.Extensions;
 using Libiada.Core.Music;
 using Libiada.Core.Music.MusicXml;
 
@@ -77,7 +76,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
         Sequence measuresSequence = ConvertCongenericScoreTrackToMeasuresSequence(tempTrack.CongenericScoreTracks[0]);
         long[] measuresAlphabet = MeasureRepository.GetOrCreateMeasuresInDb(measuresSequence.Alphabet);
 
-        var pauseTreatments = EnumExtensions.ToArray<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable).ToArray();
+        var pauseTreatments = Enum.GetValues<PauseTreatment>().Where(pt => pt != PauseTreatment.NotApplicable).ToArray();
         List<Sequence> fmotifsSequences = new(pauseTreatments.Length);
         List<long[]> fmotifsAlphabets = new(pauseTreatments.Length);
         List<Sequence> fmotifsSequencesWithSequentialTransfer = new(pauseTreatments.Length);

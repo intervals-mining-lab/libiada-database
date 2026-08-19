@@ -18,7 +18,7 @@ public class TaskStateTests
     /// <summary>
     /// Array of all task states.
     /// </summary>
-    private readonly TaskState[] taskStates = EnumExtensions.ToArray<TaskState>();
+    private readonly TaskState[] taskStates = Enum.GetValues<TaskState>();
 
     /// <summary>
     /// Tests count of task states.

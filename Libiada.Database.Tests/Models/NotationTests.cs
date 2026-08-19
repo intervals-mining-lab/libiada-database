@@ -1,10 +1,8 @@
 ﻿namespace Libiada.Database.Tests.Models;
-
+﻿
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Extensions;
-
-using EnumExtensions = Core.Extensions.EnumExtensions;
 
 /// <summary>
 /// Notation enum tests.
@@ -20,12 +18,12 @@ public class NotationTests
     /// <summary>
     /// Array of all notations.
     /// </summary>
-    private readonly Notation[] notations = EnumExtensions.ToArray<Notation>();
+    private readonly Notation[] notations = Enum.GetValues<Notation>();
 
     /// <summary>
     /// Array of all natures.
     /// </summary>
-    private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+    private readonly Nature[] natures = Enum.GetValues<Nature>();
 
     /// <summary>
     /// Tests count of notations.

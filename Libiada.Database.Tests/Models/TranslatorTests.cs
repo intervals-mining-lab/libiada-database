@@ -16,7 +16,7 @@ public class TranslatorTests
     /// <summary>
     /// Array of all automatic translators.
     /// </summary>
-    private readonly Translator[] translators = EnumExtensions.ToArray<Translator>();
+    private readonly Translator[] translators = Enum.GetValues<Translator>();
 
     /// <summary>
     /// Tests count of translators.

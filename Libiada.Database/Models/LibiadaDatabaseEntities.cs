@@ -4,7 +4,6 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.AccordanceCalculators;
 using Libiada.Core.Core.Characteristics.Calculators.BinaryCalculators;
 using Libiada.Core.Core.SimpleTypes;
-using Libiada.Core.Extensions;
 
 using Libiada.Database.Tasks;
 
@@ -160,11 +159,11 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<CalculationTask>(entity =>
         {
-            var taskTypesIds = EnumExtensions.ToArray<TaskType>().Select(n => (byte)n);
+            var taskTypesIds = Enum.GetValues<TaskType>().Select(n => (byte)n);
             string taskTypesIdsString = string.Join(", ", taskTypesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_task_type", $"task_type IN ({taskTypesIdsString})"));
 
-            var taskStatusesIds = EnumExtensions.ToArray<TaskState>().Select(n => (byte)n);
+            var taskStatusesIds = Enum.GetValues<TaskState>().Select(n => (byte)n);
             string taskStatusesIdsString = string.Join(", ", taskStatusesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_task_status", $"status IN ({taskStatusesIdsString})"));
 
@@ -223,7 +222,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Element>(entity =>
         {
-            var notationsIds = EnumExtensions.ToArray<Notation>().Select(n => (byte)n);
+            var notationsIds = Enum.GetValues<Notation>().Select(n => (byte)n);
             string notationsIdsString = string.Join(", ", notationsIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_element_notation", $"notation IN ({notationsIdsString})"));
 
@@ -234,7 +233,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Fmotif>(entity =>
         {
-            var fmotifTypesIds = EnumExtensions.ToArray<FmotifType>().Select(n => (byte)n);
+            var fmotifTypesIds = Enum.GetValues<FmotifType>().Select(n => (byte)n);
             string fmotifTypesIdsString = string.Join(", ", fmotifTypesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_fmotif_type", $"fmotif_type IN ({fmotifTypesIdsString})"));
 
@@ -257,12 +256,12 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
             entity.ToTable(t => t.HasCheckConstraint("chk_multisequence_reference",
                 "(multisequence_id IS NULL AND multisequence_number IS NULL) OR (multisequence_id IS NOT NULL AND multisequence_number IS NOT NULL)"));
 
-            var naturesIds = EnumExtensions.ToArray<Nature>().Select(n => (byte)n);
+            var naturesIds = Enum.GetValues<Nature>().Select(n => (byte)n);
             string naturesIdsString = string.Join(", ", naturesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_research_object_nature", $"nature IN ({naturesIdsString})"));
 
 
-            var sequenceTypesIds = EnumExtensions.ToArray<SequenceType>().Select(n => (byte)n);
+            var sequenceTypesIds = Enum.GetValues<SequenceType>().Select(n => (byte)n);
             string sequenceTypesIdsString = string.Join(", ", sequenceTypesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_research_object_sequence_type", $"sequence_type IN ({sequenceTypesIdsString})"));
 
@@ -279,7 +278,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Multisequence>(entity =>
         {
-            var naturesIds = EnumExtensions.ToArray<Nature>().Select(n => (byte)n);
+            var naturesIds = Enum.GetValues<Nature>().Select(n => (byte)n);
             string naturesIdsString = string.Join(", ", naturesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_multisequence_nature", $"nature IN ({naturesIdsString})"));
 
@@ -288,7 +287,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Note>(entity =>
         {            
-            var tiesIds = EnumExtensions.ToArray<Tie>().Select(n => (byte)n);
+            var tiesIds = Enum.GetValues<Tie>().Select(n => (byte)n);
             string tiesIdsString = string.Join(", ", tiesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_note_tie", $"tie IN ({tiesIdsString})"));
 
@@ -304,11 +303,11 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Pitch>(entity =>
         {
-            var accidentalsIds = EnumExtensions.ToArray<Accidental>().Select(n => (sbyte)n);
+            var accidentalsIds = Enum.GetValues<Accidental>().Select(n => (sbyte)n);
             string accidentalsIdsString = string.Join(", ", accidentalsIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_pitch_accidental", $"accidental IN ({accidentalsIdsString})"));
 
-            var noteSymbolsIds = EnumExtensions.ToArray<NoteSymbol>().Select(n => (byte)n);
+            var noteSymbolsIds = Enum.GetValues<NoteSymbol>().Select(n => (byte)n);
             string noteSymbolsIdsString = string.Join(", ", noteSymbolsIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_pitch_note_symbol", $"note_symbol IN ({noteSymbolsIdsString})"));
 
@@ -325,7 +324,7 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<SequenceAttribute>(entity =>
         {
-            var attributesIds = EnumExtensions.ToArray<AnnotationAttribute>().Select(n => (byte)n);
+            var attributesIds = Enum.GetValues<AnnotationAttribute>().Select(n => (byte)n);
             string attributesIdsString = string.Join(", ", attributesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_sequence_attribute_attribute", $"attribute IN ({attributesIdsString})"));
 
@@ -338,19 +337,19 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<SequenceGroup>(entity =>
         {
-            var naturesIds = EnumExtensions.ToArray<Nature>().Select(n => (byte)n);
+            var naturesIds = Enum.GetValues<Nature>().Select(n => (byte)n);
             string naturesIdsString = string.Join(", ", naturesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_sequence_group_nature", $"nature IN ({naturesIdsString})"));
 
-            var sequenceGroupTypesIds = EnumExtensions.ToArray<SequenceGroupType>().Select(n => (byte)n);
+            var sequenceGroupTypesIds = Enum.GetValues<SequenceGroupType>().Select(n => (byte)n);
             string sequenceGroupTypesString = string.Join(", ", sequenceGroupTypesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_sequence_group_type", $"sequence_group_type IN ({sequenceGroupTypesString})"));
 
-            var sequenceTypesIds = EnumExtensions.ToArray<SequenceType>().Select(n => (byte)n);
+            var sequenceTypesIds = Enum.GetValues<SequenceType>().Select(n => (byte)n);
             string sequenceTypesIdsString = string.Join(", ", sequenceTypesIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_sequence_group_sequence_type", $"sequence_type IN ({sequenceTypesIdsString})"));
 
-            var groupsIds = EnumExtensions.ToArray<Group>().Select(n => (byte)n);
+            var groupsIds = Enum.GetValues<Group>().Select(n => (byte)n);
             string groupsIdsString = string.Join(", ", groupsIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_sequence_group_group", $"group IN ({groupsIdsString})"));
 
@@ -370,11 +369,11 @@ public partial class LibiadaDatabaseEntities : IdentityDbContext<AspNetUser, Ide
 
         modelBuilder.Entity<Subsequence>(entity =>
         {
-            var featuresIds = EnumExtensions.ToArray<Feature>().Select(n => (byte)n);
+            var featuresIds = Enum.GetValues<Feature>().Select(n => (byte)n);
             string featuresIdsString = string.Join(", ", featuresIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_subsequence_feature", $"feature IN ({featuresIdsString})"));
 
-            var notationsIds = EnumExtensions.ToArray<Notation>().Select(n => (byte)n);
+            var notationsIds = Enum.GetValues<Notation>().Select(n => (byte)n);
             string notationsIdsString = string.Join(", ", notationsIds);
             entity.ToTable(t => t.HasCheckConstraint("chk_subsequence_notation", $"notation IN ({notationsIdsString})"));
 

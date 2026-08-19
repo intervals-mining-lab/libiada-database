@@ -4,8 +4,6 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Tasks;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// TaskType enum tests.
 /// </summary>
@@ -20,7 +18,7 @@ public class TaskTypeTests
     /// <summary>
     /// Array of all tasks types.
     /// </summary>
-    private readonly TaskType[] taskTypes = EnumExtensions.ToArray<TaskType>();
+    private readonly TaskType[] taskTypes = Enum.GetValues<TaskType>();
 
     /// <summary>
     /// Tests count of task types.

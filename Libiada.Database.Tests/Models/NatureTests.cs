@@ -16,7 +16,7 @@ public class NatureTests
     /// <summary>
     /// Array of all natures.
     /// </summary>
-    private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+    private readonly Nature[] natures = Enum.GetValues<Nature>();
 
     /// <summary>
     /// Tests count of natures.

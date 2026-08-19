@@ -4,8 +4,6 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Extensions;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// RemoteDb enum tests.
 /// </summary>
@@ -20,12 +18,12 @@ public class RemoteDbTests
     /// <summary>
     /// Array of all remote databases.
     /// </summary>
-    private readonly RemoteDb[] remoteDbs = EnumExtensions.ToArray<RemoteDb>();
+    private readonly RemoteDb[] remoteDbs = Enum.GetValues<RemoteDb>();
 
     /// <summary>
     /// Array of all natures.
     /// </summary>
-    private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+    private readonly Nature[] natures = Enum.GetValues<Nature>();
 
     /// <summary>
     /// Tests count of remote dbs.

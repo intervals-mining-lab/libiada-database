@@ -16,7 +16,7 @@ public class AnnotationAttributeTests
     /// <summary>
     /// Array of all attributes.
     /// </summary>
-    private readonly AnnotationAttribute[] attributes = EnumExtensions.ToArray<AnnotationAttribute>();
+    private readonly AnnotationAttribute[] attributes = Enum.GetValues<AnnotationAttribute>();
 
     /// <summary>
     /// Tests count of attributes.

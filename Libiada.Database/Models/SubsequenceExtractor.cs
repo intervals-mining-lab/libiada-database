@@ -3,7 +3,6 @@
 using Bio.Extensions;
 
 using Libiada.Core.Core;
-using Libiada.Core.Extensions;
 
 using Libiada.Database.Models.Repositories.Sequences;
 
@@ -96,7 +95,7 @@ public class SubsequenceExtractor
     /// </returns>
     public Subsequence[] GetSubsequences(long sequenceId, IReadOnlyList<Feature> features)
     {
-        Feature[] allFeatures = EnumExtensions.ToArray<Feature>();
+        Feature[] allFeatures = Enum.GetValues<Feature>();
         if (allFeatures.Length == features.Count)
         {
             return db.Subsequences.Where(s => s.SequenceId == sequenceId)

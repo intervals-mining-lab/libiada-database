@@ -4,8 +4,6 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Extensions;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// Sequence type enum tests.
 /// </summary>
@@ -20,12 +18,12 @@ public class SequenceTypeTests
     /// <summary>
     /// Array of all sequence types.
     /// </summary>
-    private readonly SequenceType[] sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+    private readonly SequenceType[] sequenceTypes = Enum.GetValues<SequenceType>();
 
     /// <summary>
     /// Array of all natures.
     /// </summary>
-    private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+    private readonly Nature[] natures = Enum.GetValues<Nature>();
 
     /// <summary>
     /// Tests count of sequence types.

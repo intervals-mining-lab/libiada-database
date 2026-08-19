@@ -1,14 +1,11 @@
 ﻿namespace Libiada.Database.Models;
-
-using Libiada.SequenceGenerator;
-
-using Libiada.Database.Models.CalculatorsData;
-
+﻿
 using Libiada.Core.Core;
 using Libiada.Core.DataTransformers;
 using Libiada.Core.Extensions;
+using Libiada.Database.Models.CalculatorsData;
+using Libiada.SequenceGenerator;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
 
 public class OrderTransformer
 {
@@ -29,7 +26,7 @@ public class OrderTransformer
         int[] ordersIds = Enumerable.Range(0, Orders.Count).ToArray();
         TransformationsData = ordersIds.AsParallel().AsOrdered().Select(orderId => new OrderTransformationData
         {
-            ResultTransformation = EnumExtensions.ToArray<OrderTransformation>().AsParallel().AsOrdered().Select(t => TransformOrder(t, orderId)).ToArray()
+            ResultTransformation = Enum.GetValues<OrderTransformation>().AsParallel().AsOrdered().Select(t => TransformOrder(t, orderId)).ToArray()
         }).ToArray();
 
         ordersIds.AsParallel().ForAll(orderId => TransformationsData[orderId].UniqueFinalOrdersCount = CalculateUniqueOrdersCount(orderId));
@@ -56,7 +53,7 @@ public class OrderTransformer
 
     private int CalculateUniqueOrdersCount(int id)
     {
-        OrderTransformation[] transformationTypes = EnumExtensions.ToArray<OrderTransformation>();
+        OrderTransformation[] transformationTypes = Enum.GetValues<OrderTransformation>();
         bool completed = false;
         List<int> ordersForChecking = [id];
         List<int> checkedOrders = [id];

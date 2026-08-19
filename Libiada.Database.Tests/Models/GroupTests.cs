@@ -4,8 +4,6 @@ using Libiada.Core.Extensions;
 
 using Libiada.Database.Extensions;
 
-using EnumExtensions = Core.Extensions.EnumExtensions;
-
 /// <summary>
 /// Group enum tests.
 /// </summary>
@@ -20,12 +18,12 @@ public class GroupTests
     /// <summary>
     /// Array of all groups.
     /// </summary>
-    private readonly Group[] groups = EnumExtensions.ToArray<Group>();
+    private readonly Group[] groups = Enum.GetValues<Group>();
 
     /// <summary>
     /// Array of all natures.
     /// </summary>
-    private readonly Nature[] natures = EnumExtensions.ToArray<Nature>();
+    private readonly Nature[] natures = Enum.GetValues<Nature>();
 
     /// <summary>
     /// Tests count of groups.

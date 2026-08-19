@@ -17,7 +17,7 @@ public class AttributeRepository
     /// </summary>
     public AttributeRepository()
     {
-        AnnotationAttribute[] attributes = EnumExtensions.ToArray<AnnotationAttribute>();
+        AnnotationAttribute[] attributes = Enum.GetValues<AnnotationAttribute>();
         attributesDictionary = attributes.ToDictionary(a => a.GetDisplayValue());
     }
 

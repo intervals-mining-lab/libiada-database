@@ -1,9 +1,9 @@
-﻿namespace Libiada.Database.Extensions;
-
+﻿
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Attributes;
 
+namespace Libiada.Database.Extensions;
 /// <summary>
 /// The enum helper.
 /// </summary>
@@ -21,8 +21,5 @@ public static class EnumExtensions
     /// <returns>
     /// Nature attribute value as <see cref="Nature"/>
     /// </returns>
-    public static Nature GetNature<T>(this T value) where T : struct, IComparable, IFormattable, IConvertible
-    {
-        return value.GetAttribute<T, NatureAttribute>().Value;
-    }
+    public static Nature GetNature<T>(this T value) where T : struct, Enum => value.GetAttribute<T, NatureAttribute>().Value;
 }
