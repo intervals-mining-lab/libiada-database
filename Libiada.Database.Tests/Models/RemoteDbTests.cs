@@ -53,7 +53,7 @@ public class RemoteDbTests
     /// The name.
     /// </param>
     [TestCase((RemoteDb)1, "GenBank")]
-    public void RemoteDbNamesTest(RemoteDb remoteDb, string name) => Assert.That(remoteDb.GetName(), Is.EqualTo(name));
+    public void RemoteDbNamesTest(RemoteDb remoteDb, string name) => Assert.That(Enum.GetName(remoteDb), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all remote dbs have display value.

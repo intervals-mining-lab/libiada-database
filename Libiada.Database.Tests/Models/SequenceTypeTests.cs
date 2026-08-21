@@ -66,7 +66,7 @@ public class SequenceTypeTests
     [TestCase((SequenceType)12, "MitochondrialPlasmid")]
     [TestCase((SequenceType)13, "CompleteImage")]
     [TestCase((SequenceType)14, "CompletePoem")]
-    public void SequenceTypeNamesTest(SequenceType sequenceType, string name) => Assert.That(sequenceType.GetName(), Is.EqualTo(name));
+    public void SequenceTypeNamesTest(SequenceType sequenceType, string name) => Assert.That(Enum.GetName(sequenceType), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all sequence types have display value.

@@ -48,7 +48,7 @@ public class LanguageTests
     [TestCase((Language)1, "Russian")]
     [TestCase((Language)2, "English")]
     [TestCase((Language)3, "German")]
-    public void LanguageNamesTest(Language language, string name) => Assert.That(language.GetName(), Is.EqualTo(name));
+    public void LanguageNamesTest(Language language, string name) => Assert.That(Enum.GetName(language), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all languages have display value.

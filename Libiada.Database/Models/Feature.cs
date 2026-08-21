@@ -1,12 +1,12 @@
 ﻿namespace Libiada.Database.Models;
+﻿
+using Libiada.Database.Attributes;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
-using Libiada.Database.Attributes;
-
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
 
 /// <summary>
 /// Types of genetic subsequences.
@@ -20,7 +20,6 @@ public enum Feature : byte
     [Display(Name = "Non-coding sequence")]
     [Description("Non-coding sequence")]
     [Nature(Nature.Genetic)]
-    [GenBankFeatureName("")]
     NonCodingSequence = 0,
 
     /// <summary>

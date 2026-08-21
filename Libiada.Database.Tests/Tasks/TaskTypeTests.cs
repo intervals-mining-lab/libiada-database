@@ -89,7 +89,7 @@ public class TaskTypeTests
     [TestCase((TaskType)40, "PoemSegmentation")]
     [TestCase((TaskType)41, "CustomSequenceSegmentation")]
     [TestCase((TaskType)42, "GeneticSequencesTransformation")]
-    public void TaskTypeNameTest(TaskType taskType, string name) => Assert.That(taskType.GetName(), Is.EqualTo(name));
+    public void TaskTypeNameTest(TaskType taskType, string name) => Assert.That(Enum.GetName(taskType), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all task types have display value.

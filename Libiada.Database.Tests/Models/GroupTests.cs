@@ -62,7 +62,7 @@ public class GroupTests
     [TestCase((Group)8, "Photo")]
     [TestCase((Group)9, "Picture")]
     [TestCase((Group)10, "Archaea")]
-    public void GroupNamesTest(Group group, string name) => Assert.That(@group.GetName(), Is.EqualTo(name));
+    public void GroupNamesTest(Group group, string name) => Assert.That(Enum.GetName(@group), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all groups have display value.

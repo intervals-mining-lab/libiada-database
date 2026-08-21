@@ -96,7 +96,7 @@ public class FeatureTests
     [TestCase((Feature)38, "MiscellaneousStructure", "misc_structure")]
     public void FeatureNameAndGenBankNameTest(Feature feature, string name, string genBankName)
     {
-        Assert.That(feature.GetName(), Is.EqualTo(name));
+        Assert.That(Enum.GetName(feature), Is.EqualTo(name));
         Assert.That(feature.GetGenBankName(), Is.EqualTo(genBankName));
     }
 

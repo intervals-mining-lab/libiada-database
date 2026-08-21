@@ -7,8 +7,7 @@ using Libiada.Database.Extensions;
 /// </summary>
 public static class FeatureRepository
 {
-    private static readonly Dictionary<string, Feature> featuresDictionary = Enum.GetValues<Feature>()
-                                                                                           .ToDictionary(FeatureExtensions.GetGenBankName);
+    private static readonly Dictionary<string, Feature> featuresDictionary = Enum.GetValues<Feature>().ToDictionary(FeatureExtensions.GetGenBankName);
 
     /// <summary>
     /// Gets feature by name.

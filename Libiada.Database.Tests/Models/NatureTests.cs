@@ -50,7 +50,7 @@ public class NatureTests
     [TestCase((Nature)3, "Literature")]
     [TestCase((Nature)4, "MeasurementData")]
     [TestCase((Nature)5, "Image")]
-    public void NatureNamesTest(Nature nature, string name) => Assert.That(nature.GetName(), Is.EqualTo(name));
+    public void NatureNamesTest(Nature nature, string name) => Assert.That(Enum.GetName(nature), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all natures have display value.

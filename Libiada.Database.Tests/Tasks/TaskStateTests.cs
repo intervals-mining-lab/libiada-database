@@ -51,7 +51,7 @@ public class TaskStateTests
     [TestCase((TaskState)2, "InProgress")]
     [TestCase((TaskState)3, "Completed")]
     [TestCase((TaskState)4, "Error")]
-    public void TaskStateNameTest(TaskState taskState, string name) => Assert.That(taskState.GetName(), Is.EqualTo(name));
+    public void TaskStateNameTest(TaskState taskState, string name) => Assert.That(Enum.GetName(taskState), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all task states have display value.

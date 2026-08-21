@@ -18,8 +18,6 @@ public static class FeatureExtensions
     /// <returns>
     /// The <see cref="string"/>.
     /// </returns>
-    public static string GetGenBankName(this Feature value)
-    {
-        return value.GetAttribute<Feature, GenBankFeatureNameAttribute>().Value;
-    }
+    public static string GetGenBankName(this Feature value) => value.GetAttribute<Feature, GenBankFeatureNameAttribute>()?.Value ?? String.Empty;
+
 }

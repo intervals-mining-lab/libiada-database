@@ -65,7 +65,7 @@ public class NotationTests
     [TestCase((Notation)11, "Consonance")]
     [TestCase((Notation)12, "Phonemes")]
     [TestCase((Notation)13, "Pixels")]
-    public void NotationNamesTest(Notation notation, string name) => Assert.That(notation.GetName(), Is.EqualTo(name));
+    public void NotationNamesTest(Notation notation, string name) => Assert.That(Enum.GetName(notation), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all notations have display value.

@@ -21,5 +21,6 @@ public static class EnumExtensions
     /// <returns>
     /// Nature attribute value as <see cref="Nature"/>
     /// </returns>
-    public static Nature GetNature<T>(this T value) where T : struct, Enum => value.GetAttribute<T, NatureAttribute>().Value;
+    public static Nature GetNature<T>(this T value) where T : struct, Enum =>
+        value.GetAttribute<T, NatureAttribute>()?.Value ?? throw new NullReferenceException($"Nature attribute not found on enum value {Enum.GetName(value)}");
 }

@@ -49,7 +49,7 @@ public class TranslatorTests
     [TestCase((Translator)1, "GoogleTranslate")]
     [TestCase((Translator)2, "Promt")]
     [TestCase((Translator)3, "InterTran")]
-    public void TranslatorNamesTest(Translator translator, string name) => Assert.That(translator.GetName(), Is.EqualTo(name));
+    public void TranslatorNamesTest(Translator translator, string name) => Assert.That(Enum.GetName(translator), Is.EqualTo(name));
 
     /// <summary>
     /// Tests that all translators have display value.
