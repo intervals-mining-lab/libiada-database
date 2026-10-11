@@ -17,7 +17,6 @@ public class EnumExtensionsTests
         [Nature(Nature.Genetic)]
         Second = 2,
 
-
         Third = 3
     }
 

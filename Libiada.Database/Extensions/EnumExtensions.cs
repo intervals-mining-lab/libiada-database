@@ -1,9 +1,9 @@
-﻿
+﻿namespace Libiada.Database.Extensions;
+
 using Libiada.Core.Extensions;
 
 using Libiada.Database.Attributes;
 
-namespace Libiada.Database.Extensions;
 /// <summary>
 /// The enum helper.
 /// </summary>
