@@ -6,10 +6,10 @@ namespace Libiada.Database.Models.CalculatorsData;
 /// <remarks>
 /// Initializes a new instance of the <see cref="FragmentData"/> class.
 /// </remarks>
-/// <param name="characteristics">
+/// <param name="Characteristics">
 /// The characteristics values.
 /// </param>
-/// <param name="name">
+/// <param name="Name">
 /// The name of the fragment.
 /// </param>
 /// <param name="start">
@@ -18,25 +18,4 @@ namespace Libiada.Database.Models.CalculatorsData;
 /// <param name="length">
 /// The length of the fragment.
 /// </param>
-public record struct FragmentData(double[] characteristics, string name, int start, int length)
-{
-    /// <summary>
-    /// The characteristics values.
-    /// </summary>
-    public double[] Characteristics = characteristics;
-
-    /// <summary>
-    /// The name of the fragment.
-    /// </summary>
-    public string Name = name;
-
-    /// <summary>
-    /// The starting position of the fragment in full sequence.
-    /// </summary>
-    public int Start = start;
-
-    /// <summary>
-    /// The length of the fragment.
-    /// </summary>
-    public int Length = length;
-}
+public record struct FragmentData(double[] Characteristics, string Name, int Start, int Length);
