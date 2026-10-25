@@ -26,21 +26,22 @@ public class LiteratureSequence : AbstractCombinedSequence
     /// </summary>
     public Translator Translator { get; set; }
 
-    public CombinedSequenceEntity ToCombinedSequence() => new()
+    public static LiteratureSequence FromCombinedSequence(CombinedSequenceEntity combinedSequenceEntity) => new()
     {
-        Id = Id,
-        Alphabet = Alphabet,
-        Order = Order,
-        Nature = Nature.Literature,
-        Notation = Notation,
-        ResearchObjectId = ResearchObjectId,
-        RemoteDb = RemoteDb,
-        RemoteId = RemoteId,
-        ResearchObject = ResearchObject,
-        CreatorId = CreatorId,
-        ModifierId = ModifierId,
-        Original = Original,
-        Language = Language,
-        Translator = Translator
+        Id = combinedSequenceEntity.Id,
+        Alphabet = combinedSequenceEntity.Alphabet,
+        Order = combinedSequenceEntity.Order,
+        Notation = combinedSequenceEntity.Notation,
+        ResearchObjectId = combinedSequenceEntity.ResearchObjectId,
+        RemoteDb = combinedSequenceEntity.RemoteDb,
+        RemoteId = combinedSequenceEntity.RemoteId,
+        ResearchObject = combinedSequenceEntity.ResearchObject,
+        CreatorId = combinedSequenceEntity.CreatorId,
+        Created = combinedSequenceEntity.Created,
+        ModifierId = combinedSequenceEntity.ModifierId,
+        Modified = combinedSequenceEntity.Modified,
+        Original = combinedSequenceEntity.Original ?? throw new Exception("Literature sequence original flag is not present in form data"),
+        Language = combinedSequenceEntity.Language ?? throw new Exception("Literature sequence language is not present in form data"),
+        Translator = combinedSequenceEntity.Translator ?? throw new Exception("Literature sequence translator is not present in form data")
     };
 }

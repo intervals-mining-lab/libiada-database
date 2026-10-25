@@ -76,7 +76,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
             throw new Exception("At least one element of new sequence is invalid (not A, C, T, G or U).");
         }
 
-        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
+        CombinedSequenceEntity dbSequence = CombinedSequenceEntity.FromGeneticSequence(sequence);
 
         ResearchObjectRepository.CreateOrExtractExistingResearchObjectForSequence(dbSequence);
         sequence.Alphabet = ElementRepository.ToDbElements(libiadaSequence.Alphabet, sequence.Notation, false);
@@ -93,7 +93,7 @@ public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepos
     /// </param>
     public void Create(GeneticSequence sequence)
     {
-        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
+        CombinedSequenceEntity dbSequence = CombinedSequenceEntity.FromGeneticSequence(sequence);
 
         Db.CombinedSequenceEntities.Add(dbSequence);
         Db.SaveChanges();

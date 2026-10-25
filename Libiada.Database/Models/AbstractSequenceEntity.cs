@@ -44,7 +44,7 @@ public abstract class AbstractSequenceEntity
     [Column("created")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     [Comment("Sequence creation date and time (filled trough trigger).")]
-    public DateTimeOffset Created { get; private set; }
+    public DateTimeOffset Created { get; protected init; }
 
     /// <summary>
     /// Record creator user id.
@@ -60,7 +60,7 @@ public abstract class AbstractSequenceEntity
     [Column("modified")]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     [Comment("Record last change date and time (updated trough trigger).")]
-    public DateTimeOffset Modified { get; private set; }
+    public DateTimeOffset Modified { get; protected init; }
 
     /// <summary>
     /// Record editor user id.

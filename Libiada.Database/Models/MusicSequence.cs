@@ -23,20 +23,21 @@ public class MusicSequence : AbstractCombinedSequence
     [Display(Name = "Sequential transfer is used")]
     public bool SequentialTransfer { get; set; }
 
-    public CombinedSequenceEntity ToCombinedSequence() => new()
+    public static MusicSequence FromCombinedSequence(CombinedSequenceEntity combinedSequence) => new()
     {
-        Id = Id,
-        Alphabet = Alphabet,
-        Order = Order,
-        Nature = Nature.Music,
-        Notation = Notation,
-        ResearchObjectId = ResearchObjectId,
-        RemoteDb = RemoteDb,
-        RemoteId = RemoteId,
-        ResearchObject = ResearchObject,
-        CreatorId = CreatorId,
-        ModifierId = ModifierId,
-        SequentialTransfer = SequentialTransfer,
-        PauseTreatment = PauseTreatment
+        Id = combinedSequence.Id,
+        Alphabet = combinedSequence.Alphabet,
+        Order = combinedSequence.Order,
+        Notation = combinedSequence.Notation,
+        ResearchObjectId = combinedSequence.ResearchObjectId,
+        RemoteDb = combinedSequence.RemoteDb,
+        RemoteId = combinedSequence.RemoteId,
+        ResearchObject = combinedSequence.ResearchObject,
+        CreatorId = combinedSequence.CreatorId,
+        Created = combinedSequence.Created,
+        ModifierId = combinedSequence.ModifierId,
+        Modified = combinedSequence.Modified,        
+        SequentialTransfer = combinedSequence.SequentialTransfer ?? throw new Exception("Music sequence sequential transfer is not present in form data"),
+        PauseTreatment = combinedSequence.PauseTreatment ?? throw new Exception("Music sequence pause treatment is not present in form data")
     };
 }

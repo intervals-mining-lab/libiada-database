@@ -15,19 +15,20 @@ public class GeneticSequence : AbstractCombinedSequence
     [Display(Name = "Sequence is partial (incomplete)")]
     public bool Partial { get; set; }
 
-    public CombinedSequenceEntity ToCombinedSequence() => new()
+    public static GeneticSequence FromCombinedSequence(CombinedSequenceEntity combinedSequence) => new()
     {
-        Id = Id,
-        Alphabet = Alphabet,
-        Order = Order,
-        Nature = Nature.Genetic,
-        Notation = Notation,
-        ResearchObjectId = ResearchObjectId,
-        RemoteDb = RemoteDb,
-        RemoteId = RemoteId,
-        ResearchObject = ResearchObject,
-        CreatorId = CreatorId,
-        ModifierId = ModifierId,
-        Partial = Partial,
+        Id = combinedSequence.Id,
+        Alphabet = combinedSequence.Alphabet,
+        Order = combinedSequence.Order,
+        Notation = combinedSequence.Notation,
+        ResearchObjectId = combinedSequence.ResearchObjectId,
+        RemoteDb = combinedSequence.RemoteDb,
+        RemoteId = combinedSequence.RemoteId,
+        ResearchObject = combinedSequence.ResearchObject,
+        CreatorId = combinedSequence.CreatorId,
+        Created = combinedSequence.Created,
+        ModifierId = combinedSequence.ModifierId,
+        Modified = combinedSequence.Modified,
+        Partial = combinedSequence.Partial ?? throw new Exception("Genetic sequence partial flag is not present in form data")
     };
 }

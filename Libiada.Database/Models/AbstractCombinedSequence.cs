@@ -27,7 +27,7 @@ public abstract class AbstractCombinedSequence
     /// <summary>
     /// Sequence creation date and time (filled trough trigger).
     /// </summary>
-    public DateTimeOffset Created { get; private set; }
+    public DateTimeOffset Created { get; protected init; }
 
     /// <summary>
     /// Record creator user id.
@@ -38,7 +38,7 @@ public abstract class AbstractCombinedSequence
     /// <summary>
     /// Record last change date and time (updated trough trigger).
     /// </summary>
-    public DateTimeOffset Modified { get; private set; }
+    public DateTimeOffset Modified { get; protected init; }
 
     /// <summary>
     /// Record editor user id.

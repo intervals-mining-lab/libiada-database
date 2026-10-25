@@ -64,7 +64,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
             libiadSequence = new Sequence(text.Select(e => (ValueString)e).ToList());
         }
 
-        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
+        CombinedSequenceEntity dbSequence = CombinedSequenceEntity.FromLiteratureSequence(sequence);
 
         ResearchObjectRepository.CreateOrExtractExistingResearchObjectForSequence(dbSequence);
 
@@ -97,7 +97,7 @@ public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenc
     /// </param>
     public void Create(LiteratureSequence sequence)
     {
-        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
+        CombinedSequenceEntity dbSequence = CombinedSequenceEntity.FromLiteratureSequence(sequence);
 
         Db.CombinedSequenceEntities.Add(dbSequence);
         Db.SaveChanges();

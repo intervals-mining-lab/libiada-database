@@ -108,51 +108,60 @@ public class CombinedSequenceEntity : AbstractSequenceEntity
     [DeleteBehavior(DeleteBehavior.NoAction)]
     public virtual ResearchObject ResearchObject { get; set; } = null!;
 
-    public MusicSequence ToMusicSequence() => new()
+    public static CombinedSequenceEntity FromMusicSequence(MusicSequence musicSequence) => new()
     {
-        Id = Id,
-        Alphabet = Alphabet,
-        Order = Order,
-        Notation = Notation,
-        ResearchObjectId = ResearchObjectId,
-        RemoteDb = RemoteDb,
-        RemoteId = RemoteId,
-        ResearchObject = ResearchObject,
-        CreatorId = CreatorId,
-        ModifierId = ModifierId,
-        SequentialTransfer = SequentialTransfer ?? throw new Exception("Music sequence sequential transfer is not present in form data"),
-        PauseTreatment = PauseTreatment ?? throw new Exception("Music sequence pause treatment is not present in form data")
+        Id = musicSequence.Id,
+        Alphabet = musicSequence.Alphabet,
+        Order = musicSequence.Order,
+        Nature = Nature.Music,
+        Notation = musicSequence.Notation,
+        ResearchObjectId = musicSequence.ResearchObjectId,
+        RemoteDb = musicSequence.RemoteDb,
+        RemoteId = musicSequence.RemoteId,
+        ResearchObject = musicSequence.ResearchObject,
+        CreatorId = musicSequence.CreatorId,
+        Created = musicSequence.Created,
+        ModifierId = musicSequence.ModifierId,
+        Modified = musicSequence.Modified,
+        SequentialTransfer = musicSequence.SequentialTransfer,
+        PauseTreatment = musicSequence.PauseTreatment
     };
 
-    public GeneticSequence ToGeneticSequence() => new()
+    public static CombinedSequenceEntity FromGeneticSequence(GeneticSequence geneticSequence) => new()
     {
-        Id = Id,
-        Alphabet = Alphabet,
-        Order = Order,
-        Notation = Notation,
-        ResearchObjectId = ResearchObjectId,
-        RemoteDb = RemoteDb,
-        RemoteId = RemoteId,
-        ResearchObject = ResearchObject,
-        CreatorId = CreatorId,
-        ModifierId = ModifierId,
-        Partial = Partial ?? throw new Exception("Genetic sequence partial flag is not present in form data")
+        Id = geneticSequence.Id,
+        Alphabet = geneticSequence.Alphabet,
+        Order = geneticSequence.Order,
+        Nature = Nature.Genetic,
+        Notation = geneticSequence.Notation,
+        ResearchObjectId = geneticSequence.ResearchObjectId,
+        RemoteDb = geneticSequence.RemoteDb,
+        RemoteId = geneticSequence.RemoteId,
+        ResearchObject = geneticSequence.ResearchObject,
+        CreatorId = geneticSequence.CreatorId,
+        Created = geneticSequence.Created,
+        ModifierId = geneticSequence.ModifierId,
+        Modified = geneticSequence.Modified,
+        Partial = geneticSequence.Partial,
     };
 
-    public LiteratureSequence ToLiteratureSequence() => new()
+    public static CombinedSequenceEntity FromLiteratureSequence(LiteratureSequence literatureSequence) => new()
     {
-        Id = Id,
-        Alphabet = Alphabet,
-        Order = Order,
-        Notation = Notation,
-        ResearchObjectId = ResearchObjectId,
-        RemoteDb = RemoteDb,
-        RemoteId = RemoteId,
-        ResearchObject = ResearchObject,
-        CreatorId = CreatorId,
-        ModifierId = ModifierId,
-        Original = Original ?? throw new Exception("Literature sequence original flag is not present in form data"),
-        Language = Language ?? throw new Exception("Literature sequence language is not present in form data"),
-        Translator = Translator ?? throw new Exception("Literature sequence translator is not present in form data")
+        Id = literatureSequence.Id,
+        Alphabet = literatureSequence.Alphabet,
+        Order = literatureSequence.Order,
+        Nature = Nature.Literature,
+        Notation = literatureSequence.Notation,
+        ResearchObjectId = literatureSequence.ResearchObjectId,
+        RemoteDb = literatureSequence.RemoteDb,
+        RemoteId = literatureSequence.RemoteId,
+        ResearchObject = literatureSequence.ResearchObject,
+        CreatorId = literatureSequence.CreatorId,
+        Created = literatureSequence.Created,
+        ModifierId = literatureSequence.ModifierId,
+        Modified = literatureSequence.Modified,
+        Original = literatureSequence.Original,
+        Language = literatureSequence.Language,
+        Translator = literatureSequence.Translator
     };
 }

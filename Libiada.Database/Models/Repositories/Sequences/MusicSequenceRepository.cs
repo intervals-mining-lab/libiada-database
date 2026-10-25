@@ -66,7 +66,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
             throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
         }
 
-        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
+        CombinedSequenceEntity dbSequence = CombinedSequenceEntity.FromMusicSequence(sequence);
 
         ResearchObjectRepository.CreateOrExtractExistingResearchObjectForSequence(dbSequence);
 
@@ -96,7 +96,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
         // creating notes and measures sequences
         List<CombinedSequenceEntity> CombinedSequenceEntityToCreate = new(8);
 
-        CombinedSequenceEntity musicSequence = sequence.ToCombinedSequence();
+        CombinedSequenceEntity musicSequence = CombinedSequenceEntity.FromMusicSequence(sequence);
         musicSequence.Order = notesSequence.Order;
         musicSequence.Alphabet = notesAlphabet;
         musicSequence.Notation = Notation.Notes;
@@ -105,7 +105,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
 
         CombinedSequenceEntityToCreate.Add(musicSequence);
 
-        musicSequence = sequence.ToCombinedSequence();
+        musicSequence = CombinedSequenceEntity.FromMusicSequence(sequence);
         musicSequence.Order = measuresSequence.Order;
         musicSequence.Alphabet = measuresAlphabet;
         musicSequence.Notation = Notation.Measures;
@@ -119,7 +119,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
         {
             PauseTreatment pauseTreatment = pauseTreatments[i];
 
-            musicSequence = sequence.ToCombinedSequence();
+            musicSequence = CombinedSequenceEntity.FromMusicSequence(sequence);
             musicSequence.Order = fmotifsSequences[i].Order;
             musicSequence.Alphabet = fmotifsAlphabets[i];
             musicSequence.Notation = Notation.FormalMotifs;
@@ -128,7 +128,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
 
             CombinedSequenceEntityToCreate.Add(musicSequence);
 
-            musicSequence = sequence.ToCombinedSequence();
+            musicSequence = CombinedSequenceEntity.FromMusicSequence(sequence);
             musicSequence.Order = fmotifsSequencesWithSequentialTransfer[i].Order;
             musicSequence.Alphabet = fmotifsAlphabetsWithSequentialTransfer[i];
             musicSequence.Notation = Notation.FormalMotifs;
@@ -157,7 +157,7 @@ public class MusicSequenceRepository : SequenceImporter, IMusicSequenceRepositor
     /// </param>
     public void Create(MusicSequence sequence)
     {
-        CombinedSequenceEntity dbSequence = sequence.ToCombinedSequence();
+        CombinedSequenceEntity dbSequence = CombinedSequenceEntity.FromMusicSequence(sequence);
 
         Db.CombinedSequenceEntities.Add(dbSequence);
         Db.SaveChanges();
