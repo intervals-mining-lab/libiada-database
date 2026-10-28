@@ -1,21 +1,18 @@
 namespace Libiada.Database.Models.Repositories.Sequences;
 
-using SixLabors.ImageSharp;
-
-using System.Text;
-
 using Libiada.Core.Core;
-using Libiada.Core.Extensions;
-using Libiada.Core.Music;
-using Libiada.Core.Images;
 using Libiada.Core.Core.SimpleTypes;
-
+using Libiada.Core.Extensions;
+using Libiada.Core.Images;
+using Libiada.Core.Music;
 using Libiada.Database.Attributes;
 using Libiada.Database.Extensions;
 
 using Microsoft.EntityFrameworkCore;
-using SixLabors.ImageSharp.PixelFormats;
 
+using SkiaSharp;
+
+using System.Text;
 
 /// <summary>
 /// The sequence repository.
@@ -28,7 +25,10 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
     /// <param name="dbFactory">
     /// Database context factory.
     /// </param>
-    public CombinedSequenceEntityRepository(IDbContextFactory<LibiadaDatabaseEntities> dbFactory, IResearchObjectsCache cache) : base(dbFactory, cache)
+    public CombinedSequenceEntityRepository(
+        IDbContextFactory<LibiadaDatabaseEntities> dbFactory,
+        IResearchObjectsCache cache)
+        : base(dbFactory, cache)
     {
     }
 
@@ -90,9 +90,11 @@ public class CombinedSequenceEntityRepository : SequenceImporter, ICombinedSeque
             throw new Exception("Cannot find sequence to return");
         }
 
-        Image<Rgba32> image = Image.Load<Rgba32>(imageSequence.ResearchObject.Source);
-        Type orderExtractor = imageSequence.OrderExtractor.GetAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>().Value;
-        Sequence sequence = ImageProcessor.ProcessImage(image, [], [], (IImageOrderExtractor)Activator.CreateInstance(orderExtractor));
+        using SKBitmap image = SKBitmap.Decode(imageSequence.ResearchObject.Source)
+            ?? throw new InvalidDataException($"Unable to read image from research object data: {imageSequence.ResearchObject.Name}.");
+        Type orderExtractorType = imageSequence.OrderExtractor.GetAttribute<ImageOrderExtractor, ImageOrderExtractorAttribute>()!.Value;
+        IImageOrderExtractor imageOrderExtractor = (IImageOrderExtractor)Activator.CreateInstance(orderExtractorType)!;
+        Sequence sequence = ImageProcessor.ProcessImage(image, [], [], imageOrderExtractor);
         Alphabet alphabet = [NullValue.Instance()];
         Alphabet incompleteAlphabet = sequence.Alphabet;
         for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
