@@ -4,11 +4,11 @@ using Libiada.Core.Core;
 using Libiada.Core.Core.Characteristics.Calculators.FullCalculators;
 using Libiada.Database.Models.Repositories.Catalogs;
 
-public class CustomSequencesCharacterisitcsCalculator
+public class CustomSequencesCharacteristicsCalculator
 {
     private readonly LinkedFullCalculator[] calculators;
 
-    public CustomSequencesCharacterisitcsCalculator(IFullCharacteristicRepository characteristicTypeLinkRepository, short[] characteristicLinkIds)
+    public CustomSequencesCharacteristicsCalculator(IFullCharacteristicRepository characteristicTypeLinkRepository, short[] characteristicLinkIds)
     {
         calculators = new LinkedFullCalculator[characteristicLinkIds.Length];
         for (int i = 0; i < characteristicLinkIds.Length; i++)
